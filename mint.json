@@ -38,6 +38,16 @@
       "name": "HierarchicalForecast",
       "url": "hierarchicalforecast",
       "icon": "crown"
+    },
+    {
+      "name": "UtilsForecast",
+      "url": "utilsforecast",
+      "icon": "wrench"
+    },
+    {
+      "name": "DatasetsForecast",
+      "url": "datasetsforecast",
+      "icon": "chart-simple"
     }
   ],
   "navigation": [],
