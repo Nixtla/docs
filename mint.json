@@ -19,11 +19,12 @@
     "type": "github",
     "url": "https://github.com/Nixtla"
   },
-  "topAnchor": {
-    "name": "TimeGPT",
-    "icon": "clock-nine"
-  },
   "anchors": [
+    {
+      "name": "TimeGPT",
+      "url": "timegpt",
+      "icon": "clock-nine"
+    },
     {
       "name": "StatsForecast",
       "url": "statsforecast",
