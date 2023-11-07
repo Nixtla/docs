@@ -55,6 +55,11 @@
       "icon": "chart-simple"
     }
   ],
-  "navigation": [],
+  "navigation": [
+    {
+      "group": "",
+      "pages": ["index"]
+    }
+  ],
   "footerSocials": {}
 }
