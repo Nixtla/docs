@@ -57,5 +57,9 @@
     }
   ],
   "navigation": [],
-  "footerSocials": {}
+  "footerSocials": {
+    "github": "https://github.com/Nixtla",
+    "slack": "https://join.slack.com/t/nixtlaworkspace/shared_invite/zt-135dssye9-fWTzMpv2WBthq8NK0Yvu6A",
+    "twitter": "https://twitter.com/nixtlainc"
+  }
 }
