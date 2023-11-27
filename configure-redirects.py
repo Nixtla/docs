@@ -1,7 +1,10 @@
+import re
 import sys
 from pathlib import Path
 
 new_domain = f'https://nixtla.mintlify.app/{sys.argv[1]}'
+
+number_prefix_pat = re.compile(r'\d+_')
 
 template = """<!DOCTYPE html>
 <html lang="en">
@@ -22,7 +25,7 @@ template = """<!DOCTYPE html>
 pages_dir = Path('gh-pages')
 for page in Path('nbs').rglob('*.ipynb'):
     rel_page = page.with_suffix('.html').relative_to('nbs')
-    rel_page = rel_page.parent / rel_page.name.lower()
+    rel_page = rel_page.parent / number_prefix_pat.sub('', rel_page.name.lower())
     new_path = pages_dir / rel_page
     new_path.parent.mkdir(exist_ok=True, parents=True)
     content = template.format(new_url=f'{new_domain}/{rel_page}')
