@@ -2,7 +2,7 @@ import re
 import sys
 from pathlib import Path
 
-new_domain = f'https://nixtla.mintlify.app/{sys.argv[1]}'
+new_domain = f'https://nixtlaverse.nixtla.io/{sys.argv[1]}'
 
 number_prefix_pat = re.compile(r'\d+_')
 
