@@ -54,6 +54,11 @@
       "name": "DatasetsForecast",
       "url": "datasetsforecast",
       "icon": "chart-simple"
+    },
+    {
+      "name": "CoreForecast",
+      "url": "coreforecast",
+      "icon": "truck-fast"
     }
   ],
   "navigation": [],
