@@ -1,0 +1,44 @@
+name: Mintlify Multirepo Action
+
+on:
+  push:
+    branches: main
+  workflow_dispatch:
+
+jobs:
+  multirepo-action:
+    runs-on: ubuntu-latest
+    name: Run mintlify multirepo action
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+      - name: Run mintlify github action
+        uses: mintlify/multirepo-action@v0.15
+        with:
+          token: ${{ secrets.DOCS_PUSH_TOKEN }}
+          target-branch: docs
+          repos: |
+            - owner: nixtla
+              repo: nixtla
+              ref: docs
+            - owner: nixtla
+              repo: statsforecast
+              ref: docs
+            - owner: nixtla
+              repo: mlforecast
+              ref: docs
+            - owner: nixtla
+              repo: neuralforecast
+              ref: docs
+            - owner: nixtla
+              repo: hierarchicalforecast
+              ref: docs
+            - owner: nixtla
+              repo: utilsforecast
+              ref: docs
+            - owner: nixtla
+              repo: datasetsforecast
+              ref: docs
+            - owner: nixtla
+              repo: coreforecast
+              ref: docs
