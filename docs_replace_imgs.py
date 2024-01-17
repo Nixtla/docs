@@ -3,22 +3,24 @@ from functools import partial
 from pathlib import Path
 
 def main():
+    repo = Path('.').absolute().name
     pattern = r'!\[([^\]]*)\]\(((?!https:\/\/).+?)\)'
     equation_pattern = r'(\$\$[^\$]+\$\$)'
     hyperlink_pat = r'(\[[^\]]*\])(\([^\)]+\))'
     for file in Path('_docs').rglob('*.mdx'):
         content = file.read_text()
         parent = str(file.parent.relative_to('_docs'))
-        content = re.sub(pattern, partial(url_replace, parent=parent), content)
+        content = re.sub(pattern, partial(url_replace, parent=parent, repo=repo), content)
         content = re.sub(equation_pattern, multiline_equations, content)
         content = re.sub(hyperlink_pat, standardize_page_name, content)
         file.write_text(content)
 
-def url_replace(match, parent):
+def url_replace(match, parent, repo):
     if parent == '.':
         new_url = match[2]
     else:
         new_url = f'{parent}/{match[2]}'
+    new_url = f'{repo}/{new_url}'
     if not new_url.startswith('/'):
       new_url = '/' + new_url
     return f'![{match[1]}]({new_url})'
