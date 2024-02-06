@@ -512,7 +512,8 @@
       "pages": [
         "coreforecast/grouped_array",
         "coreforecast/lag_transforms",
-        "coreforecast/scalers"
+        "coreforecast/scalers",
+        "coreforecast/differences"
       ]
     }
   ],
