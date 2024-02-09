@@ -513,7 +513,8 @@
         "coreforecast/grouped_array",
         "coreforecast/lag_transforms",
         "coreforecast/scalers",
-        "coreforecast/differences"
+        "coreforecast/differences",
+        "coreforecast/seasonal"
       ]
     }
   ],
