@@ -308,6 +308,7 @@
         "neuralforecast/examples/exogenous_variables.html",
         "neuralforecast/examples/time_series_scaling.html",
         "neuralforecast/examples/automatic_hyperparameter_tuning.html",
+        "neuralforecast/examples/cross_validation_tutorial.html",
         "neuralforecast/examples/predictinsample.html",
         "neuralforecast/examples/save_load_models.html",
         "neuralforecast/examples/getting_started_complete.html",
