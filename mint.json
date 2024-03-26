@@ -79,15 +79,17 @@
       "group": "Tutorials",
       "pages": [
         "nixtla/docs/tutorials/anomaly_detection.html",
+        "nixtla/docs/tutorials/cross_validation.html",
         "nixtla/docs/tutorials/exogenous_variables.html",
         "nixtla/docs/tutorials/finetuning.html",
         "nixtla/docs/tutorials/loss_function_finetuning.html",
         "nixtla/docs/tutorials/historical_forecast.html",
         "nixtla/docs/tutorials/holidays.html",
         "nixtla/docs/tutorials/irregular_timestamps.html",
+        "nixtla/docs/tutorials/longhorizon.html",
         "nixtla/docs/tutorials/multiple_series.html",
         "nixtla/docs/tutorials/prediction_intervals.html",
-        "nixtla/docs/tutorials/longhorizon.html"
+        "nixtla/docs/tutorials/quantile_forecasts.html"
       ]
     },
     {
