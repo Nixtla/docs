@@ -240,6 +240,7 @@
       "pages": [
         "mlforecast/docs/how-to-guides/exogenous_features.html",
         "mlforecast/docs/how-to-guides/lag_transforms_guide.html",
+        "mlforecast/docs/how-to-guides/hyperparameter_optimization.html",
         "mlforecast/docs/how-to-guides/transforming_exog.html",
         "mlforecast/docs/how-to-guides/cross_validation.html",
         "mlforecast/docs/how-to-guides/prediction_intervals.html",
@@ -270,7 +271,9 @@
           "group": "Local",
           "pages": [
             "mlforecast/forecast.html",
+            "mlforecast/auto.html",
             "mlforecast/lgb_cv.html",
+            "mlforecast/optimization.html",
             "mlforecast/utils.html",
             "mlforecast/core.html",
             "mlforecast/target_transforms.html",
