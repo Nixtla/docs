@@ -115,4 +115,3 @@ inkeepScript.addEventListener("load", function () {
     ),
     (document.body || document.head).appendChild(n);
 })();
-</script>
