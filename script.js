@@ -103,7 +103,6 @@ inkeepScript.addEventListener("load", function () {
   });
 });
 
-<script>
 
 !(function (t) {
   if (window.oneloop) return;
