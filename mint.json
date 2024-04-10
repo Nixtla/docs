@@ -322,7 +322,8 @@
         "neuralforecast/examples/save_load_models.html",
         "neuralforecast/examples/getting_started_complete.html",
         "neuralforecast/examples/neuralforecast_map.html",
-        "neuralforecast/examples/how_to_add_models.html"
+        "neuralforecast/examples/how_to_add_models.html",
+        "neuralforecast/examples/mlflow_and_neuralforecast.html"
       ]
     },
     {
