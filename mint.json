@@ -149,6 +149,7 @@
         "statsforecast/docs/how-to-guides/automatic_forecasting.html",
         "statsforecast/docs/how-to-guides/exogenous.html",
         "statsforecast/docs/how-to-guides/generating_features.html",
+        "statsforecast/docs/how-to-guides/sklearn_models.html",
         "statsforecast/docs/how-to-guides/migrating_R",
         "statsforecast/docs/how-to-guides/numba_cache.html"
       ]
