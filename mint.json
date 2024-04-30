@@ -72,37 +72,99 @@
     {
       "group": "Getting Started",
       "pages": [
-        "nixtla/docs/getting-started/getting_started_short.html",
-        "nixtla/docs/getting-started/setting_up_your_authentication_api_key.html"
+        "nixtla/docs/1_getting_started/quickstart.html",
+        "nixtla/docs/1_getting_started/setting_up_your_api_key.html",
+        "nixtla/docs/1_getting_started/faqs.html"
+      ]
+    },
+    {
+      "group": "Capabilities",
+      "pages": [
+        "nixtla/docs/2_capabilities/overview.html",
+        {
+          "group": "Forecast",
+          "pages": [
+            "nixtla/docs/2_capabilities/forecast/quickstart.html"
+          ]
+        },
+        {
+          "group": "Anomaly Detection",
+          "pages": [
+            "nixtla/docs/2_capabilities/anomaly_detection/quickstart.html"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Deployment",
+      "pages": [
+        "nixtla/docs/3_deployment/azure_ai.html"
       ]
     },
     {
       "group": "Tutorials",
       "pages": [
-        "nixtla/docs/tutorials/anomaly_detection.html",
-        "nixtla/docs/tutorials/cross_validation.html",
-        "nixtla/docs/tutorials/exogenous_variables.html",
-        "nixtla/docs/tutorials/finetuning.html",
-        "nixtla/docs/tutorials/loss_function_finetuning.html",
-        "nixtla/docs/tutorials/historical_forecast.html",
-        "nixtla/docs/tutorials/holidays.html",
-        "nixtla/docs/tutorials/irregular_timestamps.html",
-        "nixtla/docs/tutorials/longhorizon.html",
-        "nixtla/docs/tutorials/multiple_series.html",
-        "nixtla/docs/tutorials/prediction_intervals.html",
-        "nixtla/docs/tutorials/quantile_forecasts.html"
+        "nixtla/docs/4_tutorials/overview.html",
+        {
+          "group": "Exogenous variables",
+          "pages": [
+            "nixtla/docs/4_tutorials/holidays.html",
+            "nixtla/docs/4_tutorials/exogenous_variables.html",
+            "nixtla/docs/4_tutorials/categorical_variables.html"
+          ]
+        },
+        {
+          "group": "Training",
+          "pages": [
+            "nixtla/docs/4_tutorials/long_horizon.html",
+            "nixtla/docs/4_tutorials/multiple_series.html"
+          ]
+        },
+        {
+          "group": "Fine-tuning",
+          "pages": [
+            "nixtla/docs/4_tutorials/finetuning.html",
+            "nixtla/docs/4_tutorials/loss_function_finetuning.html"
+          ]
+        },
+        {
+          "group": "Validation",
+          "pages": [
+            "nixtla/docs/4_tutorials/cross_validation.html",
+            "nixtla/docs/4_tutorials/historical_forecast.html"
+          ]
+        },
+        {
+          "group": "Uncertainty quantification",
+          "pages": [
+            "nixtla/docs/4_tutorials/uncertainty_quantification_with_quantile_forecasts.html",
+            "nixtla/docs/4_tutorials/uncertainty_quantification_with_prediction_intervals.html"
+          ]
+        },
+        {
+          "group": "Forecasting - Special Topics",
+          "pages": [
+            "nixtla/docs/4_tutorials/irregular_timestamps.html",
+            "nixtla/docs/4_tutorials/bounded_forecasts.html",
+            "nixtla/docs/4_tutorials/hierarchical_forecasting.html"
+          ]
+        },
+        {
+          "group": "Computing at scale",
+          "pages": [
+            "nixtla/docs/4_tutorials/computing_at_scale.html",
+            "nixtla/docs/4_tutorials/computing_at_scale_spark_distributed.html",
+            "nixtla/docs/4_tutorials/computing_at_scale_dask_distributed.html",
+            "nixtla/docs/4_tutorials/computing_at_scale_ray_distributed.html"
+          ]
+        }
       ]
     },
     {
-      "group": "How-To Guides",
+      "group": "Use cases",
       "pages": [
-        "nixtla/docs/how-to-guides/distributed.spark.html"
-      ]
-    },
-    {
-      "group": "FAQS & Misc",
-      "pages": [
-        "nixtla/docs/misc/faqs.html"
+        "nixtla/docs/5_use_cases/forecasting_web_traffic_with_timegpt.html",
+        "nixtla/docs/5_use_cases/bitcoin_price_prediction.html"
       ]
     },
     {
