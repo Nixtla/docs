@@ -64,12 +64,6 @@
   ],
   "navigation": [
     {
-      "group": "",
-      "pages": [
-        "nixtla/index.html"
-      ]
-    },
-    {
       "group": "Getting Started",
       "pages": [
         "nixtla/docs/getting-started/introduction.html",
@@ -91,7 +85,7 @@
             "nixtla/docs/capabilities/forecast/longhorizon.html",
             "nixtla/docs/capabilities/forecast/multiple_series.html",
             "nixtla/docs/capabilities/forecast/finetuning.html",
-            "nixtla/docs/capabilities/forecast/custom_loss_functions.html",
+            "nixtla/docs/capabilities/forecast/custom_loss_function.html",
             "nixtla/docs/capabilities/forecast/cross_validation.html",
             "nixtla/docs/capabilities/forecast/prediction_intervals.html",
             "nixtla/docs/capabilities/forecast/irregular_timestamps.html"
