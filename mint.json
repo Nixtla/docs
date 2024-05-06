@@ -172,7 +172,9 @@
       "group": "Use cases",
       "pages": [
         "nixtla/docs/use-cases/forecasting_web_traffic.html",
-        "nixtla/docs/use-cases/bitcoin_price_prediction.html"
+        "nixtla/docs/use-cases/bitcoin_price_prediction.html",
+        "nixtla/docs/use-cases/electricity_demand.html",
+        "nixtla/docs/uses-cases/intermittent_demand.html"
       ]
     },
     {
