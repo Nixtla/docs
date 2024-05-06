@@ -69,7 +69,8 @@
         "nixtla/docs/getting-started/introduction.html",
         "nixtla/docs/getting-started/quickstart.html",
         "nixtla/docs/getting-started/setting_up_your_api_key.html",
-        "nixtla/docs/getting-started/faq.html"
+        "nixtla/docs/getting-started/faq.html",
+        "nixtla/docs/getting-started/glossary.html"
       ]
     },
     {
@@ -152,7 +153,8 @@
           "pages": [
             "nixtla/docs/tutorials/irregular_timestamps.html",
             "nixtla/docs/tutorials/bounded_forecasts.html",
-            "nixtla/docs/tutorials/hierarchical_forecasting.html"
+            "nixtla/docs/tutorials/hierarchical_forecasting.html",
+            "nixtla/docs/tutorials/missing_values.html"
           ]
         },
         {
