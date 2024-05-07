@@ -598,7 +598,10 @@
         "coreforecast/lag_transforms",
         "coreforecast/scalers",
         "coreforecast/differences",
-        "coreforecast/seasonal"
+        "coreforecast/seasonal",
+        "coreforecast/rolling",
+        "coreforecast/expanding",
+        "coreforecast/exponentially_weighted"
       ]
     }
   ],
