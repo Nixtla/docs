@@ -180,8 +180,9 @@
     {
       "group": "API Reference",
       "pages": [
-        "nixtla/nixtla_client.html",
-        "nixtla/date_features.html"
+        "nixtla/docs/reference/nixtla_client.html",
+        "nixtla/docs/reference/date_features.html",
+        "nixtla/docs/reference/excel_addin.html"
       ]
     },
     {
