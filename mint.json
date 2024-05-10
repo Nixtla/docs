@@ -69,6 +69,7 @@
         "nixtla/docs/getting-started/introduction.html",
         "nixtla/docs/getting-started/quickstart.html",
         "nixtla/docs/getting-started/setting_up_your_api_key.html",
+        "nixtla/docs/getting-started/data_requirements.html",
         "nixtla/docs/getting-started/faq.html",
         "nixtla/docs/getting-started/glossary.html"
       ]
@@ -175,7 +176,8 @@
         "nixtla/docs/use-cases/forecasting_web_traffic.html",
         "nixtla/docs/use-cases/bitcoin_price_prediction.html",
         "nixtla/docs/use-cases/electricity_demand.html",
-        "nixtla/docs/uses-cases/intermittent_demand.html"
+        "nixtla/docs/uses-cases/intermittent_demand.html",
+        "nixtla/docs/use-cases/what_if_pricing_scenarios_in_retail.html"
       ]
     },
     {
