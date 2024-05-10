@@ -112,6 +112,7 @@
     {
       "group": "Tutorials",
       "pages": [
+        "nixtla/docs/tutorials/anomaly_detection.html",
         {
           "group": "Exogenous variables",
           "pages": [
