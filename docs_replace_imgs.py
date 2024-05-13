@@ -36,7 +36,7 @@ def multiline_equations(matches):
 
 def standardize_page_name(match):
     """Make name lowercase, remove numbers from the beginning and use html suffix."""
-    if match[2].startswith('(https://raw.githubusercontent'):
+    if match[2].startswith(('(https://raw.githubusercontent', '(https://www.youtube')):
         # leave existing filenames as is
         return f'{match[1]}{match[2]}'
     parts = match[2].split('/')
