@@ -267,6 +267,7 @@
         "statsforecast/docs/models/holt.html",
         "statsforecast/docs/models/holtwinters.html",
         "statsforecast/docs/models/imapa.html",
+        "statsforecast/docs/models/mfles.html",
         "statsforecast/docs/models/multipleseasonaltrend.html",
         "statsforecast/docs/models/optimizedtheta.html",
         "statsforecast/docs/models/seasonalexponentialsmoothing.html",
