@@ -419,7 +419,8 @@
         "neuralforecast/examples/temporal_classifiers.html",
         "neuralforecast/examples/predictive_maintenance.html",
         "neuralforecast/examples/multivariate_with_tsmixer.html",
-        "neuralforecast/examples/statsmlneuralmethods.html"
+        "neuralforecast/examples/statsmlneuralmethods.html",
+        "neuralforecast/examples/distributed/distributed_neuralforecast.html"
       ]
     },
     {
