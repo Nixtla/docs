@@ -382,108 +382,98 @@
       ]
     },
     {
-      "group": "",
+      "group": "Getting Started",
       "pages": [
-        "neuralforecast/index.html"
+        "neuralforecast/docs/getting-started/introduction.html",
+        "neuralforecast/docs/getting-started/quickstart.html",
+        "neuralforecast/docs/getting-started/installation.html",
+        "neuralforecast/docs/getting-started/datarequirements.html"
       ]
     },
     {
-      "group": "Getting Started",
+      "group": "Capabilities",
       "pages": [
-        "neuralforecast/examples/installation.html",
-        "neuralforecast/examples/getting_started.html",
-        "neuralforecast/examples/data_format.html",
-        "neuralforecast/examples/exogenous_variables.html",
-        "neuralforecast/examples/time_series_scaling.html",
-        "neuralforecast/examples/automatic_hyperparameter_tuning.html",
-        "neuralforecast/examples/cross_validation_tutorial.html",
-        "neuralforecast/examples/predictinsample.html",
-        "neuralforecast/examples/save_load_models.html",
-        "neuralforecast/examples/getting_started_complete.html",
-        "neuralforecast/examples/neuralforecast_map.html",
-        "neuralforecast/examples/how_to_add_models.html",
-        "neuralforecast/examples/mlflow_and_neuralforecast.html"
+        "neuralforecast/docs/capabilities/overview.html",
+        "neuralforecast/docs/capabilities/objectives.html",
+        "neuralforecast/docs/capabilities/exogenous_variables.html",
+        "neuralforecast/docs/capabilities/hyperparameter_tuning.html",
+        "neuralforecast/docs/capabilities/predictinsample.html",
+        "neuralforecast/docs/capabilities/save_load_models.html",
+        "neuralforecast/docs/capabilities/time_series_scaling.html"
       ]
     },
     {
       "group": "Tutorials",
       "pages": [
-        "neuralforecast/examples/signal_decomposition.html",
-        "neuralforecast/examples/uncertaintyintervals.html",
-        "neuralforecast/examples/longhorizon_probabilistic.html",
-        "neuralforecast/examples/longhorizon_with_transformers.html",
-        "neuralforecast/examples/intermittentdata.html",
-        "neuralforecast/examples/robust_regression.html",
-        "neuralforecast/examples/electricitypeakforecasting.html",
-        "neuralforecast/examples/hierarchicalnetworks.html",
-        "neuralforecast/examples/transfer_learning.html",
-        "neuralforecast/examples/temporal_classifiers.html",
-        "neuralforecast/examples/predictive_maintenance.html",
-        "neuralforecast/examples/multivariate_with_tsmixer.html",
-        "neuralforecast/examples/statsmlneuralmethods.html",
-        "neuralforecast/examples/distributed/distributed_neuralforecast.html",
-        "neuralforecast/examples/large_datasets_tutorial.html"
+        "neuralforecast/docs/tutorials/getting_started_complete.html",
+        "neuralforecast/docs/tutorials/cross_validation_tutorial.html",
+        "neuralforecast/docs/tutorials/uncertainty_quantification.html",
+        "neuralforecast/docs/tutorials/longhorizon_nhits.html",
+        "neuralforecast/docs/tutorials/longhorizon_transformers.html",
+        "neuralforecast/docs/tutorials/longhorizon_probabilistic.html",
+        "neuralforecast/docs/tutorials/forecasting_tft.html",
+        "neuralforecast/docs/tutorials/multivariate_tsmixer.html",
+        "neuralforecast/docs/tutorials/hierarchical_forecasting.html",
+        "neuralforecast/docs/tutorials/distributed_neuralforecast.html",
+        "neuralforecast/docs/tutorials/intermittent_data.html",
+        "neuralforecast/docs/tutorials/using_mlflow.html",
+        "neuralforecast/docs/tutorials/robust_forecasting.html",
+        "neuralforecast/docs/tutorials/interpretable_decompositions.html",
+        "neuralforecast/docs/tutorials/comparing_methods.html",
+        "neuralforecast/docs/tutorials/temporal_classification.html",
+        "neuralforecast/docs/tutorials/transfer_learning.html",
+        "neuralforecast/docs/tutorials/adding_models.html",
+        "neuralforecast/docs/tutorials/large_datasets_tutorial.html"
       ]
     },
     {
-      "group": "",
+      "group": "Use cases",
       "pages": [
-        "neuralforecast/examples/models_intro"
+        "neuralforecast/docs/use-cases/electricity_peak_forecasting.html",
+        "neuralforecast/docs/use-cases/predictive_maintenance.html"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
+        "neuralforecast/docs/tutorials/neuralforecasting_map.html",
         "neuralforecast/core.html",
-        "neuralforecast/models.html",
         {
-          "group": "Models' Documentation",
+          "group": "Models",
           "pages": [
-            {
-              "group": "A. RNN-Based",
-              "pages": [
-                "neuralforecast/models.rnn.html",
-                "neuralforecast/models.gru.html",
-                "neuralforecast/models.lstm.html",
-                "neuralforecast/models.dilated_rnn.html",
-                "neuralforecast/models.tcn.html",
-                "neuralforecast/models.deepar.html"
-              ]
-            },
-            {
-              "group": "B. MLP-Based",
-              "pages": [
-                "neuralforecast/models.mlp.html",
-                "neuralforecast/models.nhits.html",
-                "neuralforecast/models.nbeats.html",
-                "neuralforecast/models.nbeatsx.html"
-              ]
-            },
-            {
-              "group": "C. Transformer-Based",
-              "pages": [
-                "neuralforecast/models.tft.html",
-                "neuralforecast/models.vanillatransformer.html",
-                "neuralforecast/models.informer.html",
-                "neuralforecast/models.autoformer.html",
-                "neuralforecast/models.patchtst.html"
-              ]
-            },
-            {
-              "group": "D. CNN-Based",
-              "pages": [
-                "neuralforecast/models.timesnet.html"
-              ]
-            },
-            {
-              "group": "E. Multivariate",
-              "pages": [
-                "neuralforecast/models.hint.html",
-                "neuralforecast/models.stemgnn.html"
-              ]
-            }
+            "neuralforecast/models.autoformer.html",
+            "neuralforecast/models.bitcn.html",
+            "neuralforecast/models.deepar.html",
+            "neuralforecast/models.dilated_rnn.html",
+            "neuralforecast/models.dlinear.html",
+            "neuralforecast/models.fedformer.html",
+            "neuralforecast/models.gru.html",
+            "neuralforecast/models.hint.html",
+            "neuralforecast/models.informer.html",
+            "neuralforecast/models.itransformer.html",
+            "neuralforecast/models.lstm.html",
+            "neuralforecast/models.mlp.html",
+            "neuralforecast/models.mlpmultivariate.html",
+            "neuralforecast/models.nbeats.html",
+            "neuralforecast/models.nbeatsx.html",
+            "neuralforecast/models.nhits.html",
+            "neuralforecast/models.nlinear.html",
+            "neuralforecast/models.patchtst.html",
+            "neuralforecast/models.rnn.html",
+            "neuralforecast/models.deepnpts.html",
+            "neuralforecast/models.softs.html",
+            "neuralforecast/models.stemgnn.html",
+            "neuralforecast/models.tcn.html",
+            "neuralforecast/models.tft.html",
+            "neuralforecast/models.tide.html",
+            "neuralforecast/models.timellm.html",
+            "neuralforecast/models.timesnet.html",
+            "neuralforecast/models.tsmixer.html",
+            "neuralforecast/models.tsmixerx.html",
+            "neuralforecast/models.vanillatransformer.html"
           ]
         },
+        "neuralforecast/models.html",
         {
           "group": "Train/Evaluation",
           "pages": [
