@@ -405,25 +405,40 @@
     {
       "group": "Tutorials",
       "pages": [
-        "neuralforecast/docs/tutorials/getting_started_complete.html",
-        "neuralforecast/docs/tutorials/cross_validation_tutorial.html",
-        "neuralforecast/docs/tutorials/uncertainty_quantification.html",
-        "neuralforecast/docs/tutorials/longhorizon_nhits.html",
-        "neuralforecast/docs/tutorials/longhorizon_transformers.html",
-        "neuralforecast/docs/tutorials/longhorizon_probabilistic.html",
-        "neuralforecast/docs/tutorials/forecasting_tft.html",
-        "neuralforecast/docs/tutorials/multivariate_tsmixer.html",
-        "neuralforecast/docs/tutorials/hierarchical_forecasting.html",
-        "neuralforecast/docs/tutorials/distributed_neuralforecast.html",
-        "neuralforecast/docs/tutorials/intermittent_data.html",
-        "neuralforecast/docs/tutorials/using_mlflow.html",
-        "neuralforecast/docs/tutorials/robust_forecasting.html",
-        "neuralforecast/docs/tutorials/interpretable_decompositions.html",
-        "neuralforecast/docs/tutorials/comparing_methods.html",
-        "neuralforecast/docs/tutorials/temporal_classification.html",
-        "neuralforecast/docs/tutorials/transfer_learning.html",
-        "neuralforecast/docs/tutorials/adding_models.html",
-        "neuralforecast/docs/tutorials/large_datasets_tutorial.html"
+        {
+          "group": "Forecasting",
+          "pages": [
+            "neuralforecast/docs/tutorials/getting_started_complete.html",
+            "neuralforecast/docs/tutorials/cross_validation_tutorial.html",
+            "neuralforecast/docs/tutorials/longhorizon_nhits.html",
+            "neuralforecast/docs/tutorials/longhorizon_transformers.html",
+            "neuralforecast/docs/tutorials/forecasting_tft.html",
+            "neuralforecast/docs/tutorials/multivariate_tsmixer.html"
+          ]
+        },
+        {
+          "group": "Probabilistic Forecasting",
+          "pages": [
+            "neuralforecast/docs/tutorials/uncertainty_quantification.html",
+            "neuralforecast/docs/tutorials/longhorizon_probabilistic.html"
+          ]
+        },
+        {
+          "group": "Special Topics",
+          "pages": [
+            "neuralforecast/docs/tutorials/hierarchical_forecasting.html",
+            "neuralforecast/docs/tutorials/distributed_neuralforecast.html",
+            "neuralforecast/docs/tutorials/intermittent_data.html",
+            "neuralforecast/docs/tutorials/using_mlflow.html",
+            "neuralforecast/docs/tutorials/robust_forecasting.html",
+            "neuralforecast/docs/tutorials/interpretable_decompositions.html",
+            "neuralforecast/docs/tutorials/comparing_methods.html",
+            "neuralforecast/docs/tutorials/temporal_classification.html",
+            "neuralforecast/docs/tutorials/transfer_learning.html",
+            "neuralforecast/docs/tutorials/adding_models.html",
+            "neuralforecast/docs/tutorials/large_datasets_tutorial.html"
+          ]
+        }
       ]
     },
     {
@@ -444,6 +459,7 @@
             "neuralforecast/models.autoformer.html",
             "neuralforecast/models.bitcn.html",
             "neuralforecast/models.deepar.html",
+            "neuralforecast/models.deepnpts.html",
             "neuralforecast/models.dilated_rnn.html",
             "neuralforecast/models.dlinear.html",
             "neuralforecast/models.fedformer.html",
@@ -460,13 +476,13 @@
             "neuralforecast/models.nlinear.html",
             "neuralforecast/models.patchtst.html",
             "neuralforecast/models.rnn.html",
-            "neuralforecast/models.deepnpts.html",
             "neuralforecast/models.softs.html",
             "neuralforecast/models.stemgnn.html",
             "neuralforecast/models.tcn.html",
             "neuralforecast/models.tft.html",
             "neuralforecast/models.tide.html",
             "neuralforecast/models.timellm.html",
+            "neuralforecast/models.timemixer.html",
             "neuralforecast/models.timesnet.html",
             "neuralforecast/models.tsmixer.html",
             "neuralforecast/models.tsmixerx.html",
