@@ -467,6 +467,7 @@
             "neuralforecast/models.hint.html",
             "neuralforecast/models.informer.html",
             "neuralforecast/models.itransformer.html",
+            "neuralforecast/models.kan.html",
             "neuralforecast/models.lstm.html",
             "neuralforecast/models.mlp.html",
             "neuralforecast/models.mlpmultivariate.html",
