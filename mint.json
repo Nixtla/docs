@@ -436,7 +436,7 @@
             "neuralforecast/docs/tutorials/temporal_classification.html",
             "neuralforecast/docs/tutorials/transfer_learning.html",
             "neuralforecast/docs/tutorials/adding_models.html",
-            "neuralforecast/docs/tutorials/large_datasets_tutorial.html"
+            "neuralforecast/docs/tutorials/large_datasets.html"
           ]
         }
       ]
