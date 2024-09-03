@@ -36,8 +36,8 @@ def multiline_equations(matches):
 
 def standardize_page_name(match):
     """Make name lowercase, remove numbers from the beginning and use html suffix."""
-    if match[2].startswith(('(https://raw.githubusercontent', '(https://www.youtube')):
-        # leave existing filenames as is
+    # we only have to standardize relative links to our nbs
+    if not (match[2].startswith(('(./', '(../')) or 'ipynb' in match[2]):
         return f'{match[1]}{match[2]}'
     parts = match[2].split('/')
     replaced = re.sub('\d+_', '', parts[-1]).lower().replace('ipynb', 'html')
