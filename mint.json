@@ -72,6 +72,7 @@
         "nixtla/docs/getting-started/azure_quickstart.html",
         "nixtla/docs/getting-started/setting_up_your_api_key.html",
         "nixtla/docs/getting-started/data_requirements.html",
+        "nixtla/docs/getting-started/pricing.html",
         "nixtla/docs/getting-started/faq.html",
         "nixtla/docs/getting-started/glossary.html"
       ]
@@ -159,7 +160,8 @@
             "nixtla/docs/tutorials/irregular_timestamps.html",
             "nixtla/docs/tutorials/bounded_forecasts.html",
             "nixtla/docs/tutorials/hierarchical_forecasting.html",
-            "nixtla/docs/tutorials/missing_values.html"
+            "nixtla/docs/tutorials/missing_values.html",
+            "nixtla/docs/tutorials/how_to_improve_forecast_accuracy.html"
           ]
         },
         {
