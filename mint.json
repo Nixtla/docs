@@ -157,7 +157,6 @@
         {
           "group": "Special Topics",
           "pages": [
-            "nixtla/docs/tutorials/irregular_timestamps.html",
             "nixtla/docs/tutorials/bounded_forecasts.html",
             "nixtla/docs/tutorials/hierarchical_forecasting.html",
             "nixtla/docs/tutorials/missing_values.html",
