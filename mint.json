@@ -74,7 +74,8 @@
         "nixtla/docs/getting-started/data_requirements.html",
         "nixtla/docs/getting-started/pricing.html",
         "nixtla/docs/getting-started/faq.html",
-        "nixtla/docs/getting-started/glossary.html"
+        "nixtla/docs/getting-started/glossary.html",
+        "nixtla/docs/getting-started/why_timegpt.html"
       ]
     },
     {
@@ -137,7 +138,8 @@
           "group": "Fine-tuning",
           "pages": [
             "nixtla/docs/tutorials/finetuning.html",
-            "nixtla/docs/tutorials/loss_function_finetuning.html"
+            "nixtla/docs/tutorials/loss_function_finetuning.html",
+            "nixtla/docs/tutorials/finetune_depth_finetuning.html"
           ]
         },
         {
