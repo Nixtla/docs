@@ -539,6 +539,7 @@
       "pages": [
         "hierarchicalforecast/examples/installation.html",
         "hierarchicalforecast/examples/tourismsmall.html",
+        "hierarchicalforecast/examples/tourismsmallpolars.html",
         "hierarchicalforecast/examples/introduction.html"
       ]
     },
