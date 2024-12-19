@@ -569,11 +569,11 @@
     {
       "group": "API Reference",
       "pages": [
-        "hierarchicalforecast/core.html",
-        "hierarchicalforecast/methods.html",
-        "hierarchicalforecast/probabilistic_methods.html",
-        "hierarchicalforecast/evaluation.html",
-        "hierarchicalforecast/utils.html"
+        "hierarchicalforecast/src/core.html",
+        "hierarchicalforecast/src/methods.html",
+        "hierarchicalforecast/src/probabilistic_methods.html",
+        "hierarchicalforecast/src/evaluation.html",
+        "hierarchicalforecast/src/utils.html"
       ]
     },
     {
