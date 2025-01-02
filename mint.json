@@ -138,6 +138,7 @@
           "group": "Fine-tuning",
           "pages": [
             "nixtla/docs/tutorials/finetuning.html",
+            "nixtla/docs/tutorials/reusing_finetuned_models.html",
             "nixtla/docs/tutorials/loss_function_finetuning.html",
             "nixtla/docs/tutorials/finetune_depth_finetuning.html"
           ]
