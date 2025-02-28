@@ -505,6 +505,7 @@
             "neuralforecast/models.timellm.html",
             "neuralforecast/models.timemixer.html",
             "neuralforecast/models.timesnet.html",
+            "neuralforecast/models.timexer.html",
             "neuralforecast/models.tsmixer.html",
             "neuralforecast/models.tsmixerx.html",
             "neuralforecast/models.vanillatransformer.html"
