@@ -573,6 +573,15 @@
             "hierarchicalforecast/examples/tourismlarge-evaluation.html"
           ]
         },
+        {
+          "group": "Temporal Reconciliation",
+          "pages": [
+            "hierarchicalforecast/examples/australiandomestictourismtemporal.html",
+            "hierarchicalforecast/examples/australiandomestictourismcrosstemporal.html",
+            "hierarchicalforecast/examples/m3withthief.html",
+            "hierarchicalforecast/examples/localglobalaggregation.html"
+          ]
+        },
         "hierarchicalforecast/examples/mlframeworksexample.html"
       ]
     },
