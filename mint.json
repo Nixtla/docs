@@ -170,6 +170,7 @@
           "pages": [
             "nixtla/docs/tutorials/bounded_forecasts.html",
             "nixtla/docs/tutorials/hierarchical_forecasting.html",
+            "nixtla/docs/tutorials/temporalhierarchical.html",
             "nixtla/docs/tutorials/missing_values.html",
             "nixtla/docs/tutorials/how_to_improve_forecast_accuracy.html"
           ]
