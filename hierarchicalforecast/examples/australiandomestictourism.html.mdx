@@ -86,7 +86,7 @@ spec = [
 ```
 
 Using the
-[`aggregate`](https://Nixtla.github.io/hierarchicalforecast/src/utils.html#aggregate)
+[`aggregate`](src/utils.html#aggregate)
 function from `HierarchicalForecast` we can get the full set of time
 series.
 
@@ -190,16 +190,16 @@ Y_fitted_df = fcst.forecast_fitted_values()
 ## 3. Reconcile forecasts
 
 The following cell makes the previous forecasts coherent using the
-[`HierarchicalReconciliation`](https://Nixtla.github.io/hierarchicalforecast/src/core.html#hierarchicalreconciliation)
+[`HierarchicalReconciliation`](src/core.html#hierarchicalreconciliation)
 class. Since the hierarchy structure is not strict, we can’t use methods
 such as
-[`TopDown`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#topdown)
+[`TopDown`](src/methods.html#topdown)
 or
-[`MiddleOut`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#middleout).
+[`MiddleOut`](src/methods.html#middleout).
 In this example we use
-[`BottomUp`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#bottomup)
+[`BottomUp`](src/methods.html#bottomup)
 and
-[`MinTrace`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#mintrace).
+[`MinTrace`](src/methods.html#mintrace).
 
 
 ```python
@@ -236,7 +236,7 @@ Y_rec_df.head()
 ## 4. Evaluation
 
 The `HierarchicalForecast` package includes an
-[`evaluate`](https://Nixtla.github.io/hierarchicalforecast/src/evaluation.html#evaluate)
+[`evaluate`](src/evaluation.html#evaluate)
 function to evaluate the different hierarchies and also is capable of
 compute scaled metrics compared to a benchmark model.
 

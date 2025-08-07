@@ -47,7 +47,7 @@ fcst = MLForecast(
 
 Once you define your transformations you can see what they look like
 with
-[`MLForecast.preprocess`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast.preprocess).
+[`MLForecast.preprocess`](forecast.html#mlforecast.preprocess).
 
 ```python
 fcst.preprocess(data).head(2)
@@ -61,7 +61,7 @@ fcst.preprocess(data).head(2)
 ### Extending the built-in transformations
 
 You can compose the built-in transformations by using the
-[`Combine`](https://Nixtla.github.io/mlforecast/lag_transforms.html#combine)
+[`Combine`](lag_transforms.html#combine)
 class, which takes two transformations and an operator.
 
 ```python
@@ -104,9 +104,9 @@ np.testing.assert_allclose(
 ```
 
 If you want one of the transformations in
-[`Combine`](https://Nixtla.github.io/mlforecast/lag_transforms.html#combine)
+[`Combine`](lag_transforms.html#combine)
 to be applied to a different lag you can use the
-[`Offset`](https://Nixtla.github.io/mlforecast/lag_transforms.html#offset)
+[`Offset`](lag_transforms.html#offset)
 class, which will apply the offset first and then the transformation.
 
 ```python
@@ -162,9 +162,9 @@ predict step they can very slow, because we have to call the function
 again on the complete history and just keep the last value, so if
 performance is a concern you should try to use the built-in ones or set
 `keep_last_n` in
-[`MLForecast.preprocess`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast.preprocess)
+[`MLForecast.preprocess`](forecast.html#mlforecast.preprocess)
 or
-[`MLForecast.fit`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast.fit)
+[`MLForecast.fit`](forecast.html#mlforecast.fit)
 to the minimum number of samples that your transformations require.
 
 ```python

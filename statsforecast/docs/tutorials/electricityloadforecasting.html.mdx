@@ -29,7 +29,7 @@ hourly PJM electricity load data. The original data can be found
 
 In this example we will use the following libraries:
 
--   [`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast).
+-   [`StatsForecast`](src/core/core.html#statsforecast).
     Lightning ⚡️ fast forecasting with statistical and econometric
     models. Includes the MSTL model for multiple seasonalities.
 -   [`Prophet`](https://github.com/facebook/prophet). Benchmark model
@@ -107,19 +107,19 @@ in production.
 ### MSTL model
 
 The
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 (Multiple Seasonal-Trend decomposition using LOESS) model, originally
 developed by [Kasun Bandara, Rob J Hyndman and Christoph
 Bergmeir](https://arxiv.org/abs/2107.13462), decomposes the time series
 in multiple seasonalities using a Local Polynomial Regression (LOESS).
 Then it forecasts the trend using a custom non-seasonal model and each
 seasonality using a
-[`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive)
+[`SeasonalNaive`](src/core/models.html#seasonalnaive)
 model.
 
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 contains a fast implementation of the
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 model. Also, the decomposition of the time series can be calculated.
 
 
@@ -135,7 +135,7 @@ every 24 \* 7 (Daily) hours. Therefore, we will use `[24, 24 * 7]` as
 the seasonalities that the MSTL model receives. We must also specify the
 manner in which the trend will be forecasted. In this case we will use
 the
-[`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima)
+[`AutoARIMA`](src/core/models.html#autoarima)
 model.
 
 
@@ -147,7 +147,7 @@ mstl = MSTL(
 ```
 
 Once the model is instantiated, we have to instantiate the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 class to create forecasts.
 
 
@@ -172,14 +172,14 @@ sf = sf.fit(df=df)
 
 Once the model is fitted, we can access the decomposition using the
 `fitted_` attribute of
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast).
+[`StatsForecast`](src/core/core.html#statsforecast).
 This attribute stores all relevant information of the fitted models for
 each of the time series.
 
 In this case we are fitting a single model for a single time series, so
 by accessing the fitted\_ location \[0, 0\] we will find the relevant
 information of our model. The
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 class generates a `model_` attribute that contains the way the series
 was decomposed.
 
@@ -215,11 +215,11 @@ plt.show()
 
 We observe that there is a clear trend towards the high (orange line).
 This component would be predicted with the
-[`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima)
+[`AutoARIMA`](src/core/models.html#autoarima)
 model. We can also observe that every 24 hours and every `24 * 7` hours
 there is a very well defined pattern. These two components will be
 forecast separately using a
-[`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive)
+[`SeasonalNaive`](src/core/models.html#seasonalnaive)
 model.
 
 #### Produce forecasts
@@ -284,7 +284,7 @@ def plot_forecasts(y_hist, y_true, y_pred, models):
 #### Split Train/Test sets
 
 To validate the accuracy of the
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 model, we will show its performance on unseen data. We will use a
 classical time series technique that consists of dividing the data into
 a training set and a test set. We will leave the last 24 observations
@@ -300,13 +300,13 @@ df_train = df.drop(df_test.index)
 #### MSTL model
 
 In addition to the
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 model, we will include the
-[`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive)
+[`SeasonalNaive`](src/core/models.html#seasonalnaive)
 model as a benchmark to validate the added value of the
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 model. Including
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 models is as simple as adding them to the list of models to be fitted.
 
 
@@ -366,7 +366,7 @@ plot_series(df_train, df_test.merge(forecasts_test), level=[90], max_insample_le
 ![](/statsforecast/docs/tutorials/ElectricityLoadForecasting_files/figure-markdown_strict/cell-21-output-1.png)
 
 Let’s look at those produced only by
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl).
+[`MSTL`](src/core/models.html#mstl).
 
 
 ```python
@@ -376,7 +376,7 @@ plot_series(df_train, df_test.merge(forecasts_test), level=[90], max_insample_le
 ![](/statsforecast/docs/tutorials/ElectricityLoadForecasting_files/figure-markdown_strict/cell-22-output-1.png)
 
 We note that
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 produces very accurate forecasts that follow the behavior of the time
 series. Now let us calculate numerically the accuracy of the model. We
 will use the following metrics: `MAE`, `MAPE`, `MASE`, `RMSE`, `SMAPE`.
@@ -415,9 +415,9 @@ eval_df
 ```
 
 We observe that
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 has an improvement of about 35% over the
-[`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive)
+[`SeasonalNaive`](src/core/models.html#seasonalnaive)
 method in the test set measured in `MASE`.
 
 #### Comparison with Prophet
@@ -426,7 +426,7 @@ One of the most widely used models for time series forecasting is
 `Prophet`. This model is known for its ability to model different
 seasonalities (weekly, daily yearly). We will use this model as a
 benchmark to see if the
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 adds value for this time series.
 
 
@@ -487,7 +487,7 @@ times
 
 We observe that the time required for `Prophet` to perform the fit and
 predict pipeline is greater than
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl).
+[`MSTL`](src/core/models.html#mstl).
 Let’s look at the forecasts produced by `Prophet`.
 
 
@@ -534,9 +534,9 @@ eval_df
 
 In terms of accuracy, `Prophet` is not able to produce better forecasts
 than the
-[`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive)
+[`SeasonalNaive`](src/core/models.html#seasonalnaive)
 model, however, the
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 model improves `Prophet`’s forecasts by 45% (`MASE`).
 
 #### Comparison with NeuralProphet
@@ -639,7 +639,7 @@ times
 
 We observe that `NeuralProphet` requires a longer processing time than
 `Prophet` and
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl).
+[`MSTL`](src/core/models.html#mstl).
 
 
 ```python
@@ -685,7 +685,7 @@ eval_df
 
 With respect to numerical evaluation, `NeuralProphet` improves the
 results of `Prophet`, as expected, however,
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](src/core/models.html#mstl)
 improves over `NeuralProphet`’s foreacasts by 44% (`MASE`).
 
 > **Important**
@@ -698,7 +698,7 @@ improves over `NeuralProphet`’s foreacasts by 44% (`MASE`).
 ## Conclusion
 
 In this post we introduced
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl),
+[`MSTL`](src/core/models.html#mstl),
 a model originally developed by [Kasun Bandara, Rob Hyndman and
 Christoph Bergmeir](https://arxiv.org/abs/2107.13462) capable of
 handling time series with multiple seasonalities. We also showed that

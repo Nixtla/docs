@@ -5,7 +5,7 @@ title: Quick Start
 ---
 
 
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 follows the sklearn model API. For this minimal example, you will create
 an instance of the StatsForecast class and then call its `fit` and
 `predict` methods. We recommend this option if speed is not paramount
@@ -66,13 +66,13 @@ df.head()
 | 4   | AirPassengers | 1949-05-01 | 121 |
 
 We fit the model by instantiating a new
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 object with its two required parameters:
 https://nixtla.github.io/statsforecast/src/core/models.html \* `models`:
 a list of models. Select the models you want from
 [models](../../src/core/models.html) and import them. For this example,
 we will use a
-[`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima)
+[`AutoARIMA`](src/core/models.html#autoarima)
 model. We set `season_length` to 12 because we expect seasonal effects
 every 12 months. (See: [Seasonal
 periods](https://robjhyndman.com/hyndsight/seasonal-periods/))

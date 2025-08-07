@@ -481,10 +481,10 @@ fig = plot_series(forecasts_df=results)
 #### Prediction intervals
 
 With
-[`MLForecast`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast),
+[`MLForecast`](forecast.html#mlforecast),
 you can generate prediction intervals using Conformal Prediction. To
 configure Conformal Prediction, you need to pass an instance of the
-[`PredictionIntervals`](https://Nixtla.github.io/mlforecast/utils.html#predictionintervals)
+[`PredictionIntervals`](utils.html#predictionintervals)
 class to the `prediction_intervals` argument of the `fit` method. The
 class takes three parameters: `n_windows`, `h` and `method`.
 
@@ -535,7 +535,7 @@ fig = plot_series(forecasts_df=results, level=[50, 80, 95])
 
 If you want to reduce the computational time and produce intervals with
 the same width for the whole forecast horizon, simple pass `h=1` to the
-[`PredictionIntervals`](https://Nixtla.github.io/mlforecast/utils.html#predictionintervals)
+[`PredictionIntervals`](utils.html#predictionintervals)
 class. The caveat of this strategy is that in some cases, variance of
 the absolute residuals maybe be small (even zero), so the intervals may
 be too narrow.
@@ -660,7 +660,7 @@ target="_blank" style={{ float: "right", fontSize: "smaller" }}>source</a>
 > ```
 
 *Manually train models. Use this if you called
-[`MLForecast.preprocess`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast.preprocess)
+[`MLForecast.preprocess`](forecast.html#mlforecast.preprocess)
 beforehand.*
 
 |             | **Type**       | **Details**                              |
@@ -747,7 +747,7 @@ Since the data is time dependant we usually take the last *x*
 observations from our data as the validation set.
 
 This process is implemented in
-[`MLForecast.cross_validation`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast.cross_validation),
+[`MLForecast.cross_validation`](forecast.html#mlforecast.cross_validation),
 which takes our data and performs the process described above for
 `n_windows` times where each window has `h` validation samples in it.
 For example, if we have 100 samples and we want to perform 2 backtests
@@ -907,11 +907,11 @@ target="_blank" style={{ float: "right", fontSize: "smaller" }}>source</a>
 
 Once you’ve found a set of features and parameters that work for your
 problem you can build a forecast object from it using
-[`MLForecast.from_cv`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast.from_cv),
+[`MLForecast.from_cv`](forecast.html#mlforecast.from_cv),
 which takes the trained
-[`LightGBMCV`](https://Nixtla.github.io/mlforecast/lgb_cv.html#lightgbmcv)
+[`LightGBMCV`](lgb_cv.html#lightgbmcv)
 object and builds an
-[`MLForecast`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast)
+[`MLForecast`](forecast.html#mlforecast)
 object that will use the same features and parameters. Then you can call
 fit and predict as you normally would.
 

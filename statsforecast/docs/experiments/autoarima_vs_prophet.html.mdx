@@ -9,15 +9,15 @@ title: AutoARIMA Comparison (Prophet and pmdarima)
 ## Motivation
 
 The
-[`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima)
+[`AutoARIMA`](src/core/models.html#autoarima)
 model is widely used to forecast time series in production and as a
 benchmark. However, the python implementation (`pmdarima`) is so slow
 that prevent data scientist practioners from quickly iterating and
 deploying
-[`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima)
+[`AutoARIMA`](src/core/models.html#autoarima)
 in production for a large number of time series. In this notebook we
 present Nixtla’s
-[`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima)
+[`AutoARIMA`](src/core/models.html#autoarima)
 based on the R implementation (developed by Rob Hyndman) and optimized
 using `numba`.
 
@@ -123,7 +123,7 @@ data.
 
 ### Training and forecasting
 
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 receives a list of models to fit each time series. Since we are dealing
 with Hourly data, it would be benefitial to use 24 as seasonality.
 
@@ -257,7 +257,7 @@ Subclasses:
 ```
 
 As we see, we can pass `season_length` to
-[`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima),
+[`AutoARIMA`](src/core/models.html#autoarima),
 so the definition of our models would be,
 
 
@@ -323,7 +323,7 @@ plot_series(train, test)
 ### pmdarima
 
 You can use the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 class to parallelize your own models. In this section we will use it to
 run the `auto_arima` model from `pmdarima`.
 
@@ -532,7 +532,7 @@ plot_series(train, test)
 ### Time
 
 Since
-[`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima)
+[`AutoARIMA`](src/core/models.html#autoarima)
 works with numba is useful to calculate the time for just one time
 series.
 

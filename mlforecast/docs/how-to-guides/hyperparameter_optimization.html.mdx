@@ -196,12 +196,12 @@ evaluate(preds, group)
 ### Tuning features
 
 The
-[`MLForecast`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast)
+[`MLForecast`](forecast.html#mlforecast)
 class defines the features to build in its constructor. You can tune the
 features by providing a function through the `init_config` argument,
 which will take an optuna trial and produce a configuration to pass to
 the
-[`MLForecast`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast)
+[`MLForecast`](forecast.html#mlforecast)
 constructor.
 
 ```python
@@ -240,7 +240,7 @@ evaluate(preds, group)
 ### Tuning fit parameters
 
 The
-[`MLForecast.fit`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast.fit)
+[`MLForecast.fit`](forecast.html#mlforecast.fit)
 method takes some arguments that could improve the forecasting
 performance of your models, such as `dropna` and `static_features`. If
 you want to tune those you can provide a function to the `fit_config`
@@ -281,7 +281,7 @@ evaluate(preds, group)
 
 After the process has finished the results are available under the
 `results_` attribute of the
-[`AutoMLForecast`](https://Nixtla.github.io/mlforecast/auto.html#automlforecast)
+[`AutoMLForecast`](auto.html#automlforecast)
 object. There will be one result per model and the best configuration
 can be found under the `config` user attribute.
 
@@ -322,7 +322,7 @@ There is one optimization process per model. This is because different
 models can make use of different features. So after the optimization
 process is done for each model the best configuration is used to retrain
 the model using all of the data. These final models are
-[`MLForecast`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast)
+[`MLForecast`](forecast.html#mlforecast)
 objects and are saved in the `models_` attribute.
 
 ```python
@@ -336,7 +336,7 @@ auto_mlf.models_
 ## Saving
 
 You can use the
-[`AutoMLForecast.save`](https://Nixtla.github.io/mlforecast/auto.html#automlforecast.save)
+[`AutoMLForecast.save`](auto.html#automlforecast.save)
 method to save the best models found. This produces one directory per
 model.
 
@@ -351,7 +351,7 @@ with tempfile.TemporaryDirectory() as tmpdir:
 ```
 
 Since each model is an
-[`MLForecast`](https://Nixtla.github.io/mlforecast/forecast.html#mlforecast)
+[`MLForecast`](forecast.html#mlforecast)
 object you can load it by itself.
 
 ```python

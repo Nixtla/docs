@@ -111,7 +111,7 @@ StatsForecast models.\*
 | df | AnyDataFrame | DataFrame with ids, times, targets and exogenous. |
 | freq | Union | Frequency of the data. Must be a valid pandas or polars offset alias, or an integer. |
 | models | List | List of instantiated objects models.StatsForecast. |
-| fallback_model | Optional | Any, optional (default=None)<br/>Model to be used if a model fails.<br/>Only works with the `forecast` and [`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation) methods. |
+| fallback_model | Optional | Any, optional (default=None)<br/>Model to be used if a model fails.<br/>Only works with the `forecast` and [`cross_validation`](src/mfles.html#cross_validation) methods. |
 | X_df | Optional | DataFrame with ids, times and future exogenous. |
 | h | int | Forecast horizon. |
 | level | Optional | Confidence levels between 0 and 100 for prediction intervals. |
@@ -159,7 +159,7 @@ measurements by increasing the test’s length and diversity.\*
 | df | AnyDataFrame | DataFrame with ids, times, targets and exogenous. |
 | freq | Union | Frequency of the data. Must be a valid pandas or polars offset alias, or an integer. |
 | models | List | List of instantiated objects models.StatsForecast. |
-| fallback_model | Optional | Any, optional (default=None)<br/>Model to be used if a model fails.<br/>Only works with the `forecast` and [`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation) methods. |
+| fallback_model | Optional | Any, optional (default=None)<br/>Model to be used if a model fails.<br/>Only works with the `forecast` and [`cross_validation`](src/mfles.html#cross_validation) methods. |
 | h | int | Forecast horizon. |
 | n_windows | int | Number of windows used for cross validation. |
 | step_size | int | Step size between each window. |
@@ -177,11 +177,11 @@ measurements by increasing the test’s length and diversity.\*
 ## Dask Distributed Predictions
 
 Here we provide an example for the distribution of the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 predictions using `Fugue` to execute the code in a Dask cluster.
 
 To do it we instantiate the
-[`FugueBackend`](https://Nixtla.github.io/statsforecast/src/core/distributed.fugue.html#fuguebackend)
+[`FugueBackend`](src/core/distributed.fugue.html#fuguebackend)
 class with a `DaskExecutionEngine`.
 
 
@@ -207,7 +207,7 @@ engine = DaskExecutionEngine(dask_client=dask_client)
 ```
 
 We have simply create the class to the usual
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 instantiation.
 
 
@@ -244,7 +244,7 @@ yy = sf.forecast_fitted_values().compute()
 ### Distributed Cross-Validation
 
 For extremely fast distributed temporcal cross-validation we use
-[`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation)
+[`cross_validation`](src/mfles.html#cross_validation)
 method that operates like the original
 [StatsForecast.cross_validation](https://nixtla.github.io/statsforecast/src/core/core.html#statsforecast.cross_validation)
 method.

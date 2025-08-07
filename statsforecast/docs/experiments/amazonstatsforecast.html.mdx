@@ -139,15 +139,15 @@ Y_df_m5.head()
 ### Train statistical models
 
 We fit the model by instantiating a new
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 object with the following parameters:
 
 -   `models`: a list of models. Select the models you want from
     [models](../models.html) and import them. For this example, we will
     use
-    [`AutoETS`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoets)
+    [`AutoETS`](src/core/models.html#autoets)
     and
-    [`DynamicOptimizedTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#dynamicoptimizedtheta).
+    [`DynamicOptimizedTheta`](src/core/models.html#dynamicoptimizedtheta).
     We set `season_length` to 7 because we expect seasonal effects every
     week. (See: [Seasonal
     periods](https://robjhyndman.com/hyndsight/seasonal-periods/))
@@ -171,21 +171,21 @@ method and pass in the historical data frame.
 > should take around 5 seconds. The second time -once Numba compiled
 > your settings- it should take less than 0.2s.
 
--   [`AutoETS`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoets):
+-   [`AutoETS`](src/core/models.html#autoets):
     Exponential Smoothing model. Automatically selects the best ETS
     (Error, Trend, Seasonality) model using an information criterion.
     Ref:
-    [`AutoETS`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoets).
+    [`AutoETS`](src/core/models.html#autoets).
 
--   [`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive):
+-   [`SeasonalNaive`](src/core/models.html#seasonalnaive):
     Memory Efficient Seasonal Naive predictions. Ref:
-    [`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive).
+    [`SeasonalNaive`](src/core/models.html#seasonalnaive).
 
--   [`DynamicOptimizedTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#dynamicoptimizedtheta):
+-   [`DynamicOptimizedTheta`](src/core/models.html#dynamicoptimizedtheta):
     fit two theta lines to a deseasonalized time series, using different
     techniques to obtain and combine the two theta lines to produce the
     final forecasts. Ref:
-    [`DynamicOptimizedTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#dynamicoptimizedtheta).
+    [`DynamicOptimizedTheta`](src/core/models.html#dynamicoptimizedtheta).
 
 
 ```python
@@ -268,7 +268,7 @@ forecasts_df.to_parquet('s3://m5-benchmarks/forecasts/statsforecast-m5.parquet')
 ## Evaluation
 
 This section evaluates the performance of
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 and `AmazonForecast`. To do this, we first need to install
 [datasetsforecast](https://github.com/Nixtla/datasetsforecast), a Python
 library developed by Nixtla that includes a large battery of benchmark

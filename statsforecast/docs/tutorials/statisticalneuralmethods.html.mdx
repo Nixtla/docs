@@ -39,21 +39,21 @@ paradigms:
 -   Baseline models: These models are simple yet often highly effective
     for providing an initial perspective on the forecasting problem. We
     will use
-    [`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive)
+    [`SeasonalNaive`](src/core/models.html#seasonalnaive)
     and
-    [`HistoricAverage`](https://Nixtla.github.io/statsforecast/src/core/models.html#historicaverage)
+    [`HistoricAverage`](src/core/models.html#historicaverage)
     models for this category.
 -   Intermittent models: For series with sporadic, non-continuous
     demand, we will utilize models like
-    [`CrostonOptimized`](https://Nixtla.github.io/statsforecast/src/core/models.html#crostonoptimized),
-    [`IMAPA`](https://Nixtla.github.io/statsforecast/src/core/models.html#imapa),
+    [`CrostonOptimized`](src/core/models.html#crostonoptimized),
+    [`IMAPA`](src/core/models.html#imapa),
     and
-    [`ADIDA`](https://Nixtla.github.io/statsforecast/src/core/models.html#adida).
+    [`ADIDA`](src/core/models.html#adida).
     These models are particularly suited for handling zero-inflated
     series.
 -   State Space Models: These are statistical models that use
     mathematical descriptions of a system to make predictions. The
-    [`AutoETS`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoets)
+    [`AutoETS`](src/core/models.html#autoets)
     model from the statsforecast library falls under this category.
 
 *[MLForecast](https://github.com/Nixtla/mlforecast)*
@@ -153,7 +153,7 @@ Y_df['unique_id'] = Y_df['unique_id'].astype(str)
 # Basic Plotting
 
 Plot some series using the plot method from the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 class. This method prints 8 random series from the dataset and is useful
 for basic
 [EDA](https://nixtla.github.io/statsforecast/core.html#statsforecast.plot).
@@ -192,7 +192,7 @@ StatsForecast.plot(Y_df, unique_ids=["FOODS_3_432_TX_2"], engine ='matplotlib')
 
 ## StatsForecast
 
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 is a comprehensive library providing a suite of popular univariate time
 series forecasting models, all designed with a focus on high performance
 and scalability.
@@ -222,7 +222,7 @@ forecasting:
     computations across multiple nodes in a cluster, making it a go-to
     solution for large-scale time series forecasting tasks.
 
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 receives a list of models to fit each time series. Since we are dealing
 with Daily data, it would be benefitial to use 7 as seasonality.
 
@@ -576,7 +576,7 @@ sf.plot(Y_df, fcst_df, max_insample_length=28 * 3,
 # Validate Model’s Performance
 
 The three libraries -
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast),
+[`StatsForecast`](src/core/core.html#statsforecast),
 `MLForecast`, and `NeuralForecast` - offer out-of-the-box
 cross-validation capabilities specifically designed for time series.
 This allows us to evaluate the model’s performance using historical data
@@ -593,9 +593,9 @@ Practice</figcaption>
 ## Cross Validation in StatsForecast
 
 The
-[`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation)
+[`cross_validation`](src/mfles.html#cross_validation)
 method from the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 class accepts the following arguments:
 
 -   `df`: A DataFrame representing the training data.
@@ -660,7 +660,7 @@ cv_df.head()
 ## MLForecast
 
 The
-[`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation)
+[`cross_validation`](src/mfles.html#cross_validation)
 method from the `MLForecast` class takes the following arguments.
 
 -   `data`: training data frame
@@ -1027,8 +1027,8 @@ sf.plot(Y_df, fcst_df, max_insample_length=28 * 3)
 -   Train the statistical models in the full dataset.
 -   Increase the number of `num_samples` in the neural auto models.
 -   Include other models such as
-    [`Theta`](https://Nixtla.github.io/statsforecast/src/core/models.html#theta),
-    [`ARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#arima),
+    [`Theta`](src/core/models.html#theta),
+    [`ARIMA`](src/core/models.html#arima),
     `RNN`, `LSTM`, …
 
 # Further materials

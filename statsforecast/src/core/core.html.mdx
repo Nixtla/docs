@@ -6,13 +6,13 @@ title: Core Methods
 
 
 The core methods of
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 are:
 
 -   `StatsForecast.fit`
 -   `StatsForecast.predict`
--   [`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
--   [`StatsForecast.cross_validation`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.cross_validation)
+-   [`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast)
+-   [`StatsForecast.cross_validation`](src/core/core.html#statsforecast.cross_validation)
 -   `StatsForecast.plot`
 
 ------------------------------------------------------------------------
@@ -29,20 +29,20 @@ target="_blank" style={{ float: "right", fontSize: "smaller" }}>source</a>
 > ```
 
 \*The
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 class allows you to efficiently fit multiple
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 models for large sets of time series. It operates on a DataFrame `df`
 with at least three columns ids, times and targets.
 
 The class has memory-efficient
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
+[`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast)
 method that avoids storing partial model outputs. While the
 `StatsForecast.fit` and `StatsForecast.predict` methods with
 Scikit-learn interface store the fitted models.
 
 The
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 class offers parallelization utilities with Dask, Spark and Ray
 back-ends. See distributed computing example
 [here](https://github.com/Nixtla/statsforecast/tree/main/experiments/ray).\*
@@ -130,7 +130,7 @@ fitted models for later inspection.\*
 | id_col | str | unique_id | Column that identifies each serie. |
 | time_col | str | ds | Column that identifies each timestep, its values can be timestamps or integers. |
 | target_col | str | y | Column that contains the target. |
-| **Returns** | **StatsForecast** |  | **Returns with stored [`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast) fitted `models`.** |
+| **Returns** | **StatsForecast** |  | **Returns with stored [`StatsForecast`](src/core/core.html#statsforecast) fitted `models`.** |
 
 ------------------------------------------------------------------------
 
@@ -185,7 +185,7 @@ analogous to Scikit-Learn `fit_predict` without storing information. It
 requires the forecast horizon `h` in advance.
 
 In contrast to
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
+[`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast)
 this method stores partial models outputs.\*
 
 |  | **Type** | **Default** | **Details** |
@@ -274,12 +274,12 @@ target="_blank" style={{ float: "right", fontSize: "smaller" }}>source</a>
 \*Access insample predictions.
 
 After executing
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast),
+[`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast),
 you can access the insample prediction values for each model. To get
 them, you need to pass `fitted=True` to the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
+[`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast)
 method and then use the
-[`StatsForecast.forecast_fitted_values`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast_fitted_values)
+[`StatsForecast.forecast_fitted_values`](src/core/core.html#statsforecast.forecast_fitted_values)
 method.\*
 
 
@@ -329,7 +329,7 @@ target="_blank" style={{ float: "right", fontSize: "smaller" }}>source</a>
 \*Temporal Cross-Validation.
 
 Efficiently fits a list of
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 models through multiple training windows, in either chained or rolled
 manner.
 
@@ -390,10 +390,10 @@ target="_blank" style={{ float: "right", fontSize: "smaller" }}>source</a>
 \*Access insample cross validated predictions.
 
 After executing
-[`StatsForecast.cross_validation`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.cross_validation),
+[`StatsForecast.cross_validation`](src/core/core.html#statsforecast.cross_validation),
 you can access the insample prediction values for each model and window.
 To get them, you need to pass `fitted=True` to the
-[`StatsForecast.cross_validation`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.cross_validation)
+[`StatsForecast.cross_validation`](src/core/core.html#statsforecast.cross_validation)
 method and then use the `StatsForecast.cross_validation_fitted_values`
 method.\*
 
@@ -517,7 +517,7 @@ res = fcst.forecast(df=series, h=14)
 ## Integer datestamp
 
 The
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 class can also receive integers as datestamp, the following example
 shows how to do it.
 
@@ -570,7 +570,7 @@ int_ds_cv
 Every column after **y** is considered an external regressor and will be
 passed to the models that allow them. If you use them you must supply
 the future values to the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
+[`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast)
 method.
 
 
@@ -639,7 +639,7 @@ xreg_res_cv = fcst.cross_validation(df=series_train, h=3, test_size=5, n_windows
 ## Prediction intervals
 
 You can pass the argument `level` to the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
+[`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast)
 method to calculate prediction intervals. Not all models can calculate
 them at the moment, so we will only obtain the intervals of those models
 that have it implemented.

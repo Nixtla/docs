@@ -112,7 +112,7 @@ spec_temporal_quarterly = {"yearly": 4, "semiannually": 2, "quarterly": 1}
 ```
 
 We next compute the temporally aggregated train- and test sets using the
-[`aggregate_temporal`](https://Nixtla.github.io/hierarchicalforecast/src/utils.html#aggregate_temporal)
+[`aggregate_temporal`](src/utils.html#aggregate_temporal)
 function. Note that we have different aggregation matrices `S` for the
 train- and test set, as the test set contains temporal hierarchies that
 are not included in the train set.
@@ -224,9 +224,9 @@ for tags_train, tags_test, Y_train, Y_test in zip([tags_monthly_train, tags_quar
 ### 2c. Reconcile forecasts
 
 We can use the
-[`HierarchicalReconciliation`](https://Nixtla.github.io/hierarchicalforecast/src/core.html#hierarchicalreconciliation)
+[`HierarchicalReconciliation`](src/core.html#hierarchicalreconciliation)
 class to reconcile the forecasts. In this example we use
-[`BottomUp`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#bottomup)
+[`BottomUp`](src/methods.html#bottomup)
 and `MinTrace(wls_struct)`. The latter is the ‘structural scaling’
 method introduced in [Forecasting with temporal
 hierarchies](https://robjhyndman.com/publications/temporal-hierarchies/).
@@ -258,7 +258,7 @@ for Y_hat, S, tags in zip(Y_hats,
 ## 3. Evaluation
 
 The `HierarchicalForecast` package includes the
-[`evaluate`](https://Nixtla.github.io/hierarchicalforecast/src/evaluation.html#evaluate)
+[`evaluate`](src/evaluation.html#evaluate)
 function to evaluate the different hierarchies.
 
 We evaluate the temporally aggregated forecasts *across all temporal

@@ -14,9 +14,9 @@ Follow this article for a step to step guide on building a
 production-ready forecasting pipeline for multiple time series.
 
 During this guide you will gain familiary with the core
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)class
+[`StatsForecast`](src/core/core.html#statsforecast)class
 and some relevant methods like `StatsForecast.plot`,
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
+[`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast)
 and `StatsForecast.cross_validation.`
 
 We will use a classical benchmarking dataset from the M4 competition.
@@ -132,7 +132,7 @@ Y_df = Y_df.groupby('unique_id').tail(7 * 24) #Select last 7 days of data to mak
 ## Explore Data with the plot method
 
 Plot some series using the `plot` method from the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 class. This method prints 8 random series from the dataset and is useful
 for basic EDA.
 
@@ -190,29 +190,29 @@ Here you can check the complete list of
 
 For this example we will use:
 
--   [`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima):
+-   [`AutoARIMA`](src/core/models.html#autoarima):
     Automatically selects the best ARIMA (AutoRegressive Integrated
     Moving Average) model using an information criterion. Ref:
-    [`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima).
+    [`AutoARIMA`](src/core/models.html#autoarima).
 
--   [`HoltWinters`](https://Nixtla.github.io/statsforecast/src/core/models.html#holtwinters):
+-   [`HoltWinters`](src/core/models.html#holtwinters):
     triple exponential smoothing, Holt-Winters’ method is an extension
     of exponential smoothing for series that contain both trend and
     seasonality. Ref:
-    [`HoltWinters`](https://Nixtla.github.io/statsforecast/src/core/models.html#holtwinters)
+    [`HoltWinters`](src/core/models.html#holtwinters)
 
--   [`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive):
+-   [`SeasonalNaive`](src/core/models.html#seasonalnaive):
     Memory Efficient Seasonal Naive predictions. Ref:
-    [`SeasonalNaive`](https://Nixtla.github.io/statsforecast/src/core/models.html#seasonalnaive)
+    [`SeasonalNaive`](src/core/models.html#seasonalnaive)
 
--   [`HistoricAverage`](https://Nixtla.github.io/statsforecast/src/core/models.html#historicaverage):
+-   [`HistoricAverage`](src/core/models.html#historicaverage):
     arthimetic mean. Ref:
-    [`HistoricAverage`](https://Nixtla.github.io/statsforecast/src/core/models.html#historicaverage).
+    [`HistoricAverage`](src/core/models.html#historicaverage).
 
--   [`DynamicOptimizedTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#dynamicoptimizedtheta):
+-   [`DynamicOptimizedTheta`](src/core/models.html#dynamicoptimizedtheta):
     The theta family of models has been shown to perform well in various
     datasets such as M3. Models the deseasonalized time series. Ref:
-    [`DynamicOptimizedTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#dynamicoptimizedtheta).
+    [`DynamicOptimizedTheta`](src/core/models.html#dynamicoptimizedtheta).
 
 Import and instantiate the models. Setting the `season_length` argument
 is sometimes tricky. This article on [Seasonal
@@ -243,7 +243,7 @@ models = [
 ```
 
 We fit the models by instantiating a new
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 object with the following parameters:
 
 -   `models`: a list of models. Select the models you want from
@@ -383,9 +383,9 @@ Depending on your computer, this step should take around 1 min.
 > serving as the testing set.
 
 The
-[`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation)
+[`cross_validation`](src/mfles.html#cross_validation)
 method from the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 class takes the following arguments.
 
 -   `df`: training data frame

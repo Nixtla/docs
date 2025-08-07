@@ -94,7 +94,7 @@ If you want to check the status of your API key, you can use the
 [`validate_api_key`
 method](https://nixtlaverse.nixtla.io/nixtla/nixtla_client.html#nixtlaclient-validate-api-key)
 of the
-[`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+[`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
 class.
 
 `nixtla_client = NixtlaClient(     api_key = 'my_api_key_provided_by_nixtla' )`
@@ -114,7 +114,7 @@ What if my API key isn’t validating?
 When you validate your API key and it returns `False`:
 
 -   If you are targeting an Azure endpoint, getting `False` from the
-    [`NixtlaClient.validate_api_key`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient.validate_api_key)
+    [`NixtlaClient.validate_api_key`](src/nixtla_client.html#nixtlaclient.validate_api_key)
     method is expected. You can skip this step when taregting an Azure
     endpoint and proceed diretly to forecasting instead.
 -   If you are not taregting an Azure endpoint, then you should check
@@ -251,7 +251,7 @@ tutorial.
 How can I plot the TimeGPT forecast?
 
 The
-[`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+[`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
 class has a [`plot`
 method](https://nixtlaverse.nixtla.io/nixtla/nixtla_client.html#nixtlaclient-validate-token)
 that can be used to visualize the forecast. This method only works in
@@ -298,7 +298,7 @@ model then produces the forecasts. You can control the number of
 training iterations and the loss function for fine-tuning with the
 `finetune_steps` and the `finetune_loss` parameters in the `forecast`
 method from the
-[`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+[`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
 class, respectively.
 
 For a comprehensive guide on how to apply fine-tuning, please refer to
@@ -470,7 +470,7 @@ issue when working with large datasets. To fix this, consider increasing
 the `num_partitions` parameter in the [`forecast`
 method](https://nixtlaverse.nixtla.io/nixtla/nixtla_client.html#nixtlaclient-forecast)
 of the
-[`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+[`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
 class, or use a distributed backend if not already in use.
 
 ## Additional Support
