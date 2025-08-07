@@ -20,7 +20,7 @@ from `StatsForecast`, machine learning models such as
 `HistGradientBoostingRegressor` using `MLForecast`, and neural network
 models like `NBEATS` from `NeuralForecast`. After generating these base
 forecasts, we will reconcile them using
-[`BottomUp`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#bottomup),
+[`BottomUp`](src/methods.html#bottomup),
 `MinTrace(mint_shrink)`, `TopDown(forecast_proportions)` reconciliators
 from `HierarchicalForecast`.
 
@@ -80,7 +80,7 @@ spec = [
 ```
 
 Using the
-[`aggregate`](https://Nixtla.github.io/hierarchicalforecast/src/utils.html#aggregate)
+[`aggregate`](src/utils.html#aggregate)
 function from `HierarchicalForecast` we can get the full set of time
 series.
 
@@ -178,7 +178,7 @@ models = {
 To fit each model and create forecasts with it, we loop over the
 timeseries that are present in each level of the hierarchy, using the
 `tags` we created earlier using the
-[`aggregate`](https://Nixtla.github.io/hierarchicalforecast/src/utils.html#aggregate)
+[`aggregate`](src/utils.html#aggregate)
 function.
 
 
@@ -296,9 +296,9 @@ Y_hat_df.head(10)
 | 9 | Australia/ACT | 2016-04-01 | NaN | 548.060532 | NaN | 548.060532 |
 
 We are now ready to make the forecasts coherent using the
-[`HierarchicalReconciliation`](https://Nixtla.github.io/hierarchicalforecast/src/core.html#hierarchicalreconciliation)
+[`HierarchicalReconciliation`](src/core.html#hierarchicalreconciliation)
 class. In this example we use
-[`BottomUp`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#bottomup),
+[`BottomUp`](src/methods.html#bottomup),
 `MinTrace(mint_shrink)`, `TopDown(forecast_proportions)` reconcilers.
 
 
@@ -336,7 +336,7 @@ Y_rec_df.head()
 ## 4. Evaluation
 
 The `HierarchicalForecast` package includes an
-[`evaluate`](https://Nixtla.github.io/hierarchicalforecast/src/evaluation.html#evaluate)
+[`evaluate`](src/evaluation.html#evaluate)
 function to evaluate the different hierarchies. To evaluate models we
 use `mase` metric and compare it to base predictions.
 
@@ -383,7 +383,7 @@ We find that:
     upper levels of the hierarchy, reducing the MASE from 1.59 (base
     forecast) to just 0.44.
 -   **BottomUp for Country/State/Region and Overall**: The
-    [`BottomUp`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#bottomup)
+    [`BottomUp`](src/methods.html#bottomup)
     method preserves only the NBEATS forecast of the most granular
     **Country/State/Regions** level, and aggregates those forecasts for
     the upper levels. It yields the **best Overall MASE score**.
@@ -404,10 +404,10 @@ In this example we fitted:
 We then combined the results into a single prediction.
 
 For the reconciliation of the forecasts, we used
-[`HierarchicalReconciliation`](https://Nixtla.github.io/hierarchicalforecast/src/core.html#hierarchicalreconciliation)
+[`HierarchicalReconciliation`](src/core.html#hierarchicalreconciliation)
 with three different methods:
 
--   [`BottomUp`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#bottomup)
+-   [`BottomUp`](src/methods.html#bottomup)
 -   `MinTrace(method='mint_shrink')`
 -   `TopDown(method='forecast_proportions')`
 

@@ -85,7 +85,7 @@ Y_df.head()
 | 4   | H1        | 5   | 511.0 |
 
 The input to
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 is a data frame in [long
 format](https://www.theanalysisfactor.com/wide-and-long-data/) with
 three columns: `unique_id`, `ds` and y:
@@ -126,11 +126,11 @@ For this example, we’ll use StastForecast
 [AutoETS](https://nixtla.github.io/statsforecast/models.html#autoets).
 We first need to import it from `statsforecast.models` and then we need
 to instantiate a new
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 object.
 
 The
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 object has the following parameters:
 
 -   models: a list of models. Select the models you want from
@@ -164,13 +164,13 @@ sf = StatsForecast(
 ## Perform time series cross-validation
 
 Once the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)object
+[`StatsForecast`](src/core/core.html#statsforecast)object
 has been instantiated, we can use the
-[`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation)
+[`cross_validation`](src/mfles.html#cross_validation)
 method, which takes the following arguments:
 
 -   `df`: training data frame with
-    [`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+    [`StatsForecast`](src/core/core.html#statsforecast)
     format
 -   `h` (int): represents the h steps into the future that will be
     forecasted
@@ -257,7 +257,7 @@ The function to compute the RMSE takes two arguments:
 
 1.  The actual values.  
 2.  The forecasts, in this case,
-    [`AutoETS`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoets).
+    [`AutoETS`](src/core/models.html#autoets).
 
 
 ```python

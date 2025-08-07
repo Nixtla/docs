@@ -63,7 +63,7 @@ $\text{ARCH}(p)$ model defined by (1) will provide an adequate fit only
 if the order $p$ is large. By allowing past volatilities to affect the
 present volatility in (1), a more parsimonious model may result. That is
 why we need
-[`GARCH`](https://Nixtla.github.io/statsforecast/src/core/models.html#garch)
+[`GARCH`](src/core/models.html#garch)
 models. Besides, note the condition that the order $p ≥ 1$. The **GARCH
 model** in Definition 1 has the properties as follows.
 
@@ -555,7 +555,7 @@ ljung_res.head()
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
 Let’s divide our data into sets 1. Data to train our
-[`GARCH`](https://Nixtla.github.io/statsforecast/src/core/models.html#garch)
+[`GARCH`](src/core/models.html#garch)
 model 2. Data to test our model
 
 For the test data we will use the last 30 day to test and evaluate the
@@ -743,7 +743,7 @@ evals.drop(columns='metric').loc[0].idxmin()
 to train and test the model, and the models you want to test. This is an
 example, where the objective is to be able to teach a methodology for
 the use of
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast),
+[`StatsForecast`](src/core/core.html#statsforecast),
 and in particular the GARCH model and the parameters used in Cross
 Validation to determine the best model for this example.
 
@@ -856,7 +856,7 @@ plt.show();
 
 If you want to gain speed in productive settings where you have multiple
 series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
+[`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast)
 method instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
@@ -879,9 +879,9 @@ the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min. (If you want to speed things up to a couple of seconds,
 remove the AutoModels like
-[`ARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#arima)
+[`ARIMA`](src/core/models.html#arima)
 and
-[`Theta`](https://Nixtla.github.io/statsforecast/src/core/models.html#theta))
+[`Theta`](src/core/models.html#theta))
 
 
 ```python

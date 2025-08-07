@@ -71,7 +71,7 @@ spec = [
 ```
 
 Using the
-[`aggregate`](https://Nixtla.github.io/hierarchicalforecast/src/utils.html#aggregate)
+[`aggregate`](src/utils.html#aggregate)
 function from `HierarchicalForecast` we can get the full set of time
 series.
 
@@ -119,7 +119,7 @@ array(['Australia/ACT', 'Australia/New South Wales',
 ```
 
 We can visualize the `S` matrix and the data using the
-[`HierarchicalPlot`](https://Nixtla.github.io/hierarchicalforecast/src/utils.html#hierarchicalplot)
+[`HierarchicalPlot`](src/utils.html#hierarchicalplot)
 class as follows.
 
 
@@ -194,11 +194,11 @@ Y_fitted_df = fcst.forecast_fitted_values()
 ## Reconcile forecasts and compute prediction intervals using PERMBU
 
 The following cell makes the previous forecasts coherent using the
-[`HierarchicalReconciliation`](https://Nixtla.github.io/hierarchicalforecast/src/core.html#hierarchicalreconciliation)
+[`HierarchicalReconciliation`](src/core.html#hierarchicalreconciliation)
 class. In this example we use
-[`BottomUp`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#bottomup)
+[`BottomUp`](src/methods.html#bottomup)
 and
-[`MinTrace`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#mintrace).
+[`MinTrace`](src/methods.html#mintrace).
 If you want to calculate prediction intervals, you have to use the
 `level` argument as follows and also `intervals_method='permbu'`.
 

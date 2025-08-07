@@ -22,7 +22,7 @@ that won’t be shared.
     dashboard](https://dashboard.nixtla.io/).
 -   **Step 2**: Paste the key directly into your Python code, by
     instantiating the
-    [`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+    [`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
     with your API key:
 
 ```python
@@ -41,7 +41,7 @@ nixtla_client = NixtlaClient(api_key ='your API key here')
     `NIXTLA_API_KEY`. This can be done (a) temporarily for a session
     or (b) permanently, depending on your preference.
 -   **Step 2**: When you instantiate the
-    [`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+    [`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
     class, the SDK will automatically look for the `NIXTLA_API_KEY`
     environment variable and use it to authenticate your requests.
 
@@ -108,7 +108,7 @@ deployed or shared, as it keeps API keys out of the source code.
 You can always find your API key in the `API Keys` section of your
 dashboard. To check the status of your API key, use the
 `validate_api_key` method of the
-[`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+[`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
 class. This method will return `True` if the API key is valid and
 `False` otherwise.
 

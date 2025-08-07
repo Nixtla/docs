@@ -49,11 +49,11 @@ Note that in this example, the `ds` column is named `timestamp` and the
 
 2.  Keep the current column names and specify them when using any method
     from the
-    [`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+    [`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
     class with the `time_col` and `target_col` arguments.
 
 For example, when using the `forecast` method from the
-[`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+[`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
 class, you must instantiate the class and then specify the columns names
 as follows.
 
@@ -89,12 +89,12 @@ INFO:nixtla.nixtla_client:Calling Forecast Endpoint...
 | 4   | 1961-05-01 | 505.64648 |
 
 In this example, the
-[`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+[`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
 is infereing the frequency, but you can explicitly specify it with the
 `freq` argument.
 
 To learn more about how to instantiate the
-[`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+[`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
 class, refer to the [TimeGPT
 Quickstart](https://docs.nixtla.io/docs/getting-started-timegpt_quickstart)
 
@@ -103,7 +103,7 @@ Quickstart](https://docs.nixtla.io/docs/getting-started-timegpt_quickstart)
 If you’re working with multiple time series, make sure that each series
 has a unique identifier. You can name this column `unique_id` or specify
 its name using the `id_col` argument when calling any method from the
-[`NixtlaClient`](https://Nixtla.github.io/nixtla/src/nixtla_client.html#nixtlaclient)
+[`NixtlaClient`](src/nixtla_client.html#nixtlaclient)
 class. This column should be a string, integer, or category.
 
 In this example, we have five series representing hourly electricity

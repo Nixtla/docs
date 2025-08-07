@@ -111,7 +111,7 @@ spec_temporal = {"year": 4, "semiannual": 2, "quarter": 1}
 ```
 
 We next compute the temporally aggregated train- and test sets using the
-[`aggregate_temporal`](https://Nixtla.github.io/hierarchicalforecast/src/utils.html#aggregate_temporal)
+[`aggregate_temporal`](src/utils.html#aggregate_temporal)
 function. Note that we have different aggregation matrices `S` for the
 train- and test set, as the test set contains temporal hierarchies that
 are not included in the train set.
@@ -200,7 +200,7 @@ If you don’t have a test set available, as is usually the case when
 you’re making forecasts, it is necessary to create a future dataframe
 that holds the correct bottom-level unique_ids and timestamps so that
 they can be temporally aggregated. We can use the
-[`make_future_dataframe`](https://Nixtla.github.io/hierarchicalforecast/src/utils.html#make_future_dataframe)
+[`make_future_dataframe`](src/utils.html#make_future_dataframe)
 helper function for that.
 
 
@@ -214,7 +214,7 @@ Y_test_df_new = make_future_dataframe(Y_train_df, freq="QS", h=horizon)
 ```
 
 `Y_test_df_new` can be then used in
-[`aggregate_temporal`](https://Nixtla.github.io/hierarchicalforecast/src/utils.html#aggregate_temporal)
+[`aggregate_temporal`](src/utils.html#aggregate_temporal)
 to construct the temporally aggregated structures:
 
 
@@ -336,11 +336,11 @@ Y_hat_df = pd.concat(Y_hat_dfs, ignore_index=True)
 ### 3c. Reconcile forecasts
 
 We can use the
-[`HierarchicalReconciliation`](https://Nixtla.github.io/hierarchicalforecast/src/core.html#hierarchicalreconciliation)
+[`HierarchicalReconciliation`](src/core.html#hierarchicalreconciliation)
 class to reconcile the forecasts. In this example we use
-[`BottomUp`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#bottomup)
+[`BottomUp`](src/methods.html#bottomup)
 and
-[`MinTrace`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#mintrace).
+[`MinTrace`](src/methods.html#mintrace).
 Note that we have to set `temporal=True` in the `reconcile` function.
 
 Note that temporal reconcilation currently isn’t supported for insample
@@ -369,7 +369,7 @@ Y_rec_df = hrec.reconcile(Y_hat_df=Y_hat_df,
 ## 4. Evaluation
 
 The `HierarchicalForecast` package includes the
-[`evaluate`](https://Nixtla.github.io/hierarchicalforecast/src/evaluation.html#evaluate)
+[`evaluate`](src/evaluation.html#evaluate)
 function to evaluate the different hierarchies.
 
 We evaluate the temporally aggregated forecasts *across all temporal

@@ -135,17 +135,17 @@ Y_hat_df = fcst.forecast(df=Y_train_df, h=group.horizon)
 ## 4. Hierarchical reconciliation
 
 The following cell makes the previous forecasts coherent using the
-[`HierarchicalReconciliation`](https://Nixtla.github.io/hierarchicalforecast/src/core.html#hierarchicalreconciliation)
+[`HierarchicalReconciliation`](src/core.html#hierarchicalreconciliation)
 class. The used methods to make the forecasts coherent are:
 
--   [`BottomUp`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#bottomup):
+-   [`BottomUp`](src/methods.html#bottomup):
     The reconciliation of the method is a simple addition to the upper
     levels.
--   [`TopDown`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#topdown):
+-   [`TopDown`](src/methods.html#topdown):
     The second method constrains the base-level predictions to the
     top-most aggregate-level serie and then distributes it to the
     disaggregate series through the use of proportions.
--   [`MiddleOut`](https://Nixtla.github.io/hierarchicalforecast/src/methods.html#middleout):
+-   [`MiddleOut`](src/methods.html#middleout):
     Anchors the base predictions in a middle level.
 
 
@@ -169,7 +169,7 @@ Y_rec_df = hrec.reconcile(Y_hat_df=Y_hat_df, Y_df=Y_train_df, S_df=S_df, tags=ta
 ## 5. Evaluation
 
 The `HierarchicalForecast` package includes the
-[`evaluate`](https://Nixtla.github.io/hierarchicalforecast/src/evaluation.html#evaluate)
+[`evaluate`](src/evaluation.html#evaluate)
 function to evaluate the different hierarchies and we can use
 utilsforecast to compute the mean absolute error relative to a baseline
 model.

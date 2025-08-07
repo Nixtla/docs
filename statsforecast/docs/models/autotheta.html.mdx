@@ -19,13 +19,13 @@ title: AutoTheta Model
 ## Introduction<a class="anchor" id="introduction"></a>
 
 The
-[`AutoTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#autotheta)
+[`AutoTheta`](src/core/models.html#autotheta)
 model in
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 automatically selects the best **Theta model** based on the **mean
 squared error (MSE)**. In this section, we will discuss each of the
 models that
-[`AutoTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#autotheta)
+[`AutoTheta`](src/core/models.html#autotheta)
 considers and then explain how it selects the best one.
 
 ### 1. Standard Theta Model (STM)
@@ -62,7 +62,7 @@ the model dynamically with new data.
 
 ## How AutoTheta Selects the Best Model
 
-1.  [`AutoTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#autotheta)
+1.  [`AutoTheta`](src/core/models.html#autotheta)
     fits all four variants of the Theta model (STM, OTM, DSTM, and DOTM)
     to your data.
 2.  Each model is evaluated using cross-validation or a hold-out
@@ -216,7 +216,7 @@ plt.show();
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
 Let’s divide our data into sets 1. Data to train our
-[`AutoTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#autotheta)
+[`AutoTheta`](src/core/models.html#autotheta)
 model 2. Data to test our model
 
 For the test data we will use the last 12 months to test and evaluate
@@ -674,7 +674,7 @@ plt.show();
 
 If you want to gain speed in productive settings where you have multiple
 series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
+[`StatsForecast.forecast`](src/core/core.html#statsforecast.forecast)
 method instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
@@ -697,9 +697,9 @@ the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min. (If you want to speed things up to a couple of seconds,
 remove the AutoModels like
-[`ARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#arima)
+[`ARIMA`](src/core/models.html#arima)
 and
-[`Theta`](https://Nixtla.github.io/statsforecast/src/core/models.html#theta))
+[`Theta`](src/core/models.html#theta))
 
 
 ```python

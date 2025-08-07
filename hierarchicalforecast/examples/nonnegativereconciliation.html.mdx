@@ -201,7 +201,7 @@ Y_hat_df.query('AutoETS < 0')
 
 The following cell makes the previous forecasts coherent and nonnegative
 using the
-[`HierarchicalReconciliation`](https://Nixtla.github.io/hierarchicalforecast/src/core.html#hierarchicalreconciliation)
+[`HierarchicalReconciliation`](src/core.html#hierarchicalreconciliation)
 class.
 
 
@@ -275,7 +275,7 @@ Y_rec_df.query('`AutoETS/MinTrace_method-ols` < 0')
 ## 4. Evaluation
 
 The `HierarchicalForecast` package includes the
-[`evaluate`](https://Nixtla.github.io/hierarchicalforecast/src/evaluation.html#evaluate)
+[`evaluate`](src/evaluation.html#evaluate)
 function to evaluate the different hierarchies. We use `utilsforecast`
 to compute the mean absolute error.
 

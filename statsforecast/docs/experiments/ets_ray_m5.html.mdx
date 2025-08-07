@@ -6,10 +6,10 @@ title: Forecasting at Scale using ETS and ray (M5)
 
 
 In this notebook we show how to use
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 and `ray` to forecast thounsands of time series in less than 6 minutes
 (M5 dataset). Also, we show that
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 has better performance in time and accuracy compared to [`Prophet`
 running on a Spark
 cluster](http:nixtla.github.io/statsforecast/examples/Prophet_spark_m5.html)
@@ -77,7 +77,7 @@ Y_df['y'] += constant
 
 ## Train the model
 
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 receives a list of models to fit each time series. Since we are dealing
 with Daily data, it would be benefitial to use 7 as seasonality. Observe
 that we need to pass the ray address to the `ray_address` argument.
@@ -110,7 +110,7 @@ print(f'Minutes taken by StatsForecast using: {(end - init) / 60}')
 Minutes taken by StatsForecast using: 5.4817593971888225
 ```
 
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 and `ray` took only 5.48 minutes to train `30,490` time series, compared
 to 18.23 minutes for Prophet and Spark.
 
@@ -165,7 +165,7 @@ M5Evaluation.evaluate(y_hat=Y_hat, directory='./data')
 | Level12 | 0.916175 |
 
 Also,
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](src/core/core.html#statsforecast)
 is more accurate than Prophet, since the overall WMRSSE is `0.68`,
 against `0.77` obtained by prophet.
 
