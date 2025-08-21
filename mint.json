@@ -66,16 +66,16 @@
     {
       "group": "Getting Started",
       "pages": [
-        "nixtla/docs/getting-started/introduction.html",
-        "nixtla/docs/getting-started/quickstart.html",
-        "nixtla/docs/getting-started/polars_quickstart.html",
-        "nixtla/docs/getting-started/azure_quickstart.html",
-        "nixtla/docs/getting-started/setting_up_your_api_key.html",
-        "nixtla/docs/getting-started/pricing.html",
-        "nixtla/docs/getting-started/data_requirements.html",
-        "nixtla/docs/getting-started/faq.html",
-        "nixtla/docs/getting-started/glossary.html",
-        "nixtla/docs/getting-started/why_timegpt.html"
+        "nixtla/docs/getting-started/1_introduction",
+        "nixtla/docs/getting-started/2_quickstart",
+        "nixtla/docs/getting-started/21_polars_quickstart",
+        "nixtla/docs/getting-started/22_azure_quickstart",
+        "nixtla/docs/getting-started/3_setting_up_your_api_key",
+        "nixtla/docs/getting-started/4_data_requirements",
+        "nixtla/docs/getting-started/41_pricing",
+        "nixtla/docs/getting-started/5_faq",
+        "nixtla/docs/getting-started/6_glossary",
+        "nixtla/docs/getting-started/7_why_timegpt"
       ]
     },
     {
@@ -84,34 +84,34 @@
         {
           "group": "Forecast",
           "pages": [
-            "nixtla/docs/capabilities/forecast/quickstart.html",
-            "nixtla/docs/capabilities/forecast/exogenous_variables.html",
-            "nixtla/docs/capabilities/forecast/holidays_special_dates.html",
-            "nixtla/docs/capabilities/forecast/categorical_variables.html",
-            "nixtla/docs/capabilities/forecast/longhorizon.html",
-            "nixtla/docs/capabilities/forecast/multiple_series.html",
-            "nixtla/docs/capabilities/forecast/finetuning.html",
-            "nixtla/docs/capabilities/forecast/custom_loss_function.html",
-            "nixtla/docs/capabilities/forecast/cross_validation.html",
-            "nixtla/docs/capabilities/forecast/prediction_intervals.html",
-            "nixtla/docs/capabilities/forecast/irregular_timestamps.html"
+            "nixtla/docs/capabilities/forecast/01_quickstart",
+            "nixtla/docs/capabilities/forecast/02_exogenous_variables",
+            "nixtla/docs/capabilities/forecast/03_holidays_special_dates",
+            "nixtla/docs/capabilities/forecast/04_categorical_variables",
+            "nixtla/docs/capabilities/forecast/05_longhorizon",
+            "nixtla/docs/capabilities/forecast/06_multiple_series",
+            "nixtla/docs/capabilities/forecast/07_finetuning",
+            "nixtla/docs/capabilities/forecast/08_custom_loss_function",
+            "nixtla/docs/capabilities/forecast/09_cross_validation",
+            "nixtla/docs/capabilities/forecast/10_prediction_intervals",
+            "nixtla/docs/capabilities/forecast/11_irregular_timestamps"
           ]
         },
         {
           "group": "Historical Anomaly Detection",
           "pages": [
-            "nixtla/docs/capabilities/historical-anomaly-detection/quickstart.html",
-            "nixtla/docs/capabilities/historical-anomaly-detection/anomaly_exogenous.html",
-            "nixtla/docs/capabilities/historical-anomaly-detection/anomaly_detection_date_features.html",
-            "nixtla/docs/capabilities/historical-anomaly-detection/confidence_levels.html"
+            "nixtla/docs/capabilities/historical-anomaly-detection/01_quickstart",
+            "nixtla/docs/capabilities/historical-anomaly-detection/02_anomaly_exogenous",
+            "nixtla/docs/capabilities/historical-anomaly-detection/03_anomaly_detection_date_features",
+            "nixtla/docs/capabilities/historical-anomaly-detection/04_confidence_levels"
           ]
         },
         {
           "group": "Online Anomaly Detection",
           "pages": [
-            "nixtla/docs/capabilities/online-anomaly-detection/quickstart.html",
-            "nixtla/docs/capabilities/online-anomaly-detection/adjusting_detection_process.html",
-            "nixtla/docs/capabilities/online-anomaly-detection/univariate_vs_multivariate_anomaly_detection.html"
+            "nixtla/docs/capabilities/online-anomaly-detection/01_quickstart",
+            "nixtla/docs/capabilities/online-anomaly-detection/02_adjusting_detection_process",
+            "nixtla/docs/capabilities/online-anomaly-detection/03_univariate_vs_multivariate_anomaly_detection"
           ]
         }
       ]
@@ -119,69 +119,69 @@
     {
       "group": "Deployment",
       "pages": [
-        "nixtla/docs/deployment/azure_ai.html"
+        "nixtla/docs/deployment/2_azure_ai"
       ]
     },
     {
       "group": "Tutorials",
       "pages": [
-        "nixtla/docs/tutorials/anomaly_detection.html",
+        "nixtla/docs/tutorials/20_anomaly_detection",
         {
           "group": "Exogenous variables",
           "pages": [
-            "nixtla/docs/tutorials/exogenous_variables.html",
-            "nixtla/docs/tutorials/holidays.html",
-            "nixtla/docs/tutorials/categorical_variables.html",
-            "nixtla/docs/tutorials/shap_values.html"
+            "nixtla/docs/tutorials/01_exogenous_variables",
+            "nixtla/docs/tutorials/02_holidays",
+            "nixtla/docs/tutorials/03_categorical_variables",
+            "nixtla/docs/tutorials/21_shap_values"
           ]
         },
         {
           "group": "Training",
           "pages": [
-            "nixtla/docs/tutorials/longhorizon.html",
-            "nixtla/docs/tutorials/multiple_series.html"
+            "nixtla/docs/tutorials/04_longhorizon",
+            "nixtla/docs/tutorials/05_multiple_series"
           ]
         },
         {
           "group": "Fine-tuning",
           "pages": [
-            "nixtla/docs/tutorials/finetuning.html",
-            "nixtla/docs/tutorials/reusing_finetuned_models.html",
-            "nixtla/docs/tutorials/loss_function_finetuning.html",
-            "nixtla/docs/tutorials/finetune_depth_finetuning.html"
+            "nixtla/docs/tutorials/06_finetuning",
+            "nixtla/docs/tutorials/061_reusing_finetuned_models",
+            "nixtla/docs/tutorials/07_loss_function_finetuning",
+            "nixtla/docs/tutorials/23_finetune_depth_finetuning"
           ]
         },
         {
           "group": "Validation",
           "pages": [
-            "nixtla/docs/tutorials/cross_validation.html",
-            "nixtla/docs/tutorials/historical_forecast.html"
+            "nixtla/docs/tutorials/08_cross_validation",
+            "nixtla/docs/tutorials/09_historical_forecast"
           ]
         },
         {
           "group": "Uncertainty quantification",
           "pages": [
-            "nixtla/docs/tutorials/uncertainty_quantification_with_quantile_forecasts.html",
-            "nixtla/docs/tutorials/uncertainty_quantification_with_prediction_intervals.html"
+            "nixtla/docs/tutorials/10_uncertainty_quantification_with_quantile_forecasts",
+            "nixtla/docs/tutorials/11_uncertainty_quantification_with_prediction_intervals"
           ]
         },
         {
           "group": "Special Topics",
           "pages": [
-            "nixtla/docs/tutorials/bounded_forecasts.html",
-            "nixtla/docs/tutorials/hierarchical_forecasting.html",
-            "nixtla/docs/tutorials/temporalhierarchical.html",
-            "nixtla/docs/tutorials/missing_values.html",
-            "nixtla/docs/tutorials/how_to_improve_forecast_accuracy.html"
+            "nixtla/docs/tutorials/13_bounded_forecasts",
+            "nixtla/docs/tutorials/14_hierarchical_forecasting",
+            "nixtla/docs/tutorials/23_temporalhierarchical",
+            "nixtla/docs/tutorials/15_missing_values",
+            "nixtla/docs/tutorials/22_how_to_improve_forecast_accuracy"
           ]
         },
         {
           "group": "Computing at scale",
           "pages": [
-            "nixtla/docs/tutorials/computing_at_scale.html",
-            "nixtla/docs/tutorials/computing_at_scale_spark_distributed.html",
-            "nixtla/docs/tutorials/computing_at_scale_dask_distributed.html",
-            "nixtla/docs/tutorials/computing_at_scale_ray_distributed.html"
+            "nixtla/docs/tutorials/16_computing_at_scale",
+            "nixtla/docs/tutorials/17_computing_at_scale_spark_distributed",
+            "nixtla/docs/tutorials/18_computing_at_scale_dask_distributed",
+            "nixtla/docs/tutorials/19_computing_at_scale_ray_distributed"
           ]
         }
       ]
@@ -189,20 +189,20 @@
     {
       "group": "Use cases",
       "pages": [
-        "nixtla/docs/use-cases/forecasting_web_traffic.html",
-        "nixtla/docs/use-cases/bitcoin_price_prediction.html",
-        "nixtla/docs/use-cases/electricity_demand.html",
-        "nixtla/docs/use-cases/intermittent_demand.html",
-        "nixtla/docs/use-cases/what_if_pricing_scenarios_in_retail.html"
+        "nixtla/docs/use-cases/1_forecasting_web_traffic",
+        "nixtla/docs/use-cases/2_bitcoin_price_prediction",
+        "nixtla/docs/use-cases/3_electricity_demand",
+        "nixtla/docs/use-cases/4_intermittent_demand",
+        "nixtla/docs/use-cases/5_what_if_pricing_scenarios_in_retail"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "nixtla/docs/reference/nixtla_client.html",
-        "nixtla/docs/reference/date_features.html",
-        "nixtla/docs/reference/excel_addin.html",
-        "nixtla/docs/reference/nixtlar.html"
+        "nixtla/nixtla_client",
+        "nixtla/date_features",
+        "nixtla/docs/reference/03_excel_addin",
+        "nixtla/docs/reference/04_nixtlar"
       ]
     },
     {
@@ -402,23 +402,23 @@
     {
       "group": "Getting Started",
       "pages": [
-        "neuralforecast/docs/getting-started/introduction.html",
-        "neuralforecast/docs/getting-started/quickstart.html",
-        "neuralforecast/docs/getting-started/installation.html",
-        "neuralforecast/docs/getting-started/datarequirements.html"
+        "neuralforecast/docs/getting-started/01_introduction",
+        "neuralforecast/docs/getting-started/02_quickstart",
+        "neuralforecast/docs/getting-started/04_installation",
+        "neuralforecast/docs/getting-started/05_datarequirements"
       ]
     },
     {
       "group": "Capabilities",
       "pages": [
-        "neuralforecast/docs/capabilities/overview.html",
-        "neuralforecast/docs/capabilities/objectives.html",
-        "neuralforecast/docs/capabilities/exogenous_variables.html",
-        "neuralforecast/docs/capabilities/cross_validation.html",
-        "neuralforecast/docs/capabilities/hyperparameter_tuning.html",
-        "neuralforecast/docs/capabilities/predictinsample.html",
-        "neuralforecast/docs/capabilities/save_load_models.html",
-        "neuralforecast/docs/capabilities/time_series_scaling.html"
+        "neuralforecast/docs/capabilities/01_overview",
+        "neuralforecast/docs/capabilities/02_objectives",
+        "neuralforecast/docs/capabilities/03_exogenous_variables",
+        "neuralforecast/docs/capabilities/08_cross_validation",
+        "neuralforecast/docs/capabilities/04_hyperparameter_tuning",
+        "neuralforecast/docs/capabilities/05_predictInsample",
+        "neuralforecast/docs/capabilities/06_save_load_models",
+        "neuralforecast/docs/capabilities/07_time_series_scaling"
       ]
     },
     {
@@ -427,36 +427,36 @@
         {
           "group": "Forecasting",
           "pages": [
-            "neuralforecast/docs/tutorials/getting_started_complete.html",
-            "neuralforecast/docs/tutorials/cross_validation_tutorial.html",
-            "neuralforecast/docs/tutorials/longhorizon_nhits.html",
-            "neuralforecast/docs/tutorials/longhorizon_transformers.html",
-            "neuralforecast/docs/tutorials/forecasting_tft.html",
-            "neuralforecast/docs/tutorials/multivariate_tsmixer.html"
+            "neuralforecast/docs/tutorials/01_getting_started_complete",
+            "neuralforecast/docs/tutorials/02_cross_validation",
+            "neuralforecast/docs/tutorials/04_longhorizon_nhits",
+            "neuralforecast/docs/tutorials/05_longhorizon_transformers",
+            "neuralforecast/docs/tutorials/07_forecasting_tft",
+            "neuralforecast/docs/tutorials/08_multivariate_tsmixer"
           ]
         },
         {
           "group": "Probabilistic Forecasting",
           "pages": [
-            "neuralforecast/docs/tutorials/uncertainty_quantification.html",
-            "neuralforecast/docs/tutorials/longhorizon_probabilistic.html",
-            "neuralforecast/docs/tutorials/conformal_prediction.html"
+            "neuralforecast/docs/tutorials/03_uncertainty_quantification",
+            "neuralforecast/docs/tutorials/06_longhorizon_probabilistic",
+            "neuralforecast/docs/tutorials/20_conformal_prediction"
           ]
         },
         {
           "group": "Special Topics",
           "pages": [
-            "neuralforecast/docs/tutorials/hierarchical_forecasting.html",
-            "neuralforecast/docs/tutorials/distributed_neuralforecast.html",
-            "neuralforecast/docs/tutorials/intermittent_data.html",
-            "neuralforecast/docs/tutorials/using_mlflow.html",
-            "neuralforecast/docs/tutorials/robust_forecasting.html",
-            "neuralforecast/docs/tutorials/interpretable_decompositions.html",
-            "neuralforecast/docs/tutorials/comparing_methods.html",
-            "neuralforecast/docs/tutorials/temporal_classification.html",
-            "neuralforecast/docs/tutorials/transfer_learning.html",
-            "neuralforecast/docs/tutorials/adding_models.html",
-            "neuralforecast/docs/tutorials/large_datasets.html"
+            "neuralforecast/docs/tutorials/09_hierarchical_forecasting",
+            "neuralforecast/docs/tutorials/10_distributed_neuralforecast",
+            "neuralforecast/docs/tutorials/11_intermittent_data",
+            "neuralforecast/docs/tutorials/12_using_mlflow",
+            "neuralforecast/docs/tutorials/13_robust_forecasting",
+            "neuralforecast/docs/tutorials/14_interpretable_decompositions",
+            "neuralforecast/docs/tutorials/15_comparing_methods",
+            "neuralforecast/docs/tutorials/16_temporal_classification",
+            "neuralforecast/docs/tutorials/17_transfer_learning",
+            "neuralforecast/docs/tutorials/18_adding_models",
+            "neuralforecast/docs/tutorials/19_large_datasets"
           ]
         }
       ]
@@ -464,77 +464,67 @@
     {
       "group": "Use cases",
       "pages": [
-        "neuralforecast/docs/use-cases/electricity_peak_forecasting.html",
-        "neuralforecast/docs/use-cases/predictive_maintenance.html"
+        "neuralforecast/docs/use-cases/electricity_peak_forecasting",
+        "neuralforecast/docs/use-cases/predictive_maintenance"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "neuralforecast/docs/tutorials/neuralforecasting_map.html",
-        "neuralforecast/core.html",
+        "neuralforecast/core",
         {
           "group": "Models",
           "pages": [
-            "neuralforecast/models.autoformer.html",
-            "neuralforecast/models.bitcn.html",
-            "neuralforecast/models.deepar.html",
-            "neuralforecast/models.deepnpts.html",
-            "neuralforecast/models.dilated_rnn.html",
-            "neuralforecast/models.dlinear.html",
-            "neuralforecast/models.fedformer.html",
-            "neuralforecast/models.gru.html",
-            "neuralforecast/models.hint.html",
-            "neuralforecast/models.informer.html",
-            "neuralforecast/models.itransformer.html",
-            "neuralforecast/models.kan.html",
-            "neuralforecast/models.lstm.html",
-            "neuralforecast/models.mlp.html",
-            "neuralforecast/models.mlpmultivariate.html",
-            "neuralforecast/models.nbeats.html",
-            "neuralforecast/models.nbeatsx.html",
-            "neuralforecast/models.nhits.html",
-            "neuralforecast/models.nlinear.html",
-            "neuralforecast/models.patchtst.html",
-            "neuralforecast/models.rmok.html",
-            "neuralforecast/models.rnn.html",
-            "neuralforecast/models.softs.html",
-            "neuralforecast/models.stemgnn.html",
-            "neuralforecast/models.tcn.html",
-            "neuralforecast/models.tft.html",
-            "neuralforecast/models.tide.html",
-            "neuralforecast/models.timellm.html",
-            "neuralforecast/models.timemixer.html",
-            "neuralforecast/models.timesnet.html",
-            "neuralforecast/models.timexer.html",
-            "neuralforecast/models.tsmixer.html",
-            "neuralforecast/models.tsmixerx.html",
-            "neuralforecast/models.vanillatransformer.html"
+            "neuralforecast/models.autoformer",
+            "neuralforecast/models.bitcn",
+            "neuralforecast/models.deepar",
+            "neuralforecast/models.deepnpts",
+            "neuralforecast/models.dilated_rnn",
+            "neuralforecast/models.dlinear",
+            "neuralforecast/models.fedformer",
+            "neuralforecast/models.gru",
+            "neuralforecast/models.hint",
+            "neuralforecast/models.informer",
+            "neuralforecast/models.itransformer",
+            "neuralforecast/models.kan",
+            "neuralforecast/models.lstm",
+            "neuralforecast/models.mlp",
+            "neuralforecast/models.mlpmultivariate",
+            "neuralforecast/models.nbeats",
+            "neuralforecast/models.nbeatsx",
+            "neuralforecast/models.nhits",
+            "neuralforecast/models.nlinear",
+            "neuralforecast/models.patchtst",
+            "neuralforecast/models.rmok",
+            "neuralforecast/models.rnn",
+            "neuralforecast/models.softs",
+            "neuralforecast/models.stemgnn",
+            "neuralforecast/models.tcn",
+            "neuralforecast/models.tft",
+            "neuralforecast/models.tide",
+            "neuralforecast/models.timellm",
+            "neuralforecast/models.timemixer",
+            "neuralforecast/models.timesnet",
+            "neuralforecast/models.timexer",
+            "neuralforecast/models.tsmixer",
+            "neuralforecast/models.tsmixerx",
+            "neuralforecast/models.vanillatransformer",
+            "neuralforecast/models.xlstm"
           ]
         },
-        "neuralforecast/models.html",
+        "neuralforecast/models",
         {
           "group": "Train/Evaluation",
           "pages": [
-            "neuralforecast/losses.pytorch.html",
-            "neuralforecast/losses.numpy.html"
-          ]
-        },
-        {
-          "group": "Common Components",
-          "pages": [
-            "neuralforecast/common.base_auto.html",
-            "neuralforecast/common.base_recurrent.html",
-            "neuralforecast/common.base_windows.html",
-            "neuralforecast/common.scalers.html",
-            "neuralforecast/common.modules.html"
+            "neuralforecast/losses.pytorch",
+            "neuralforecast/losses.numpy"
           ]
         },
         {
           "group": "Utils",
           "pages": [
-            "neuralforecast/tsdataset.html",
-            "neuralforecast/utils.html"
+            "neuralforecast/tsdataset",
+            "neuralforecast/utils"
           ]
         }
       ]
