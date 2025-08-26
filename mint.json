@@ -66,16 +66,16 @@
     {
       "group": "Getting Started",
       "pages": [
-        "nixtla/docs/getting-started/introduction.html",
-        "nixtla/docs/getting-started/quickstart.html",
-        "nixtla/docs/getting-started/polars_quickstart.html",
-        "nixtla/docs/getting-started/azure_quickstart.html",
-        "nixtla/docs/getting-started/setting_up_your_api_key.html",
-        "nixtla/docs/getting-started/pricing.html",
-        "nixtla/docs/getting-started/data_requirements.html",
-        "nixtla/docs/getting-started/faq.html",
-        "nixtla/docs/getting-started/glossary.html",
-        "nixtla/docs/getting-started/why_timegpt.html"
+        "nixtla/docs/getting-started/1_introduction",
+        "nixtla/docs/getting-started/2_quickstart",
+        "nixtla/docs/getting-started/21_polars_quickstart",
+        "nixtla/docs/getting-started/22_azure_quickstart",
+        "nixtla/docs/getting-started/3_setting_up_your_api_key",
+        "nixtla/docs/getting-started/4_data_requirements",
+        "nixtla/docs/getting-started/41_pricing",
+        "nixtla/docs/getting-started/5_faq",
+        "nixtla/docs/getting-started/6_glossary",
+        "nixtla/docs/getting-started/7_why_timegpt"
       ]
     },
     {
@@ -84,34 +84,34 @@
         {
           "group": "Forecast",
           "pages": [
-            "nixtla/docs/capabilities/forecast/quickstart.html",
-            "nixtla/docs/capabilities/forecast/exogenous_variables.html",
-            "nixtla/docs/capabilities/forecast/holidays_special_dates.html",
-            "nixtla/docs/capabilities/forecast/categorical_variables.html",
-            "nixtla/docs/capabilities/forecast/longhorizon.html",
-            "nixtla/docs/capabilities/forecast/multiple_series.html",
-            "nixtla/docs/capabilities/forecast/finetuning.html",
-            "nixtla/docs/capabilities/forecast/custom_loss_function.html",
-            "nixtla/docs/capabilities/forecast/cross_validation.html",
-            "nixtla/docs/capabilities/forecast/prediction_intervals.html",
-            "nixtla/docs/capabilities/forecast/irregular_timestamps.html"
+            "nixtla/docs/capabilities/forecast/01_quickstart",
+            "nixtla/docs/capabilities/forecast/02_exogenous_variables",
+            "nixtla/docs/capabilities/forecast/03_holidays_special_dates",
+            "nixtla/docs/capabilities/forecast/04_categorical_variables",
+            "nixtla/docs/capabilities/forecast/05_longhorizon",
+            "nixtla/docs/capabilities/forecast/06_multiple_series",
+            "nixtla/docs/capabilities/forecast/07_finetuning",
+            "nixtla/docs/capabilities/forecast/08_custom_loss_function",
+            "nixtla/docs/capabilities/forecast/09_cross_validation",
+            "nixtla/docs/capabilities/forecast/10_prediction_intervals",
+            "nixtla/docs/capabilities/forecast/11_irregular_timestamps"
           ]
         },
         {
           "group": "Historical Anomaly Detection",
           "pages": [
-            "nixtla/docs/capabilities/historical-anomaly-detection/quickstart.html",
-            "nixtla/docs/capabilities/historical-anomaly-detection/anomaly_exogenous.html",
-            "nixtla/docs/capabilities/historical-anomaly-detection/anomaly_detection_date_features.html",
-            "nixtla/docs/capabilities/historical-anomaly-detection/confidence_levels.html"
+            "nixtla/docs/capabilities/historical-anomaly-detection/01_quickstart",
+            "nixtla/docs/capabilities/historical-anomaly-detection/02_anomaly_exogenous",
+            "nixtla/docs/capabilities/historical-anomaly-detection/03_anomaly_detection_date_features",
+            "nixtla/docs/capabilities/historical-anomaly-detection/04_confidence_levels"
           ]
         },
         {
           "group": "Online Anomaly Detection",
           "pages": [
-            "nixtla/docs/capabilities/online-anomaly-detection/quickstart.html",
-            "nixtla/docs/capabilities/online-anomaly-detection/adjusting_detection_process.html",
-            "nixtla/docs/capabilities/online-anomaly-detection/univariate_vs_multivariate_anomaly_detection.html"
+            "nixtla/docs/capabilities/online-anomaly-detection/01_quickstart",
+            "nixtla/docs/capabilities/online-anomaly-detection/02_adjusting_detection_process",
+            "nixtla/docs/capabilities/online-anomaly-detection/03_univariate_vs_multivariate_anomaly_detection"
           ]
         }
       ]
@@ -119,69 +119,69 @@
     {
       "group": "Deployment",
       "pages": [
-        "nixtla/docs/deployment/azure_ai.html"
+        "nixtla/docs/deployment/2_azure_ai"
       ]
     },
     {
       "group": "Tutorials",
       "pages": [
-        "nixtla/docs/tutorials/anomaly_detection.html",
+        "nixtla/docs/tutorials/20_anomaly_detection",
         {
           "group": "Exogenous variables",
           "pages": [
-            "nixtla/docs/tutorials/exogenous_variables.html",
-            "nixtla/docs/tutorials/holidays.html",
-            "nixtla/docs/tutorials/categorical_variables.html",
-            "nixtla/docs/tutorials/shap_values.html"
+            "nixtla/docs/tutorials/01_exogenous_variables",
+            "nixtla/docs/tutorials/02_holidays",
+            "nixtla/docs/tutorials/03_categorical_variables",
+            "nixtla/docs/tutorials/21_shap_values"
           ]
         },
         {
           "group": "Training",
           "pages": [
-            "nixtla/docs/tutorials/longhorizon.html",
-            "nixtla/docs/tutorials/multiple_series.html"
+            "nixtla/docs/tutorials/04_longhorizon",
+            "nixtla/docs/tutorials/05_multiple_series"
           ]
         },
         {
           "group": "Fine-tuning",
           "pages": [
-            "nixtla/docs/tutorials/finetuning.html",
-            "nixtla/docs/tutorials/reusing_finetuned_models.html",
-            "nixtla/docs/tutorials/loss_function_finetuning.html",
-            "nixtla/docs/tutorials/finetune_depth_finetuning.html"
+            "nixtla/docs/tutorials/06_finetuning",
+            "nixtla/docs/tutorials/061_reusing_finetuned_models",
+            "nixtla/docs/tutorials/07_loss_function_finetuning",
+            "nixtla/docs/tutorials/23_finetune_depth_finetuning"
           ]
         },
         {
           "group": "Validation",
           "pages": [
-            "nixtla/docs/tutorials/cross_validation.html",
-            "nixtla/docs/tutorials/historical_forecast.html"
+            "nixtla/docs/tutorials/08_cross_validation",
+            "nixtla/docs/tutorials/09_historical_forecast"
           ]
         },
         {
           "group": "Uncertainty quantification",
           "pages": [
-            "nixtla/docs/tutorials/uncertainty_quantification_with_quantile_forecasts.html",
-            "nixtla/docs/tutorials/uncertainty_quantification_with_prediction_intervals.html"
+            "nixtla/docs/tutorials/10_uncertainty_quantification_with_quantile_forecasts",
+            "nixtla/docs/tutorials/11_uncertainty_quantification_with_prediction_intervals"
           ]
         },
         {
           "group": "Special Topics",
           "pages": [
-            "nixtla/docs/tutorials/bounded_forecasts.html",
-            "nixtla/docs/tutorials/hierarchical_forecasting.html",
-            "nixtla/docs/tutorials/temporalhierarchical.html",
-            "nixtla/docs/tutorials/missing_values.html",
-            "nixtla/docs/tutorials/how_to_improve_forecast_accuracy.html"
+            "nixtla/docs/tutorials/13_bounded_forecasts",
+            "nixtla/docs/tutorials/14_hierarchical_forecasting",
+            "nixtla/docs/tutorials/23_temporalhierarchical",
+            "nixtla/docs/tutorials/15_missing_values",
+            "nixtla/docs/tutorials/22_how_to_improve_forecast_accuracy"
           ]
         },
         {
           "group": "Computing at scale",
           "pages": [
-            "nixtla/docs/tutorials/computing_at_scale.html",
-            "nixtla/docs/tutorials/computing_at_scale_spark_distributed.html",
-            "nixtla/docs/tutorials/computing_at_scale_dask_distributed.html",
-            "nixtla/docs/tutorials/computing_at_scale_ray_distributed.html"
+            "nixtla/docs/tutorials/16_computing_at_scale",
+            "nixtla/docs/tutorials/17_computing_at_scale_spark_distributed",
+            "nixtla/docs/tutorials/18_computing_at_scale_dask_distributed",
+            "nixtla/docs/tutorials/19_computing_at_scale_ray_distributed"
           ]
         }
       ]
@@ -189,20 +189,20 @@
     {
       "group": "Use cases",
       "pages": [
-        "nixtla/docs/use-cases/forecasting_web_traffic.html",
-        "nixtla/docs/use-cases/bitcoin_price_prediction.html",
-        "nixtla/docs/use-cases/electricity_demand.html",
-        "nixtla/docs/use-cases/intermittent_demand.html",
-        "nixtla/docs/use-cases/what_if_pricing_scenarios_in_retail.html"
+        "nixtla/docs/use-cases/1_forecasting_web_traffic",
+        "nixtla/docs/use-cases/2_bitcoin_price_prediction",
+        "nixtla/docs/use-cases/3_electricity_demand",
+        "nixtla/docs/use-cases/4_intermittent_demand",
+        "nixtla/docs/use-cases/5_what_if_pricing_scenarios_in_retail"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "nixtla/docs/reference/nixtla_client.html",
-        "nixtla/docs/reference/date_features.html",
-        "nixtla/docs/reference/excel_addin.html",
-        "nixtla/docs/reference/nixtlar.html"
+        "nixtla/nixtla_client",
+        "nixtla/date_features",
+        "nixtla/docs/reference/03_excel_addin",
+        "nixtla/docs/reference/04_nixtlar"
       ]
     },
     {
