@@ -118,7 +118,9 @@
     },
     {
       "group": "Deployment",
-      "pages": ["nixtla/docs/deployment/2_azure_ai"]
+      "pages": [
+        "nixtla/docs/deployment/2_azure_ai"
+      ]
     },
     {
       "group": "Tutorials",
@@ -205,7 +207,9 @@
     },
     {
       "group": "",
-      "pages": ["statsforecast/index"]
+      "pages": [
+        "statsforecast/index"
+      ]
     },
     {
       "group": "Getting Started",
@@ -314,7 +318,9 @@
     },
     {
       "group": "",
-      "pages": ["mlforecast/index"]
+      "pages": [
+        "mlforecast/index"
+      ]
     },
     {
       "group": "Getting Started",
@@ -535,7 +541,9 @@
     },
     {
       "group": "",
-      "pages": ["hierarchicalforecast/index"]
+      "pages": [
+        "hierarchicalforecast/index"
+      ]
     },
     {
       "group": "Getting Started",
@@ -590,7 +598,9 @@
     },
     {
       "group": "",
-      "pages": ["utilsforecast/index"]
+      "pages": [
+        "utilsforecast/index"
+      ]
     },
     {
       "group": "API Reference",
@@ -605,7 +615,9 @@
     },
     {
       "group": "",
-      "pages": ["datasetsforecast/index"]
+      "pages": [
+        "datasetsforecast/index"
+      ]
     },
     {
       "group": "API Reference",
@@ -623,7 +635,9 @@
     },
     {
       "group": "",
-      "pages": ["coreforecast/index"]
+      "pages": [
+        "coreforecast/index"
+      ]
     },
     {
       "group": "API Reference",
@@ -643,63 +657,5 @@
     "github": "https://github.com/Nixtla",
     "slack": "https://join.slack.com/t/nixtlaworkspace/shared_invite/zt-135dssye9-fWTzMpv2WBthq8NK0Yvu6A",
     "twitter": "https://twitter.com/nixtlainc"
-  },
-  "redirects": [
-    {
-      "source": "/statsforecast",
-      "destination": "/statsforecast/index"
-    },
-    {
-      "source": "/statsforecast/index.html",
-      "destination": "/statsforecast/index"
-    },
-    {
-      "source": "/mlforecast",
-      "destination": "/mlforecast/index"
-    },
-    {
-      "source": "/mlforecast/index.html",
-      "destination": "/mlforecast/index"
-    },
-    {
-      "source": "/neuralforecast",
-      "destination": "/neuralforecast/index"
-    },
-    {
-      "source": "/neuralforecast/index.html",
-      "destination": "/neuralforecast/index"
-    },
-    {
-      "source": "/hierarchicalforecast",
-      "destination": "/hierarchicalforecast/index"
-    },
-    {
-      "source": "/hierarchicalforecast/index.html",
-      "destination": "/hierarchicalforecast/index"
-    },
-    {
-      "source": "/utilsforecast",
-      "destination": "/utilsforecast/index"
-    },
-    {
-      "source": "/utilsforecast/index.html",
-      "destination": "/utilsforecast/index"
-    },
-    {
-      "source": "/datasetsforecast",
-      "destination": "/datasetsforecast/index"
-    },
-    {
-      "source": "/datasetsforecast/index.html",
-      "destination": "/datasetsforecast/index"
-    },
-    {
-      "source": "/coreforecast",
-      "destination": "/coreforecast/index"
-    },
-    {
-      "source": "/coreforecast/index.html",
-      "destination": "/coreforecast/index"
-    }
-  ]
+  }
 }
