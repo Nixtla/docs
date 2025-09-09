@@ -1,4 +1,4 @@
-name: Nixtla Simplified Documentation (Staging)
+name: Nixtla Simplified Documentation (Preview)
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-prod-documentation:
+  build-preview-documentation:
     runs-on: ubuntu-latest
     name: Clone all built documentation
     steps:
