@@ -1,0 +1,84 @@
+name: Nixtla Simplified Documentation (Production)
+
+on:
+  push:
+    branches: main
+  workflow_dispatch:
+
+jobs:
+  build-prod-documentation:
+    runs-on: ubuntu-latest
+    name: Clone all built documentation
+    steps:
+      - name: Clone nixtla
+        uses: actions/checkout@v4
+        with:
+          repository: nixtla/nixtla
+          path: nixtla
+          ref: docs
+
+      - name: Clone statsforecast
+        uses: actions/checkout@v4
+        with:
+          repository: nixtla/statsforecast
+          path: statsforecast
+          ref: docs
+      
+      - name: Clone mlforecast
+        uses: actions/checkout@v4
+        with:
+          repository: nixtla/mlforecast
+          path: mlforecast
+          ref: docs
+
+      - name: Clone neuralforecast
+        uses: actions/checkout@v4
+        with:
+          repository: nixtla/neuralforecast
+          path: neuralforecast
+          ref: docs
+      
+      - name: Clone hierarchicalforecast
+        uses: actions/checkout@v4
+        with:
+          repository: nixtla/hierarchicalforecast
+          path: hierarchicalforecast
+          ref: docs
+
+      - name: Clone utilsforecast
+        uses: actions/checkout@v4
+        with:
+          repository: nixtla/utilsforecast
+          path: utilsforecast
+          ref: docs
+
+      - name: Clone datasetsforecast
+        uses: actions/checkout@v4
+        with:
+          repository: nixtla/datasetsforecast
+          path: datasetsforecast
+          ref: docs
+
+      - name: Clone coreforecast
+        uses: actions/checkout@v4
+        with:
+          repository: nixtla/coreforecast
+          path: coreforecast
+          ref: docs
+      
+      - name: Copy documentation to the docs branch
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git checkout -b docs
+          cp -R nixtla docs/
+          cp -R statsforecast docs/
+          cp -R mlforecast docs/
+          cp -R neuralforecast docs/
+          cp -R hierarchicalforecast docs/
+          cp -R utilsforecast docs/
+          cp -R datasetsforecast docs/
+          cp -R coreforecast docs/
+          git add .
+          git commit -m "Update documentation"
+          git push origin docs
