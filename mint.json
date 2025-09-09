@@ -553,7 +553,7 @@
             "hierarchicalforecast/examples/AustralianDomesticTourism",
             "hierarchicalforecast/examples/AustralianPrisonPopulation",
             "hierarchicalforecast/examples/NonNegativeReconciliation",
-            "hierarchicalforecast/examples/AustralianDomesticTurism-Multimodel"
+            "hierarchicalforecast/examples/AustralianDomesticTourism-Multimodel"
           ]
         },
         {
