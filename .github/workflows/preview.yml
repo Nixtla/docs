@@ -15,56 +15,56 @@ jobs:
       - name: Clone nixtla
         uses: actions/checkout@v4
         with:
-          repository: nixtla/nixtla
+          repository: Nixtla/nixtla
           path: nixtla
           ref: docs-preview
 
       - name: Clone statsforecast
         uses: actions/checkout@v4
         with:
-          repository: nixtla/statsforecast
+          repository: Nixtla/statsforecast
           path: statsforecast
           ref: docs-preview
 
       - name: Clone mlforecast
         uses: actions/checkout@v4
         with:
-          repository: nixtla/mlforecast
+          repository: Nixtla/mlforecast
           path: mlforecast
           ref: docs-preview
 
       - name: Clone neuralforecast
         uses: actions/checkout@v4
         with:
-          repository: nixtla/neuralforecast
+          repository: Nixtla/neuralforecast
           path: neuralforecast
           ref: docs-preview
       
       - name: Clone hierarchicalforecast
         uses: actions/checkout@v4
         with:
-          repository: nixtla/hierarchicalforecast
+          repository: Nixtla/hierarchicalforecast
           path: hierarchicalforecast
           ref: docs-preview
 
       - name: Clone utilsforecast
         uses: actions/checkout@v4
         with:
-          repository: nixtla/utilsforecast
+          repository: Nixtla/utilsforecast
           path: utilsforecast
           ref: docs-preview
 
       - name: Clone datasetsforecast
         uses: actions/checkout@v4
         with:
-          repository: nixtla/datasetsforecast
+          repository: Nixtla/datasetsforecast
           path: datasetsforecast
           ref: docs-preview
 
       - name: Clone coreforecast
         uses: actions/checkout@v4
         with:
-          repository: nixtla/coreforecast
+          repository: Nixtla/coreforecast
           path: coreforecast
           ref: docs-preview 
       
