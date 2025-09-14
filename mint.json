@@ -428,7 +428,7 @@
           "group": "Forecasting",
           "pages": [
             "neuralforecast/docs/tutorials/getting_started_complete.html",
-            "neuralforecast/docs/tutorials/cross_validation_tutorial.html",
+            "neuralforecast/docs/tutorials/cross_validation.html",
             "neuralforecast/docs/tutorials/longhorizon_nhits.html",
             "neuralforecast/docs/tutorials/longhorizon_transformers.html",
             "neuralforecast/docs/tutorials/forecasting_tft.html",
@@ -471,7 +471,6 @@
     {
       "group": "API Reference",
       "pages": [
-        "neuralforecast/docs/tutorials/neuralforecasting_map.html",
         "neuralforecast/core.html",
         {
           "group": "Models",
@@ -524,8 +523,6 @@
           "group": "Common Components",
           "pages": [
             "neuralforecast/common.base_auto.html",
-            "neuralforecast/common.base_recurrent.html",
-            "neuralforecast/common.base_windows.html",
             "neuralforecast/common.scalers.html",
             "neuralforecast/common.modules.html"
           ]
