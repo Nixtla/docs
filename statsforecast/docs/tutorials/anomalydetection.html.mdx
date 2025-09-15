@@ -9,7 +9,7 @@ title: Anomaly Detection
 >
 > This tutorial assumes basic familiarity with StatsForecast. For a
 > minimal example visit the [Quick
-> Start](https://nixtla.github.io/statsforecast/examples/getting_started_short.html)
+> Start](../getting-started/getting_started_short.html)
 
 ## Introduction
 
@@ -57,7 +57,7 @@ models.
 
 We assume that you have StatsForecast already installed. If not, check
 this guide for instructions on [how to install
-StatsForecast](https://nixtla.github.io/statsforecast/examples/installation.html)
+StatsForecast](../getting-started/installation.html)
 
 Install the necessary packages using `pip install statsforecast`
 
@@ -140,7 +140,7 @@ plot_series(df)
 ## Train model
 
 To generate the forecast, we’ll use the
-[MSTL](https://nixtla.github.io/statsforecast/models.html#multiple-seasonalities)
+[MSTL](../../src/core/models.html#multiple-seasonalities)
 model, which is well-suited for low-frequency data like the one used
 here. We first need to import it from `statsforecast.models` and then we
 need to instantiate it. Since we’re using hourly data, we have two
