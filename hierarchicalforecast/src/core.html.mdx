@@ -15,7 +15,7 @@ the hierarchical time series pd.DataFrame `Y_df`, the base predictions
 pd.DataFrame `Y_hat_df`, the aggregation constraints matrix `S`. For
 more information on the creation of aggregation constraints matrix see
 the utils [aggregation
-method](https://nixtla.github.io/hierarchicalforecast/utils.html#aggregate).<br/><br/>
+method](https://nixtlaverse.nixtla.io/hierarchicalforecast/src/utils.html#aggregate).<br/><br/>
 
 # HierarchicalReconciliation
 
@@ -97,7 +97,7 @@ $\hat{\mathbf{y}}_{[a,b],\tau}$.
 \[‘unique_id’, ‘ds’\] and models to reconcile.<br/> `tags`: Each key is a
 level and its value contains tags associated to that level.<br/> `S_df`:
 DataFrame with summing matrix of size `(base, bottom)`, see [aggregate
-method](https://nixtla.github.io/hierarchicalforecast/utils.html#aggregate).<br/>
+method](https://nixtlaverse.nixtla.io/hierarchicalforecast/src/utils.html#aggregate).<br/>
 `Y_df`: DataFrame, training set of base time series with columns
 `['unique_id', 'ds', 'y']`.<br/> If a class of `self.reconciles` receives
 `y_hat_insample`, `Y_df` must include them as columns.<br/> `level`:
@@ -164,7 +164,7 @@ for the different reconciliation techniques instantiated in the
 **Parameters:**<br/> `Y_hat_df`: DataFrame, base forecasts with columns
 \[‘unique_id’, ‘ds’\] and models to reconcile.<br/> `S_df`: DataFrame
 with summing matrix of size `(base, bottom)`, see [aggregate
-method](https://nixtla.github.io/hierarchicalforecast/utils.html#aggregate).<br/>
+method](https://nixtlaverse.nixtla.io/hierarchicalforecast/src/utils.html#aggregate).<br/>
 `tags`: Each key is a level and its value contains tags associated to
 that level.<br/> `Y_df`: DataFrame, training set of base time series with
 columns `['unique_id', 'ds', 'y']`.<br/> If a class of `self.reconciles`
