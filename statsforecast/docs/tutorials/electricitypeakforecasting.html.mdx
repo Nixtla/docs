@@ -25,7 +25,7 @@ therefore save on electricity bills by reducing the coincident peak
 demand.
 
 In this example we will train an
-[`MSTL`](https://Nixtla.github.io/statsforecast/src/core/models.html#mstl)
+[`MSTL`](../../src/core/models.html#mstl)
 (Multiple Seasonal-Trend decomposition using LOESS) model on historic
 load data to forecast day-ahead peaks on September 2022. Multiple
 seasonality is traditionally present in low sampled electricity data.
@@ -34,7 +34,7 @@ specific hours of the day such as 6:00pm vs 3:00am or for specific days
 such as Sunday vs Friday.
 
 First, we will load ERCOT historic demand, then we will use the
-[`StatsForecast.cross_validation`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.cross_validation)
+[`StatsForecast.cross_validation`](../../src/core/core.html#statsforecast.cross_validation)
 method to fit the MSTL model and forecast daily load during September.
 Finally, we show how to use the forecasts to detect the coincident peak.
 
@@ -84,7 +84,7 @@ Y_df = pd.read_csv('https://datasets-nixtla.s3.amazonaws.com/ERCOT-clean.csv', p
 ```
 
 Plot the series using the `plot` method from the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](../../src/core/core.html#statsforecast-plot)
 class. This method prints up to 8 random series from the dataset and is
 useful for basic EDA.
 
@@ -120,10 +120,10 @@ model.
 > **Tip**
 >
 > Check our detailed explanation and tutorial on MSTL
-> [here](https://nixtla.github.io/statsforecast/examples/multipleseasonalities.html)
+> [here](./multipleseasonalities.html)
 
 Import the
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](../../src/core/core.html#statsforecast)
 class and the models you need.
 
 
@@ -142,10 +142,10 @@ seasonalities. See [this
 link](https://robjhyndman.com/hyndsight/seasonal-periods/) for a
 detailed explanation on how to set seasonal lengths. In this example we
 use the
-[`SklearnModel`](https://Nixtla.github.io/statsforecast/src/core/models.html#sklearnmodel)
+[`SklearnModel`](../../src/core/models.html#sklearnmodel)
 with a `LinearRegression` model for the trend component, however, any
 StatsForecast model can be used. The complete list of models is
-available [here](https://nixtla.github.io/statsforecast/models.html).
+available [here](../../src/core/models.html).
 
 
 ```python
@@ -172,7 +172,7 @@ models = [
 ```
 
 We fit the model by instantiating a
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
+[`StatsForecast`](../../src/core/core.html#statsforecast)
 object with the following required parameters:
 
 -   `models`: a list of models. Select the models you want from
@@ -202,16 +202,16 @@ sf = StatsForecast(
 >     none)
 
 The
-[`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation)
+[`cross_validation`](../../src/mfles.html#cross_validation)
 method allows the user to simulate multiple historic forecasts, greatly
 simplifying pipelines by replacing for loops with `fit` and `predict`
 methods. This method re-trains the model and forecast each window. See
 [this
-tutorial](https://nixtla.github.io/statsforecast/examples/getting_started_complete.html)
+tutorial](../getting-started/getting_started_complete.html)
 for an animation of how the windows are defined.
 
 Use the
-[`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation)
+[`cross_validation`](../../src/mfles.html#cross_validation)
 method to produce all the daily forecasts for September. To produce
 daily forecasts set the forecasting horizon `h` as 24. In this example
 we are simulating deploying the pipeline during September, so set the
@@ -244,7 +244,7 @@ cv_df.head()
 > **Important**
 >
 > When using
-> [`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation)
+> [`cross_validation`](../../src/mfles.html#cross_validation)
 > make sure the forecasts are produced at the desired timestamps. Check
 > the `cutoff` column which specifices the last timestamp before the
 > forecasting window.
@@ -304,7 +304,7 @@ plt.legend()
 > In this example we only include September. However, MSTL can correctly
 > predict the peaks for the 4 months of 2022. You can try this by
 > increasing the `nwindows` parameter of
-> [`cross_validation`](https://Nixtla.github.io/statsforecast/src/mfles.html#cross_validation)
+> [`cross_validation`](../../src/mfles.html#cross_validation)
 > or filtering the `Y_df` dataset. The complete run for all months take
 > only 10 minutes.
 
@@ -317,7 +317,7 @@ N-HiTS, a deep-learning model from Nixtla’s NeuralForecast library.
 
 Learn how to predict ERCOT demand peaks with our deep-learning N-HiTS
 model and the NeuralForecast library in [this
-tutorial](https://nixtla.github.io/neuralforecast/examples/electricitypeakforecasting.html).
+tutorial](../../../neuralforecast/docs/use-cases/electricity_peak_forecasting.html).
 
 ## References
 
