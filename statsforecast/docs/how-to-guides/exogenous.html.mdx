@@ -48,7 +48,7 @@ whether or not they can help enhance the forecast.
 
 We assume that you have StatsForecast already installed. If not, check
 this guide for instructions on [how to install
-StatsForecast](https://nixtla.github.io/statsforecast/examples/installation.html)
+StatsForecast](../getting-started/installation.html)
 
 
 ```python
@@ -88,7 +88,7 @@ X_ts = pd.read_parquet(f'{base_url}/m5_x.parquet', filters=filters)
 
 We can plot the sales of this product-store combination with the
 `statsforecast.plot` method from the
-[StatsForecast](https://nixtla.github.io/statsforecast/core.html#statsforecast)
+[StatsForecast](../../src/core/core.html#statsforecast)
 class. This method has multiple parameters, and the requiered ones to
 generate the plots in this notebook are explained below.
 
@@ -225,7 +225,7 @@ X_test.head()
 ## Train model
 
 To generate the forecast, we’ll use
-[AutoARIMA](https://nixtla.github.io/statsforecast/models.html#autoarima),
+[AutoARIMA](../../src/core/models.html#autoarima),
 which is one of the models available in StatsForecast that allows
 exogenous regressors. To use this model, we first need to import it from
 `statsforecast.models` and then we need to instatiate it. Given that
