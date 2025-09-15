@@ -11,7 +11,7 @@ linear constraints.
 
 We designed these methods to extend the `core.HierarchicalForecast`
 capabilities class. Check their [usage example
-here](https://nixtla.github.io/hierarchicalforecast/examples/example.html).
+here](https://nixtlaverse.nixtla.io/hierarchicalforecast/examples/introduction.html).
 
 # 1. Normality
 
@@ -37,7 +37,7 @@ The Normality method leverages the Gaussian Distribution linearity, to
 generate hierarchically coherent prediction distributions. This class is
 meant to be used as the `sampler` input as other `HierarchicalForecast`
 [reconciliation
-classes](https://nixtla.github.io/hierarchicalforecast/methods.html).
+classes](https://nixtla.github.io/hierarchicalforecast/src/methods.html).
 
 Given base forecasts under a normal distribution:
 $$\hat{y}_{h} \sim \mathrm{N}(\hat{\boldsymbol{\mu}}, \hat{\mathbf{W}}_{h})$$
@@ -114,7 +114,7 @@ base sample paths that are latered reconciled. This clever idea and its
 simplicity allows to generate coherent bootstraped prediction intervals
 for any reconciliation strategy. This class is meant to be used as the
 `sampler` input as other `HierarchicalForecast` [reconciliation
-classes](https://nixtla.github.io/hierarchicalforecast/methods.html).
+classes](https://nixtla.github.io/hierarchicalforecast/src/methods.html).
 
 Given a boostraped set of simulated sample paths:
 $$(\hat{\mathbf{y}}^{[1]}_{\tau}, \dots ,\hat{\mathbf{y}}^{[B]}_{\tau})$$
