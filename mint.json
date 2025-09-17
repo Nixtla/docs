@@ -654,5 +654,43 @@
     "github": "https://github.com/Nixtla",
     "slack": "https://join.slack.com/t/nixtlaworkspace/shared_invite/zt-135dssye9-fWTzMpv2WBthq8NK0Yvu6A",
     "twitter": "https://twitter.com/nixtlainc"
-  }
+  },
+  "redirects": [
+    {
+      "source": "/statsforecast/docs/getting-started/0_Installation",
+      "destination": "/statsforecast/docs/getting-started/installation.html"
+    },
+    {
+      "source": "/statsforecast/docs/getting-started/1_Getting_Started_short",
+      "destination": "/statsforecast/docs/getting-started/getting_started_short.html"
+    },
+    {
+      "source": "/statsforecast/docs/getting-started/2_Getting_Started_complete",
+      "destination": "/statsforecast/docs/getting-started/getting_started_complete.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/AnomalyDetection",
+      "destination": "/statsforecast/docs/tutorials/anomalydetection.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/CrossValidation",
+      "destination": "/statsforecast/docs/tutorials/crossvalidation.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/MultipleSeasonalities",
+      "destination": "/statsforecast/docs/tutorials/multipleseasonalities.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/ElectricityPeakForecasting",
+      "destination": "/statsforecast/docs/tutorials/electricitypeakforecasting.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/IntermittentData",
+      "destination": "/statsforecast/docs/tutorials/intermittentdata.html"
+    },
+    {
+      "source": "/statsforecast/docs/how-to-guides/Exogenous",
+      "destination": "/statsforecast/docs/how-to-guides/exogenous.html"
+    }
+  ]
 }
