@@ -2,15 +2,6 @@
 title: Explainability for Deep Learning Forecasting Models
 ---
 
-
-```python
-%set_env PYTORCH_ENABLE_MPS_FALLBACK=1
-```
-
-``` text
-env: PYTORCH_ENABLE_MPS_FALLBACK=1
-```
-
 In this detailed tutorial, we discover how to explain forecasts made
 with models from *neuralforecast*.
 
@@ -61,7 +52,8 @@ static exogenous variable (`Airline1`)
 
 That way, we see that we can handle attributions for all types of
 exogenous features. For more information on the types of exogenous
-features, read [this tutorial](../capabilities/03_exogenous_variables).
+features, read [this
+tutorial](https://nixtlaverse.nixtla.io/neuralforecast/docs/capabilities/exogenous_variables.html).
 
 ```python
 Y_train_df = AirPassengersPanel[AirPassengersPanel['ds'] < AirPassengersPanel['ds'].values[-12]].reset_index(drop=True)
@@ -111,9 +103,7 @@ Once the model is trained, we can get feature attributions using the
 
 This method takes the following parameters: - `horizons`: List of
 horizons to explain. If None, all horizons are explained. Defaults to
-None. - `series`: List of series to explain for multivariate models.
-Defaults to \[0\] (first series). Multivariate models are not supported
-yet. - `outputs`: List of outputs to explain for models with multiple
+None. - `outputs`: List of outputs to explain for models with multiple
 outputs. Defaults to \[0\] (first output). This is useful when we have
 models trained with a probabilistic loss. We will explore that later in
 the tutorial. - `explainer`: Name of the explainer to use. Options are
@@ -184,7 +174,7 @@ explainer does not have the additivity property, the value will be set
 to None.
 
 We will touch upon the additivity property in a later section. For now,
-just know that “IntegratedGradients” has the additive property, meaning
+just know that `IntegratedGradients` has the additive property, meaning
 that taking the sum of baseline predictions and feature attributions
 results in the final forecast made by the model.
 
@@ -304,7 +294,7 @@ shap_explanation = shap.Explanation(
 shap.plots.waterfall(shap_explanation)
 ```
 
-![](22_explainability_files/figure-markdown_strict/cell-11-output-1.png)
+![](22_explainability_files/figure-markdown_strict/cell-10-output-1.png)
 
 As you can see, we now have a nice waterfall plot showing the baseline
 prediction, E\[f(X)\] = 396.163, and how each features contributes to
@@ -317,7 +307,7 @@ example, we can do a simple bar plot as shown below.
 shap.plots.bar(shap_explanation)
 ```
 
-![](22_explainability_files/figure-markdown_strict/cell-12-output-1.png)
+![](22_explainability_files/figure-markdown_strict/cell-11-output-1.png)
 
 In both figures above, we have the breakdown of each feature at each
 timestep. This can make the plots crowded or it can be a level of
@@ -372,7 +362,7 @@ shap_explanation = shap.Explanation(
 shap.plots.waterfall(shap_explanation)
 ```
 
-![](22_explainability_files/figure-markdown_strict/cell-13-output-1.png)
+![](22_explainability_files/figure-markdown_strict/cell-12-output-1.png)
 
 As you can see from the plot above, we have combined all inputs of each
 type of feature into a single category, so we can see how each overall
@@ -456,13 +446,12 @@ scenario.
 
 **Notes:** - **Local/Global**: All explainers are local, because they
 only explain how a specific input affects a specific forecast. -
-**Additivity Property**: Whether the sum feature attributions and
+**Additivity Property**: Whether the sum of the feature attributions and
 baseline predictions result in the final forecast. - **Speed**: - Very
 fast: Single gradient computation - Fast: Multiple gradient computations
-(Integrated Gradients) - Medium: Multiple model evaluations (model
-fitting for LIME) - Slow: Many model evaluations for sampling-based
-methods - Very Slow: Exponential complexity in worst case (exact Shapley
-values)
+(Integrated Gradients) - Medium: Multiple model evaluations - Slow: Many
+model evaluations for sampling-based methods - Very Slow: Exponential
+complexity in worst case (exact Shapley values)
 
 #### Integrated Gradients
 
@@ -526,7 +515,7 @@ LSTM and GRU models.
 
 ### Explaining models with different loss functions
 
-Currently, explanations are supported for models trained with: - point
+Currently, explanations are supported for models trained with: - Point
 loss functions (MAE, MSE, RMSE, etc.) - Non-parametric probabilistic
 losses (IQLoss, MQLoss, etc.)
 
@@ -534,7 +523,8 @@ We do not support yet explaining models trained with parametric loss
 functions, like Normal, Student’s T, etc.
 
 For more information on the different loss functions supported in
-*neuralforecast*, read [here](../capabilities/02_objectives).
+*neuralforecast*, read
+[here](https://nixtlaverse.nixtla.io/neuralforecast/docs/capabilities/objectives.html).
 
 #### Explaning a model with a probablistic loss function
 
@@ -579,31 +569,6 @@ preds_df, explanations = nf.explain(
 )
 ```
 
-``` text
-Seed set to 1
-GPU available: True (mps), used: True
-TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-
-  | Name         | Type          | Params | Mode 
--------------------------------------------------------
-0 | loss         | MQLoss        | 3      | train
-1 | padder_train | ConstantPad1d | 0      | train
-2 | scaler       | TemporalNorm  | 0      | train
-3 | blocks       | ModuleList    | 2.5 M  | train
--------------------------------------------------------
-2.5 M     Trainable params
-3         Non-trainable params
-2.5 M     Total params
-10.089    Total estimated model params size (MB)
-34        Modules in train mode
-0         Modules in eval mode
-`Trainer.fit` stopped: `max_steps=20` reached.
-GPU available: True (mps), used: True
-TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-```
-
 Above, by specifying `outputs=[0]`, which is the default value, we only
 explain the median forecast. However, we can explain up to three
 ouputs: 1. Median forecast 2. Lower bound 3. Upper bound
@@ -621,11 +586,6 @@ preds_df, explanations = nf.explain(
 )
 ```
 
-``` text
-GPU available: True (mps), used: True
-TPU available: False, using: 0 TPU cores
-HPU available: False, using: 0 HPUs
-```
 
 ```python
 for key in list(explanations["NHITS"].keys()):
