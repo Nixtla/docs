@@ -118,3 +118,43 @@ html.dark #topbar-cta-button svg {
 html.dark a.card svg {
   background: var(--primary-light);
 }
+
+/* Banner styling for theme support */
+#banner {
+  background-color: var(--primary-light);
+  border-color: var(--primary-dark);
+  color: var(--primary-dark);
+}
+
+#banner a {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+#banner a:hover {
+  opacity: 0.8;
+}
+
+#banner p {
+  color: var(--primary-dark);
+  margin: 0;
+}
+
+/* Dark mode banner */
+html.dark #banner {
+  background-color: var(--primary-dark);
+  border-color: var(--gray);
+  color: var(--primary-light);
+}
+
+html.dark #banner a {
+  color: var(--primary-light);
+}
+
+html.dark #banner a:hover {
+  opacity: 0.8;
+}
+
+html.dark #banner p {
+  color: var(--primary-light);
+}
