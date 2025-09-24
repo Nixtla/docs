@@ -276,6 +276,7 @@
               {
                 "group": "Special Topics",
                 "pages": [
+                  "neuralforecast/docs/tutorials/explainability",
                   "neuralforecast/docs/tutorials/hierarchical_forecasting.html",
                   "neuralforecast/docs/tutorials/distributed_neuralforecast.html",
                   "neuralforecast/docs/tutorials/intermittent_data.html",
