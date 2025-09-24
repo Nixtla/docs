@@ -29,6 +29,19 @@ body {
   height: 20px;
 }
 
+#navigation-items > .list-none a {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#banner {
+  border-bottom: 1px solid var(--primary-dark) !important;
+}
+
+html.dark #banner {
+  border-bottom: 1px solid var(--primary-light) !important;
+}
+
 .bg-gradient-to-b {
   background-color: transparent;
   background-image: none;
@@ -48,6 +61,11 @@ a.font-semibold {
 
 a.font-semibold svg {
   background: var(--primary-dark);
+}
+
+a.font-semibold div {
+  background: #d0d0d0 !important;
+  border-radius: 1px !important;
 }
 
 .rounded-md {
@@ -156,4 +174,8 @@ html.dark #banner a:hover {
 
 html.dark #banner p {
   color: var(--primary-light);
+}
+
+html.dark a.font-semibold div {
+  background: #404040 !important;
 }
