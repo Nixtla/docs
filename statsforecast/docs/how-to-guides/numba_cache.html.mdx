@@ -16,8 +16,7 @@ that this compilation is saved (by default) on a per-session basis.
 In order to mitigate the compilation overhead numba offers the option to
 cache the function compiled code to a file, which can be then reused
 across sessions, and even copied over to different machines that share
-the same CPU characteristics ([more
-info](https://numba.pydata.org/numba-doc/latest/developer/caching.html#cache-sharing)).
+the same CPU characteristics ([more information](https://numba.readthedocs.io/en/stable/developer/caching.html)).
 
 To leverage caching, you can set the `NIXTLA_NUMBA_CACHE` environment
 variable (e.g. `NIXTLA_NUMBA_CACHE=1`), which will enable caching for
@@ -25,8 +24,7 @@ all functions. By default the cache is saved to the `__pycache__`
 directory, but you can override this with the `NUMBA_CACHE_DIR`
 environment variable to save it to a different path
 (e.g. `NUMBA_CACHE_DIR=numba_cache`), you can find more information in
-the
-[docs](https://numba.pydata.org/numba-doc/latest/reference/envvars.html#envvar-NUMBA_CACHE_DIR).
+the [docs](https://numba.readthedocs.io/en/stable/reference/envvars.html#envvar-NUMBA_CACHE_DIR).
 
 If you want to have this enabled for all your sessions, we suggest
 adding `export NIXTLA_NUMBA_CACHE=1` to your profile files, such as
