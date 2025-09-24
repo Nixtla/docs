@@ -128,7 +128,6 @@ html.dark a.card svg {
 
 #banner a {
   color: var(--primary-dark);
-  text-decoration: underline;
 }
 
 #banner a:hover {
