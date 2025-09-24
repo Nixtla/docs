@@ -59,11 +59,19 @@ a.font-semibold {
   color: var(--primary-dark);
 }
 
-a.font-semibold svg {
-  background: var(--primary-dark);
+a.font-semibold.gap-x-3 {
+  font-weight: 600;
+  background: none;
+  border: 1px solid transparent;
+  text-decoration: underline;
 }
 
-a.font-semibold div {
+a.font-semibold svg {
+  background: var(--primary-dark);
+  background-color: #fff;
+}
+
+a.font-semibold.mr-4 div {
   background: #d0d0d0 !important;
   border-radius: 1px !important;
 }
