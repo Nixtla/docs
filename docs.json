@@ -1,0 +1,565 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Nixtla",
+  "colors": {
+    "primary": "#161616",
+    "light": "#FFF",
+    "dark": "#161616"
+  },
+  "banner": {
+    "content": "Using Nixtla in production? Help us prioritize features by filling this [1-minute survey](https://form.typeform.com/to/zfHMgJ7v?utm_source=nixtlaverse&utm_medium=banner&utm_campaign=production-usage-survey).",
+    "dismissible": true 
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "anchors": [
+      {
+        "anchor": "TimeGPT",
+        "icon": "clock-nine",
+        "href": "https://nixtla.io/docs"
+      },
+      {
+        "anchor": "StatsForecast",
+        "icon": "bolt",
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "statsforecast/index.html"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "statsforecast/docs/getting-started/installation.html",
+              "statsforecast/docs/getting-started/getting_started_short.html",
+              "statsforecast/docs/getting-started/getting_started_complete.html",
+              "statsforecast/docs/getting-started/getting_started_complete_polars.html"
+            ]
+          },
+          {
+            "group": "Tutorials",
+            "pages": [
+              "statsforecast/docs/tutorials/anomalydetection.html",
+              "statsforecast/docs/tutorials/conformalprediction.html",
+              "statsforecast/docs/tutorials/crossvalidation.html",
+              "statsforecast/docs/tutorials/electricityloadforecasting.html",
+              "statsforecast/docs/tutorials/electricitypeakforecasting.html",
+              "statsforecast/docs/tutorials/garch_tutorial.html",
+              "statsforecast/docs/tutorials/intermittentdata.html",
+              "statsforecast/docs/tutorials/mlflow.html",
+              "statsforecast/docs/tutorials/multipleseasonalities.html",
+              "statsforecast/docs/tutorials/statisticalneuralmethods.html",
+              "statsforecast/docs/tutorials/uncertaintyintervals.html"
+            ]
+          },
+          {
+            "group": "How to Guides",
+            "pages": [
+              "statsforecast/docs/how-to-guides/automatic_forecasting.html",
+              "statsforecast/docs/how-to-guides/exogenous.html",
+              "statsforecast/docs/how-to-guides/generating_features.html",
+              "statsforecast/docs/how-to-guides/sklearn_models.html",
+              "statsforecast/docs/how-to-guides/migrating_R",
+              "statsforecast/docs/how-to-guides/numba_cache.html"
+            ]
+          },
+          {
+            "group": "Distributed",
+            "pages": [
+              "statsforecast/docs/distributed/dask.html",
+              "statsforecast/docs/distributed/ray.html",
+              "statsforecast/docs/distributed/spark.html"
+            ]
+          },
+          {
+            "group": "Experiments",
+            "pages": [
+              "statsforecast/docs/experiments/amazonstatsforecast.html",
+              "statsforecast/docs/experiments/autoarima_vs_prophet.html",
+              "statsforecast/docs/experiments/ets_ray_m5.html",
+              "statsforecast/docs/experiments/prophet_spark_m5.html"
+            ]
+          },
+          {
+            "group": "Model References",
+            "pages": [
+              "statsforecast/docs/models/adida.html",
+              "statsforecast/docs/models/arch.html",
+              "statsforecast/docs/models/arima.html",
+              "statsforecast/docs/models/autoarima.html",
+              "statsforecast/docs/models/autoces.html",
+              "statsforecast/docs/models/autoets.html",
+              "statsforecast/docs/models/autoregressive.html",
+              "statsforecast/docs/models/autotheta.html",
+              "statsforecast/docs/models/crostonclassic.html",
+              "statsforecast/docs/models/crostonoptimized.html",
+              "statsforecast/docs/models/crostonsba.html",
+              "statsforecast/docs/models/dynamicoptimizedtheta.html",
+              "statsforecast/docs/models/dynamicstandardtheta.html",
+              "statsforecast/docs/models/garch.html",
+              "statsforecast/docs/models/holt.html",
+              "statsforecast/docs/models/holtwinters.html",
+              "statsforecast/docs/models/imapa.html",
+              "statsforecast/docs/models/mfles.html",
+              "statsforecast/docs/models/multipleseasonaltrend.html",
+              "statsforecast/docs/models/optimizedtheta.html",
+              "statsforecast/docs/models/seasonalexponentialsmoothing.html",
+              "statsforecast/docs/models/seasonalexponentialsmoothingoptimized.html",
+              "statsforecast/docs/models/simpleexponentialoptimized.html",
+              "statsforecast/docs/models/simpleexponentialsmoothing.html",
+              "statsforecast/docs/models/standardtheta.html",
+              "statsforecast/docs/models/tsb.html"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "statsforecast/src/core/core.html",
+              "statsforecast/src/core/distributed.fugue.html",
+              "statsforecast/src/core/models.html",
+              "statsforecast/src/core/models_intro",
+              "statsforecast/src/feature_engineering.html"
+            ]
+          },
+          {
+            "group": "Contributing",
+            "pages": [
+              "statsforecast/docs/contribute/contribute",
+              "statsforecast/docs/contribute/docs",
+              "statsforecast/docs/contribute/issue-labels",
+              "statsforecast/docs/contribute/issues",
+              "statsforecast/docs/contribute/step-by-step",
+              "statsforecast/docs/contribute/techstack"
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "MLForecast",
+        "icon": "robot",
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "mlforecast/index.html"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "mlforecast/docs/getting-started/install.html",
+              "mlforecast/docs/getting-started/quick_start_local.html",
+              "mlforecast/docs/getting-started/quick_start_distributed.html",
+              "mlforecast/docs/getting-started/end_to_end_walkthrough.html"
+            ]
+          },
+          {
+            "group": "How-to guides",
+            "pages": [
+              "mlforecast/docs/how-to-guides/exogenous_features.html",
+              "mlforecast/docs/how-to-guides/lag_transforms_guide.html",
+              "mlforecast/docs/how-to-guides/hyperparameter_optimization.html",
+              "mlforecast/docs/how-to-guides/sklearn_pipelines.html",
+              "mlforecast/docs/how-to-guides/sample_weights.html",
+              "mlforecast/docs/how-to-guides/cross_validation.html",
+              "mlforecast/docs/how-to-guides/prediction_intervals.html",
+              "mlforecast/docs/how-to-guides/target_transforms_guide.html",
+              "mlforecast/docs/how-to-guides/analyzing_models.html",
+              "mlforecast/docs/how-to-guides/mlflow.html",
+              "mlforecast/docs/how-to-guides/transforming_exog.html",
+              "mlforecast/docs/how-to-guides/custom_training.html",
+              "mlforecast/docs/how-to-guides/training_with_numpy.html",
+              "mlforecast/docs/how-to-guides/one_model_per_horizon.html",
+              "mlforecast/docs/how-to-guides/custom_date_features.html",
+              "mlforecast/docs/how-to-guides/predict_callbacks.html",
+              "mlforecast/docs/how-to-guides/predict_subset.html",
+              "mlforecast/docs/how-to-guides/transfer_learning.html"
+            ]
+          },
+          {
+            "group": "Tutorials",
+            "pages": [
+              "mlforecast/docs/tutorials/electricity_load_forecasting.html",
+              "mlforecast/docs/tutorials/electricity_peak_forecasting.html",
+              "mlforecast/docs/tutorials/prediction_intervals_in_forecasting_models.html"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              {
+                "group": "Local",
+                "pages": [
+                  "mlforecast/forecast.html",
+                  "mlforecast/auto.html",
+                  "mlforecast/lgb_cv.html",
+                  "mlforecast/optimization.html",
+                  "mlforecast/utils.html",
+                  "mlforecast/core.html",
+                  "mlforecast/target_transforms.html",
+                  "mlforecast/lag_transforms.html",
+                  "mlforecast/feature_engineering.html",
+                  "mlforecast/callbacks.html"
+                ]
+              },
+              {
+                "group": "Distributed",
+                "pages": [
+                  "mlforecast/distributed.forecast.html",
+                  {
+                    "group": "Models",
+                    "pages": [
+                      "mlforecast/distributed.models.dask.lgb.html",
+                      "mlforecast/distributed.models.dask.xgb.html",
+                      "mlforecast/distributed.models.ray.lgb.html",
+                      "mlforecast/distributed.models.ray.xgb.html",
+                      "mlforecast/distributed.models.spark.lgb.html",
+                      "mlforecast/distributed.models.spark.xgb.html"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "NeuralForecast",
+        "icon": "brain-circuit",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "neuralforecast/docs/getting-started/introduction.html",
+              "neuralforecast/docs/getting-started/quickstart.html",
+              "neuralforecast/docs/getting-started/installation.html",
+              "neuralforecast/docs/getting-started/datarequirements.html"
+            ]
+          },
+          {
+            "group": "Capabilities",
+            "pages": [
+              "neuralforecast/docs/capabilities/overview.html",
+              "neuralforecast/docs/capabilities/objectives.html",
+              "neuralforecast/docs/capabilities/exogenous_variables.html",
+              "neuralforecast/docs/capabilities/cross_validation.html",
+              "neuralforecast/docs/capabilities/hyperparameter_tuning.html",
+              "neuralforecast/docs/capabilities/predictinsample.html",
+              "neuralforecast/docs/capabilities/save_load_models.html",
+              "neuralforecast/docs/capabilities/time_series_scaling.html"
+            ]
+          },
+          {
+            "group": "Tutorials",
+            "pages": [
+              {
+                "group": "Forecasting",
+                "pages": [
+                  "neuralforecast/docs/tutorials/getting_started_complete.html",
+                  "neuralforecast/docs/tutorials/cross_validation.html",
+                  "neuralforecast/docs/tutorials/longhorizon_nhits.html",
+                  "neuralforecast/docs/tutorials/longhorizon_transformers.html",
+                  "neuralforecast/docs/tutorials/forecasting_tft.html",
+                  "neuralforecast/docs/tutorials/multivariate_tsmixer.html"
+                ]
+              },
+              {
+                "group": "Probabilistic Forecasting",
+                "pages": [
+                  "neuralforecast/docs/tutorials/uncertainty_quantification.html",
+                  "neuralforecast/docs/tutorials/longhorizon_probabilistic.html",
+                  "neuralforecast/docs/tutorials/conformal_prediction.html"
+                ]
+              },
+              {
+                "group": "Special Topics",
+                "pages": [
+                  "neuralforecast/docs/tutorials/hierarchical_forecasting.html",
+                  "neuralforecast/docs/tutorials/distributed_neuralforecast.html",
+                  "neuralforecast/docs/tutorials/intermittent_data.html",
+                  "neuralforecast/docs/tutorials/using_mlflow.html",
+                  "neuralforecast/docs/tutorials/robust_forecasting.html",
+                  "neuralforecast/docs/tutorials/interpretable_decompositions.html",
+                  "neuralforecast/docs/tutorials/comparing_methods.html",
+                  "neuralforecast/docs/tutorials/temporal_classification.html",
+                  "neuralforecast/docs/tutorials/transfer_learning.html",
+                  "neuralforecast/docs/tutorials/adding_models.html",
+                  "neuralforecast/docs/tutorials/large_datasets.html"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Use cases",
+            "pages": [
+              "neuralforecast/docs/use-cases/electricity_peak_forecasting.html",
+              "neuralforecast/docs/use-cases/predictive_maintenance.html"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "neuralforecast/core.html",
+              {
+                "group": "Models",
+                "pages": [
+                  "neuralforecast/models.autoformer.html",
+                  "neuralforecast/models.bitcn.html",
+                  "neuralforecast/models.deepar.html",
+                  "neuralforecast/models.deepnpts.html",
+                  "neuralforecast/models.dilated_rnn.html",
+                  "neuralforecast/models.dlinear.html",
+                  "neuralforecast/models.fedformer.html",
+                  "neuralforecast/models.gru.html",
+                  "neuralforecast/models.hint.html",
+                  "neuralforecast/models.informer.html",
+                  "neuralforecast/models.itransformer.html",
+                  "neuralforecast/models.kan.html",
+                  "neuralforecast/models.lstm.html",
+                  "neuralforecast/models.mlp.html",
+                  "neuralforecast/models.mlpmultivariate.html",
+                  "neuralforecast/models.nbeats.html",
+                  "neuralforecast/models.nbeatsx.html",
+                  "neuralforecast/models.nhits.html",
+                  "neuralforecast/models.nlinear.html",
+                  "neuralforecast/models.patchtst.html",
+                  "neuralforecast/models.rmok.html",
+                  "neuralforecast/models.rnn.html",
+                  "neuralforecast/models.softs.html",
+                  "neuralforecast/models.stemgnn.html",
+                  "neuralforecast/models.tcn.html",
+                  "neuralforecast/models.tft.html",
+                  "neuralforecast/models.tide.html",
+                  "neuralforecast/models.timellm.html",
+                  "neuralforecast/models.timemixer.html",
+                  "neuralforecast/models.timesnet.html",
+                  "neuralforecast/models.timexer.html",
+                  "neuralforecast/models.tsmixer.html",
+                  "neuralforecast/models.tsmixerx.html",
+                  "neuralforecast/models.vanillatransformer.html"
+                ]
+              },
+              "neuralforecast/models.html",
+              {
+                "group": "Train/Evaluation",
+                "pages": [
+                  "neuralforecast/losses.pytorch.html",
+                  "neuralforecast/losses.numpy.html"
+                ]
+              },
+              {
+                "group": "Common Components",
+                "pages": [
+                  "neuralforecast/common.base_auto.html",
+                  "neuralforecast/common.scalers.html",
+                  "neuralforecast/common.modules.html"
+                ]
+              },
+              {
+                "group": "Utils",
+                "pages": [
+                  "neuralforecast/tsdataset.html",
+                  "neuralforecast/utils.html"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "HierarchicalForecast",
+        "icon": "crown",
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "hierarchicalforecast/index.html"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "hierarchicalforecast/examples/installation.html",
+              "hierarchicalforecast/examples/tourismsmall.html",
+              "hierarchicalforecast/examples/tourismsmallpolars.html",
+              "hierarchicalforecast/examples/introduction.html"
+            ]
+          },
+          {
+            "group": "Tutorials",
+            "pages": [
+              {
+                "group": "Point Reconciliation",
+                "pages": [
+                  "hierarchicalforecast/examples/australiandomestictourism.html",
+                  "hierarchicalforecast/examples/australianprisonpopulation.html",
+                  "hierarchicalforecast/examples/nonnegativereconciliation.html"
+                ]
+              },
+              {
+                "group": "Probabilistic Reconciliation",
+                "pages": [
+                  "hierarchicalforecast/examples/australiandomestictourism-intervals.html",
+                  "hierarchicalforecast/examples/australiandomestictourism-bootstraped-intervals.html",
+                  "hierarchicalforecast/examples/australiandomestictourism-permbu-intervals.html",
+                  "hierarchicalforecast/examples/tourismlarge-evaluation.html"
+                ]
+              },
+              {
+                "group": "Temporal Reconciliation",
+                "pages": [
+                  "hierarchicalforecast/examples/australiandomestictourismtemporal.html",
+                  "hierarchicalforecast/examples/australiandomestictourismcrosstemporal.html",
+                  "hierarchicalforecast/examples/m3withthief.html",
+                  "hierarchicalforecast/examples/localglobalaggregation.html"
+                ]
+              },
+              "hierarchicalforecast/examples/mlframeworksexample.html"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "hierarchicalforecast/src/core.html",
+              "hierarchicalforecast/src/methods.html",
+              "hierarchicalforecast/src/probabilistic_methods.html",
+              "hierarchicalforecast/src/evaluation.html",
+              "hierarchicalforecast/src/utils.html"
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "UtilsForecast",
+        "icon": "wrench",
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "utilsforecast/index.html"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "utilsforecast/preprocessing.html",
+              "utilsforecast/feature_engineering.html",
+              "utilsforecast/evaluation.html",
+              "utilsforecast/losses.html",
+              "utilsforecast/plotting.html",
+              "utilsforecast/data.html"
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "DatasetsForecast",
+        "icon": "chart-simple",
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "datasetsforecast/index.html"
+            ]
+          },
+          {
+            "group": "Datasets",
+            "pages": [
+              "datasetsforecast/favorita.html",
+              "datasetsforecast/hierarchical.html",
+              "datasetsforecast/long_horizon.html",
+              "datasetsforecast/long_horizon2.html",
+              "datasetsforecast/m3.html",
+              "datasetsforecast/m4.html",
+              "datasetsforecast/m5.html",
+              "datasetsforecast/phm2008.html",
+              "datasetsforecast/utils.html"
+            ]
+          }
+        ]
+      },
+      {
+        "anchor": "CoreForecast",
+        "icon": "truck-fast",
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "coreforecast/index"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "coreforecast/grouped_array",
+              "coreforecast/lag_transforms",
+              "coreforecast/scalers",
+              "coreforecast/differences",
+              "coreforecast/seasonal",
+              "coreforecast/rolling",
+              "coreforecast/expanding",
+              "coreforecast/exponentially_weighted"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/light.png",
+    "dark": "/dark.png"
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/Nixtla"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/Nixtla",
+      "slack": "https://join.slack.com/t/nixtlaworkspace/shared_invite/zt-135dssye9-fWTzMpv2WBthq8NK0Yvu6A",
+      "twitter": "https://twitter.com/nixtlainc"
+    }
+  },
+  "redirects": [
+    {
+      "source": "/statsforecast/docs/getting-started/0_Installation",
+      "destination": "/statsforecast/docs/getting-started/installation.html"
+    },
+    {
+      "source": "/statsforecast/docs/getting-started/1_Getting_Started_short",
+      "destination": "/statsforecast/docs/getting-started/getting_started_short.html"
+    },
+    {
+      "source": "/statsforecast/docs/getting-started/2_Getting_Started_complete",
+      "destination": "/statsforecast/docs/getting-started/getting_started_complete.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/AnomalyDetection",
+      "destination": "/statsforecast/docs/tutorials/anomalydetection.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/CrossValidation",
+      "destination": "/statsforecast/docs/tutorials/crossvalidation.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/MultipleSeasonalities",
+      "destination": "/statsforecast/docs/tutorials/multipleseasonalities.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/ElectricityPeakForecasting",
+      "destination": "/statsforecast/docs/tutorials/electricitypeakforecasting.html"
+    },
+    {
+      "source": "/statsforecast/docs/tutorials/IntermittentData",
+      "destination": "/statsforecast/docs/tutorials/intermittentdata.html"
+    },
+    {
+      "source": "/statsforecast/docs/how-to-guides/Exogenous",
+      "destination": "/statsforecast/docs/how-to-guides/exogenous.html"
+    }
+  ]
+}
