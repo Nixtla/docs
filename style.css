@@ -120,6 +120,7 @@ html.dark a.card svg {
   background-color: var(--primary-light);
   border-color: var(--primary-dark);
   color: var(--primary-dark);
+  border-bottom: 1px solid var(--primary-dark) !important;
 }
 
 #banner a {
@@ -140,6 +141,7 @@ html.dark #banner {
   background-color: var(--primary-dark);
   border-color: var(--gray);
   color: var(--primary-light);
+  border-bottom: 1px solid var(--primary-light) !important;
 }
 
 html.dark #banner a {
