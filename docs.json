@@ -339,7 +339,8 @@
                   "neuralforecast/models.timexer.html",
                   "neuralforecast/models.tsmixer.html",
                   "neuralforecast/models.tsmixerx.html",
-                  "neuralforecast/models.vanillatransformer.html"
+                  "neuralforecast/models.vanillatransformer.html",
+                  "neuralforecast/models.xlstm"
                 ]
               },
               "neuralforecast/models.html",
