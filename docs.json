@@ -1,17 +1,39 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Nixtla",
+
+  "banner": {
+    "content": "Using Nixtla in production? Help us prioritize features by filling this [1-minute survey](https://form.typeform.com/to/zfHMgJ7v?utm_source=nixtlaverse&utm_medium=banner&utm_campaign=production-usage-survey).",
+    "dismissible": true
+  },
   "colors": {
     "primary": "#161616",
     "light": "#FFF",
     "dark": "#161616"
   },
-  "banner": {
-    "content": "Using Nixtla in production? Help us prioritize features by filling this [1-minute survey](https://form.typeform.com/to/zfHMgJ7v?utm_source=nixtlaverse&utm_medium=banner&utm_campaign=production-usage-survey).",
-    "dismissible": true 
-  },
   "favicon": "/favicon.svg",
+  "footer": {
+    "socials": {
+      "github": "https://github.com/Nixtla",
+      "slack": "https://join.slack.com/t/nixtlaworkspace/shared_invite/zt-135dssye9-fWTzMpv2WBthq8NK0Yvu6A",
+      "twitter": "https://twitter.com/nixtlainc"
+    }
+  },
+  "integrations": {
+    "gtm": {
+      "tagId": "GTM-TBJ64S3X"
+    }
+  },
+  "logo": {
+    "light": "/light.png",
+    "dark": "/dark.png"
+  },
+  "name": "Nixtla",
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/Nixtla"
+    }
+  },
   "navigation": {
     "anchors": [
       {
@@ -25,9 +47,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "statsforecast/index.html"
-            ]
+            "pages": ["statsforecast/index.html"]
           },
           {
             "group": "Getting Started",
@@ -142,9 +162,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "mlforecast/index.html"
-            ]
+            "pages": ["mlforecast/index.html"]
           },
           {
             "group": "Getting Started",
@@ -376,9 +394,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "hierarchicalforecast/index.html"
-            ]
+            "pages": ["hierarchicalforecast/index.html"]
           },
           {
             "group": "Getting Started",
@@ -439,9 +455,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "utilsforecast/index.html"
-            ]
+            "pages": ["utilsforecast/index.html"]
           },
           {
             "group": "API Reference",
@@ -462,9 +476,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "datasetsforecast/index.html"
-            ]
+            "pages": ["datasetsforecast/index.html"]
           },
           {
             "group": "Datasets",
@@ -488,9 +500,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "coreforecast/index"
-            ]
+            "pages": ["coreforecast/index"]
           },
           {
             "group": "API Reference",
@@ -508,23 +518,6 @@
         ]
       }
     ]
-  },
-  "logo": {
-    "light": "/light.png",
-    "dark": "/dark.png"
-  },
-  "navbar": {
-    "primary": {
-      "type": "github",
-      "href": "https://github.com/Nixtla"
-    }
-  },
-  "footer": {
-    "socials": {
-      "github": "https://github.com/Nixtla",
-      "slack": "https://join.slack.com/t/nixtlaworkspace/shared_invite/zt-135dssye9-fWTzMpv2WBthq8NK0Yvu6A",
-      "twitter": "https://twitter.com/nixtlainc"
-    }
   },
   "redirects": [
     {
@@ -563,5 +556,6 @@
       "source": "/statsforecast/docs/how-to-guides/Exogenous",
       "destination": "/statsforecast/docs/how-to-guides/exogenous.html"
     }
-  ]
+  ],
+  "theme": "mint"
 }
