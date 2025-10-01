@@ -1,11 +1,41 @@
 ---
-description: >-
-  Step-by-step guide on using the `SimpleExponentialSmoothing Model` with
-  `Statsforecast`.
-output-file: simpleexponentialsmoothing.html
 title: Simple Exponential Smoothing Model
 ---
 
+
+```python
+# This cell will not be rendered but is to hide warnings and limit the rows shown
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger('statsforecast').setLevel(logging.ERROR)
+
+import pandas as pd
+pd.set_option('display.max_rows', 6)
+```
+
+
+> Step-by-step guide on using the `SimpleExponentialSmoothing Model`
+> with `Statsforecast`.
+
+During this walkthrough, we will become familiar with the main
+`StatsForecast` class and some relevant methods such as
+`StatsForecast.plot`, `StatsForecast.forecast` and
+`StatsForecast.cross_validation` in other.
+
+The text in this article is largely taken from: 1. [Changquan Huang •
+Alla Petukhina. Springer series (2022). Applied Time Series Analysis and
+Forecasting with
+Python.](https://link.springer.com/book/10.1007/978-3-031-13584-2) 2.
+Ivan Svetunkov. [Forecasting and Analytics with the Augmented Dynamic
+Adaptive Model (ADAM)](https://openforecast.org/adam/) 3. [James D.
+Hamilton. Time Series Analysis Princeton University Press, Princeton,
+New Jersey, 1st Edition,
+1994.](https://press.princeton.edu/books/hardcover/9780691042893/time-series-analysis)
+4. [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting
+Principles and Practice (3rd ed)”](https://otexts.com/fpp3/tscv.html).
 
 ## Table of Contents
 
@@ -170,10 +200,9 @@ time series has no trend or seasonal component.
 > **Tip**
 >
 > Statsforecast will be needed. To install, see
-> [instructions](../getting-started/installation.html).
+> [instructions](../getting-started/0_Installation).
 
 Next, we import plotting libraries and configure the plotting style.
-
 
 ```python
 import matplotlib.pyplot as plt
@@ -232,7 +261,6 @@ three columns: unique_id, ds and y:
 
 -   The `y` (numeric) represents the measurement we wish to forecast.
 
-
 ```python
 df["unique_id"]="1"
 df.columns=["ds", "y", "unique_id"]
@@ -249,7 +277,6 @@ df
 | 214 | 2017-09-21T22:00:00 | 95155  | 1         |
 | 215 | 2017-09-21T23:00:00 | 80285  | 1         |
 
-
 ```python
 print(df.dtypes)
 ```
@@ -261,7 +288,6 @@ unique_id    object
 dtype: object
 ```
 
-
 ```python
 df["ds"] = pd.to_datetime(df["ds"])
 ```
@@ -272,17 +298,15 @@ Plot some series using the plot method from the StatsForecast class.
 This method prints a random series from the dataset and is useful for
 basic EDA.
 
-
 ```python
 from statsforecast import StatsForecast
 
 StatsForecast.plot(df)
 ```
 
-![](/statsforecast/docs/models/SimpleExponentialSmoothing_files/figure-markdown_strict/cell-7-output-1.png)
+![](SimpleExponentialSmoothing_files/figure-markdown_strict/cell-8-output-1.png)
 
 ### Autocorrelation plots
-
 
 ```python
 fig, axs = plt.subplots(nrows=1, ncols=2)
@@ -298,7 +322,7 @@ axs[1].set_title('Partial Autocorrelation')
 plt.show();
 ```
 
-![](/statsforecast/docs/models/SimpleExponentialSmoothing_files/figure-markdown_strict/cell-8-output-1.png)
+![](SimpleExponentialSmoothing_files/figure-markdown_strict/cell-9-output-1.png)
 
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
@@ -310,9 +334,8 @@ Let’s divide our data into sets
 For the test data we will use the last 30 hours to test and evaluate the
 performance of our model.
 
-
 ```python
-train = df[df.ds<='2017-09-20 17:00:00'] 
+train = df[df.ds\<='2017-09-20 17:00:00']
 test = df[df.ds>'2017-09-20 17:00:00']
 ```
 
@@ -329,7 +352,6 @@ train.shape, test.shape
 
 ### Load libraries
 
-
 ```python
 from statsforecast import StatsForecast
 from statsforecast.models import SimpleExponentialSmoothing
@@ -338,7 +360,6 @@ from statsforecast.models import SimpleExponentialSmoothing
 ### Instantiating Model
 
 We are going to build different models, for different values of alpha.
-
 
 ```python
 horizon = len(test)
@@ -367,13 +388,11 @@ import them.
 Any settings are passed into the constructor. Then you call its fit
 method and pass in the historical data frame.
 
-
 ```python
 sf = StatsForecast(models=models, freq='h')
 ```
 
 ### Fit the Model
-
 
 ```python
 sf.fit(df=train)
@@ -386,7 +405,6 @@ StatsForecast(models=[SES01,SES05,SES08])
 Let’s see the results of our Simple
 `Simple Exponential Smoothing model (SES)`. We can observe it with the
 following instruction:
-
 
 ```python
 result01=sf.fitted_[0,0].model_
@@ -442,7 +460,6 @@ to extract each element from the dictionary we are going to use the
 `.get()` function to extract the element and then we are going to save
 it in a `pd.DataFrame()`.
 
-
 ```python
 fitted=pd.DataFrame(result01.get("fitted"), columns=["fitted01"])
 fitted["fitted05"]=result05.get("fitted")
@@ -461,7 +478,6 @@ fitted
 | 184 | 122847.531250 | 140392.50 | 141532.562500 | 2017-09-20 16:00:00 |
 | 185 | 124623.781250 | 140501.25 | 140794.515625 | 2017-09-20 17:00:00 |
 
-
 ```python
 sns.lineplot(df, x="ds", y="y", label="Actual", linewidth=2)
 sns.lineplot(fitted,x="ds", y="fitted01", label="Fitted01", linestyle="--", )
@@ -471,14 +487,13 @@ plt.title("Ads watched (hourly data)");
 plt.show()
 ```
 
-![](/statsforecast/docs/models/SimpleExponentialSmoothing_files/figure-markdown_strict/cell-17-output-1.png)
+![](SimpleExponentialSmoothing_files/figure-markdown_strict/cell-18-output-1.png)
 
 ### Forecast Method
 
 If you want to gain speed in productive settings where you have multiple
-series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
-method instead of `.fit` and `.predict`.
+series or models we recommend using the `StatsForecast.forecast` method
+instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
 values and is highly scalable in distributed environments.
@@ -494,7 +509,6 @@ the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min.
 
-
 ```python
 # Prediction
 Y_hat = sf.forecast(df=train, h=horizon, fitted=True)
@@ -508,7 +522,6 @@ Y_hat.head()
 | 2   | 1         | 2017-09-20 20:00:00 | 126112.898438 | 140008.125 | 139770.90625 |
 | 3   | 1         | 2017-09-20 21:00:00 | 126112.898438 | 140008.125 | 139770.90625 |
 | 4   | 1         | 2017-09-20 22:00:00 | 126112.898438 | 140008.125 | 139770.90625 |
-
 
 ```python
 values=sf.forecast_fitted_values()
@@ -537,9 +550,8 @@ uncertainty intervals.
 
 This step should take less than 1 second.
 
-
 ```python
-forecast_df = sf.predict(h=horizon) 
+forecast_df = sf.predict(h=horizon)
 forecast_df
 ```
 
@@ -553,12 +565,11 @@ forecast_df
 | 28  | 1         | 2017-09-21 22:00:00 | 126112.898438 | 140008.125 | 139770.90625 |
 | 29  | 1         | 2017-09-21 23:00:00 | 126112.898438 | 140008.125 | 139770.90625 |
 
-
 ```python
 sf.plot(train, forecast_df)
 ```
 
-![](/statsforecast/docs/models/SimpleExponentialSmoothing_files/figure-markdown_strict/cell-21-output-1.png)
+![](SimpleExponentialSmoothing_files/figure-markdown_strict/cell-22-output-1.png)
 
 ## Cross-validation <a class="anchor" id="cross_validate"></a>
 
@@ -606,7 +617,6 @@ following arguments.
     other words: what number of forecasting processes in the past do you
     want to evaluate.
 
-
 ```python
 crossvalidation_df = sf.cross_validation(df=df,
                                          h=horizon,
@@ -623,27 +633,25 @@ following columns:
 -   `y:` true value
 -   `model:` columns with the model’s name and fitted value.
 
-
 ```python
 crossvalidation_df
 ```
 
-|  | unique_id | ds | cutoff | y | SES01 | SES05 | SES08 |
-|----|----|----|----|----|----|----|----|
-| 0 | 1 | 2017-09-18 06:00:00 | 2017-09-18 05:00:00 | 99440.0 | 118499.953125 | 109816.250 | 112747.695312 |
-| 1 | 1 | 2017-09-18 07:00:00 | 2017-09-18 05:00:00 | 97655.0 | 118499.953125 | 109816.250 | 112747.695312 |
-| 2 | 1 | 2017-09-18 08:00:00 | 2017-09-18 05:00:00 | 97655.0 | 118499.953125 | 109816.250 | 112747.695312 |
-| ... | ... | ... | ... | ... | ... | ... | ... |
-| 87 | 1 | 2017-09-21 21:00:00 | 2017-09-20 17:00:00 | 103080.0 | 126112.898438 | 140008.125 | 139770.906250 |
-| 88 | 1 | 2017-09-21 22:00:00 | 2017-09-20 17:00:00 | 95155.0 | 126112.898438 | 140008.125 | 139770.906250 |
-| 89 | 1 | 2017-09-21 23:00:00 | 2017-09-20 17:00:00 | 80285.0 | 126112.898438 | 140008.125 | 139770.906250 |
+|     | unique_id | ds                  | cutoff              | y        | SES01         | SES05      | SES08         |
+|-----|-----------|---------------------|---------------------|----------|---------------|------------|---------------|
+| 0   | 1         | 2017-09-18 06:00:00 | 2017-09-18 05:00:00 | 99440.0  | 118499.953125 | 109816.250 | 112747.695312 |
+| 1   | 1         | 2017-09-18 07:00:00 | 2017-09-18 05:00:00 | 97655.0  | 118499.953125 | 109816.250 | 112747.695312 |
+| 2   | 1         | 2017-09-18 08:00:00 | 2017-09-18 05:00:00 | 97655.0  | 118499.953125 | 109816.250 | 112747.695312 |
+| ... | ...       | ...                 | ...                 | ...      | ...           | ...        | ...           |
+| 87  | 1         | 2017-09-21 21:00:00 | 2017-09-20 17:00:00 | 103080.0 | 126112.898438 | 140008.125 | 139770.906250 |
+| 88  | 1         | 2017-09-21 22:00:00 | 2017-09-20 17:00:00 | 95155.0  | 126112.898438 | 140008.125 | 139770.906250 |
+| 89  | 1         | 2017-09-21 23:00:00 | 2017-09-20 17:00:00 | 80285.0  | 126112.898438 | 140008.125 | 139770.906250 |
 
 ## Model Evaluation <a class="anchor" id="evaluate"></a>
 
 Now we are going to evaluate our model with the results of the
 predictions, we will use different types of metrics MAE, MAPE, MASE,
 RMSE, SMAPE to evaluate the accuracy.
-
 
 ```python
 from functools import partial
@@ -679,8 +687,8 @@ evaluate(
 3.  [James D. Hamilton. Time Series Analysis Princeton University Press,
     Princeton, New Jersey, 1st Edition,
     1994.](https://press.princeton.edu/books/hardcover/9780691042893/time-series-analysis)
-4.  [Nixtla
-    Parameters](https://nixtla.github.io/statsforecast/src/core/models.html#arch-model).
+4.  [Nixtla SeasonalExponentialSmoothing
+    API](../../models#class-simpleexponentialsmoothing)
 5.  [Pandas available
     frequencies](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases).
 6.  [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting

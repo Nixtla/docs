@@ -1,9 +1,37 @@
 ---
-description: Step-by-step guide on using the `AutoTheta Model` with `Statsforecast`.
-output-file: autotheta.html
 title: AutoTheta Model
 ---
 
+
+```python
+# This cell will not be rendered but is to hide warnings and limit the rows shown
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger('statsforecast').setLevel(logging.ERROR)
+
+import pandas as pd
+pd.set_option('display.max_rows', 6)
+```
+
+
+> Step-by-step guide on using the `AutoTheta Model` with
+> `Statsforecast`.
+
+During this walkthrough, we will become familiar with the main
+`StatsForecast` class and some relevant methods such as
+`StatsForecast.plot`, `StatsForecast.forecast` and
+`StatsForecast.cross_validation` in other.
+
+The text in this article is copied from and inspired by: 1. [Jose A.
+Fiorucci, Tiago R. Pellegrini, Francisco Louzada, Fotios Petropoulos,
+Anne B. Koehler (2016). “Models for optimising the theta method and
+their relationship to state space models”. International Journal of
+Forecasting](https://www.sciencedirect.com/science/article/pii/S0169207016300243).
+2. [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting
+Principles and Practice (3rd ed)”](https://otexts.com/fpp3/tscv.html)
 
 ## Table of Contents
 
@@ -18,15 +46,10 @@ title: AutoTheta Model
 
 ## Introduction<a class="anchor" id="introduction"></a>
 
-The
-[`AutoTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#autotheta)
-model in
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
-automatically selects the best **Theta model** based on the **mean
-squared error (MSE)**. In this section, we will discuss each of the
-models that
-[`AutoTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#autotheta)
-considers and then explain how it selects the best one.
+The `AutoTheta` model in `StatsForecast` automatically selects the best
+**Theta model** based on the **mean squared error (MSE)**. In this
+section, we will discuss each of the models that `AutoTheta` considers
+and then explain how it selects the best one.
 
 ### 1. Standard Theta Model (STM)
 
@@ -62,9 +85,8 @@ the model dynamically with new data.
 
 ## How AutoTheta Selects the Best Model
 
-1.  [`AutoTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#autotheta)
-    fits all four variants of the Theta model (STM, OTM, DSTM, and DOTM)
-    to your data.
+1.  `AutoTheta` fits all four variants of the Theta model (STM, OTM,
+    DSTM, and DOTM) to your data.
 2.  Each model is evaluated using cross-validation or a hold-out
     validation strategy, depending on the configuration.
 3.  The model that achieves the lowest mean squared error (MSE) is
@@ -76,10 +98,9 @@ the model dynamically with new data.
 > **Tip**
 >
 > Statsforecast will be needed. To install, see
-> [instructions](../getting-started/installation.html).
+> [instructions](../getting-started/0_Installation).
 
 Next, we import plotting libraries and configure the plotting style.
-
 
 ```python
 import pandas as pd
@@ -89,6 +110,7 @@ import scipy.stats as stats
 
 
 ```python
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
@@ -116,10 +138,10 @@ plt.rcParams.update(dark_style)
 
 from pylab import rcParams
 rcParams['figure.figsize'] = (18,7)
+
 ```
 
 ### Read Data
-
 
 ```python
 df = pd.read_csv("https://raw.githubusercontent.com/Naren8520/Serie-de-tiempo-con-Machine-Learning/main/Data/candy_production.csv")
@@ -146,7 +168,6 @@ three columns: unique_id, ds and y:
 
 -   The `y` (numeric) represents the measurement we wish to forecast.
 
-
 ```python
 df["unique_id"]="1"
 df.columns=["ds", "y", "unique_id"]
@@ -160,7 +181,6 @@ df.head()
 | 2   | 1972-03-01 | 66.0229 | 1         |
 | 3   | 1972-04-01 | 64.5645 | 1         |
 | 4   | 1972-05-01 | 65.0100 | 1         |
-
 
 ```python
 print(df.dtypes)
@@ -176,7 +196,6 @@ dtype: object
 We can see that our time variable `(ds)` is in an object format, we need
 to convert to a date format
 
-
 ```python
 df["ds"] = pd.to_datetime(df["ds"])
 ```
@@ -187,17 +206,15 @@ Plot some series using the plot method from the StatsForecast class.
 This method prints aa random series from the dataset and is useful for
 basic EDA.
 
-
 ```python
 from statsforecast import StatsForecast
 
 StatsForecast.plot(df)
 ```
 
-![](/statsforecast/docs/models/AutoTheta_files/figure-markdown_strict/cell-8-output-1.png)
+![](AutoTheta_files/figure-markdown_strict/cell-9-output-1.png)
 
 ### Autocorrelation plots
-
 
 ```python
 fig, axs = plt.subplots(nrows=1, ncols=2)
@@ -211,20 +228,18 @@ axs[1].set_title('Partial Autocorrelation')
 plt.show();
 ```
 
-![](/statsforecast/docs/models/AutoTheta_files/figure-markdown_strict/cell-9-output-1.png)
+![](AutoTheta_files/figure-markdown_strict/cell-10-output-1.png)
 
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
-Let’s divide our data into sets 1. Data to train our
-[`AutoTheta`](https://Nixtla.github.io/statsforecast/src/core/models.html#autotheta)
-model 2. Data to test our model
+Let’s divide our data into sets 1. Data to train our `AutoTheta` model
+2. Data to test our model
 
 For the test data we will use the last 12 months to test and evaluate
 the performance of our model.
 
-
 ```python
-train = df[df.ds<='2016-08-01'] 
+train = df[df.ds\<='2016-08-01']
 test = df[df.ds>'2016-08-01']
 ```
 
@@ -239,7 +254,6 @@ train.shape, test.shape
 
 Now let’s plot the training data and the test data.
 
-
 ```python
 sns.lineplot(train,x="ds", y="y", label="Train", linewidth=3, linestyle=":")
 sns.lineplot(test, x="ds", y="y", label="Test")
@@ -248,12 +262,11 @@ plt.xlabel("Month")
 plt.show()
 ```
 
-![](/statsforecast/docs/models/AutoTheta_files/figure-markdown_strict/cell-12-output-1.png)
+![](AutoTheta_files/figure-markdown_strict/cell-13-output-1.png)
 
 ## Implementation of AutoTheta with StatsForecast <a class="anchor" id="implementation"></a>
 
 ### Load libraries
-
 
 ```python
 from statsforecast import StatsForecast
@@ -271,15 +284,15 @@ Automatically selects the best Theta (Standard Theta Model `(‘STM’)`,
 Optimized Theta Model `(‘OTM’)`, Dynamic Standard Theta Model
 `(‘DSTM’)`, Dynamic Optimized Theta Model `(‘DOTM’))` model using mse.
 
-
 ```python
-season_length = 12 # Monthly data 
+season_length = 12 # Monthly data
 horizon = len(test) # number of predictions
 
 # We call the model that we are going to use
 models = [AutoTheta(season_length=season_length,
                      decomposition_type="additive",
                      model="STM")]
+
 ```
 
 We fit the models by instantiating a new StatsForecast object with the
@@ -300,13 +313,11 @@ import them.
 Any settings are passed into the constructor. Then you call its fit
 method and pass in the historical data frame.
 
-
 ```python
 sf = StatsForecast(models=models, freq='MS')
 ```
 
 ### Fit Model
-
 
 ```python
 sf.fit(df=train)
@@ -318,7 +329,6 @@ StatsForecast(models=[AutoTheta])
 
 Let’s see the results of our Theta model. We can observe it with the
 following instruction:
-
 
 ```python
 result=sf.fitted_[0,0].model_
@@ -633,7 +643,6 @@ to extract each element from the dictionary we are going to use the
 `.get()` function to extract the element and then we are going to save
 it in a `pd.DataFrame()`.
 
-
 ```python
 residual=pd.DataFrame(result.get("residuals"), columns=["residual Model"])
 residual
@@ -648,7 +657,6 @@ residual
 | 533 | -12.076379     |
 | 534 | -10.073890     |
 | 535 | -9.392073      |
-
 
 ```python
 fig, axs = plt.subplots(nrows=2, ncols=2)
@@ -668,14 +676,13 @@ axs[1,1].set_title("Autocorrelation");
 plt.show();
 ```
 
-![](/statsforecast/docs/models/AutoTheta_files/figure-markdown_strict/cell-19-output-1.png)
+![](AutoTheta_files/figure-markdown_strict/cell-20-output-1.png)
 
 ### Forecast Method
 
 If you want to gain speed in productive settings where you have multiple
-series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
-method instead of `.fit` and `.predict`.
+series or models we recommend using the `StatsForecast.forecast` method
+instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
 values and is highly scalable in distributed environments.
@@ -696,11 +703,7 @@ The forecast object here is a new data frame that includes a column with
 the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min. (If you want to speed things up to a couple of seconds,
-remove the AutoModels like
-[`ARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#arima)
-and
-[`Theta`](https://Nixtla.github.io/statsforecast/src/core/models.html#theta))
-
+remove the AutoModels like `ARIMA` and `Theta`)
 
 ```python
 # Prediction
@@ -718,7 +721,6 @@ Y_hat
 | 10  | 1         | 2017-07-01 | 99.870548  |
 | 11  | 1         | 2017-08-01 | 106.021718 |
 
-
 ```python
 values=sf.forecast_fitted_values()
 values.head()
@@ -732,15 +734,13 @@ values.head()
 | 3   | 1         | 1972-04-01 | 64.5645 | 77.149048  |
 | 4   | 1         | 1972-05-01 | 65.0100 | 76.981935  |
 
-
 ```python
 StatsForecast.plot(values)
 ```
 
-![](/statsforecast/docs/models/AutoTheta_files/figure-markdown_strict/cell-22-output-1.png)
+![](AutoTheta_files/figure-markdown_strict/cell-23-output-1.png)
 
 Adding 95% confidence interval with the forecast method
-
 
 ```python
 sf.forecast(df=train, h=horizon, level=[95])
@@ -755,7 +755,6 @@ sf.forecast(df=train, h=horizon, level=[95])
 | 9   | 1         | 2017-06-01 | 101.125782 | 41.186268       | 159.159903      |
 | 10  | 1         | 2017-07-01 | 99.870548  | 35.144354       | 152.867267      |
 | 11  | 1         | 2017-08-01 | 106.021718 | 38.753454       | 166.048584      |
-
 
 ```python
 # Merge the forecasts with the true values
@@ -773,12 +772,11 @@ Y_hat1
 | 10  | 2017-07-01 | 102.5861 | 1         | 99.870548  |
 | 11  | 2017-08-01 | 114.0613 | 1         | 106.021718 |
 
-
 ```python
 sf.plot(train, Y_hat1)
 ```
 
-![](/statsforecast/docs/models/AutoTheta_files/figure-markdown_strict/cell-25-output-1.png)
+![](AutoTheta_files/figure-markdown_strict/cell-26-output-1.png)
 
 ### Predict method with confidence interval
 
@@ -802,7 +800,6 @@ uncertainty intervals.
 
 This step should take less than 1 second.
 
-
 ```python
 sf.predict(h=horizon)
 ```
@@ -817,9 +814,8 @@ sf.predict(h=horizon)
 | 10  | 1         | 2017-07-01 | 99.870548  |
 | 11  | 1         | 2017-08-01 | 106.021718 |
 
-
 ```python
-forecast_df = sf.predict(h=horizon, level=[95]) 
+forecast_df = sf.predict(h=horizon, level=[95])
 forecast_df
 ```
 
@@ -833,12 +829,11 @@ forecast_df
 | 10  | 1         | 2017-07-01 | 99.870548  | 35.144354       | 152.867267      |
 | 11  | 1         | 2017-08-01 | 106.021718 | 38.753454       | 166.048584      |
 
-
 ```python
 sf.plot(train, test.merge(forecast_df), level=[95])
 ```
 
-![](/statsforecast/docs/models/AutoTheta_files/figure-markdown_strict/cell-28-output-1.png)
+![](AutoTheta_files/figure-markdown_strict/cell-29-output-1.png)
 
 ## Cross-validation <a class="anchor" id="cross_validate"></a>
 
@@ -886,7 +881,6 @@ following arguments.
     other words: what number of forecasting processes in the past do you
     want to evaluate.
 
-
 ```python
 crossvalidation_df = sf.cross_validation(
     df=train,
@@ -904,7 +898,6 @@ following columns:
 -   `cutoff:` the last datestamp or temporal index for the n_windows.
 -   `y:` true value
 -   `"model":` columns with the model’s name and fitted value.
-
 
 ```python
 crossvalidation_df
@@ -925,7 +918,6 @@ crossvalidation_df
 Now we are going to evaluate our model with the results of the
 predictions, we will use different types of metrics MAE, MAPE, MASE,
 RMSE, SMAPE to evaluate the accuracy.
-
 
 ```python
 from functools import partial
@@ -958,8 +950,7 @@ evaluate(
     theta method and their relationship to state space models”.
     International Journal of
     Forecasting](https://www.sciencedirect.com/science/article/pii/S0169207016300243).
-2.  [Nixtla
-    Parameters](https://nixtla.github.io/statsforecast/src/core/models.html#autotheta).
+2.  [Nixtla AutoTheta API](../../models#class-autotheta)
 3.  [Pandas available
     frequencies](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases).
 4.  [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting

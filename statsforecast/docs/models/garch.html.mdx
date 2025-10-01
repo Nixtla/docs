@@ -1,9 +1,43 @@
 ---
-description: Step-by-step guide on using the `GARCH Model` with `Statsforecast`.
-output-file: garch.html
 title: GARCH Model
 ---
 
+
+```python
+# This cell will not be rendered but is to hide warnings
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger('statsforecast').setLevel(logging.ERROR)
+
+import pandas as pd
+pd.set_option('display.max_rows', 6)
+```
+
+
+> Step-by-step guide on using the `GARCH Model` with `Statsforecast`.
+
+In this walkthrough, we will become familiar with the main
+`StatsForecast` class and some relevant methods such as
+`StatsForecast.plot`, `StatsForecast.forecast` and
+`StatsForecast.cross_validation`.
+
+The text in this article is largely taken from: 1. [Changquan Huang •
+Alla Petukhina. Springer series (2022). Applied Time Series Analysis and
+Forecasting with
+Python.](https://link.springer.com/book/10.1007/978-3-031-13584-2) 2.
+[Bollerslev, T. (1986). Generalized autoregressive conditional
+heteroskedasticity. Journal of econometrics, 31(3),
+307-327.](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=7da8bfa5295375c1141d797e80065a599153c19d)
+3. [Engle, R. F. (1982). Autoregressive conditional heteroscedasticity
+with estimates of the variance of United Kingdom inflation.
+Econometrica: Journal of the econometric society,
+987-1007.](http://www.econ.uiuc.edu/~econ508/Papers/engle82.pdf). 4.
+[James D. Hamilton. Time Series Analysis Princeton University Press,
+Princeton, New Jersey, 1st Edition,
+1994.](https://press.princeton.edu/books/hardcover/9780691042893/time-series-analysis)
 
 ## Table of Contents
 
@@ -43,14 +77,12 @@ other financial values.
 of the form
 
 $$
-
 \begin{equation}
     \begin{cases}
         X_t = \sigma_t \varepsilon_t\\
         \sigma_{t}^2 = \omega + \sum_{i=1}^{p} \alpha_i X_{t-i}^2 + \sum_{j=1}^{q} \beta_j \sigma_{t-j}^2
     \end{cases}
 \end{equation}
-
 $$
 
 where $\omega ≥0,\alpha_i ≥0,\beta_j ≥0,\alpha_p >0$ ,and $\beta_q >0$
@@ -62,10 +94,9 @@ In practice, it has been found that for some time series, the
 $\text{ARCH}(p)$ model defined by (1) will provide an adequate fit only
 if the order $p$ is large. By allowing past volatilities to affect the
 present volatility in (1), a more parsimonious model may result. That is
-why we need
-[`GARCH`](https://Nixtla.github.io/statsforecast/src/core/models.html#garch)
-models. Besides, note the condition that the order $p ≥ 1$. The **GARCH
-model** in Definition 1 has the properties as follows.
+why we need `GARCH` models. Besides, note the condition that the order
+$p ≥ 1$. The **GARCH model** in Definition 1 has the properties as
+follows.
 
 Proposition 1. If $X_t$ is a $\text{GARCH}(p, q)$ process defined in (1)
 and $\sum_{i=1}^{p} \alpha_{i} + \sum_{j=1}^{q} \beta_j <1$,then the
@@ -108,14 +139,14 @@ expected returns is fixed.
 
 ### Advantages and disadvantages of the Generalized Autoregressive Conditional Heteroskedasticity (GARCH) Model
 
-| Advantages | Disadvantages |
+| Advantages                                                                                                                                                                                                         | Disadvantages                                                                                                                                                                                                              |
 |--------------------------------|-----------------------------------------|
-| 1\. 1. Flexible model: The GARCH model is flexible and can fit different types of time series data with different volatility patterns. | 1\. Requires a large amount of data: The GARCH model requires a large amount of data to accurately estimate the model parameters. |
-| 2\. Ability to model volatility: The GARCH model is capable of modeling the volatility and heteroscedasticity of a time series, which can improve the accuracy of forecasts. | 2\. Sensitive to the model specification: The GARCH model is sensitive to the model specification and can be difficult to estimate if incorrectly specified. |
-| 3\. It incorporates past information: The GARCH model incorporates past information on the volatility of the time series, which makes it useful for predicting future volatility. | 3\. It can be computationally expensive: The GARCH model can be computationally expensive, especially if more complex models are used. |
-| 4\. Allows the inclusion of exogenous variables: The GARCH model can be extended to include exogenous variables, which can improve the accuracy of the predictions. | 4\. It does not consider extreme events: The GARCH model does not consider extreme or unexpected events in the time series, which can affect the accuracy of the predictions in situations of high volatility. |
+| 1\. 1. Flexible model: The GARCH model is flexible and can fit different types of time series data with different volatility patterns.                                                                             | 1\. Requires a large amount of data: The GARCH model requires a large amount of data to accurately estimate the model parameters.                                                                                          |
+| 2\. Ability to model volatility: The GARCH model is capable of modeling the volatility and heteroscedasticity of a time series, which can improve the accuracy of forecasts.                                       | 2\. Sensitive to the model specification: The GARCH model is sensitive to the model specification and can be difficult to estimate if incorrectly specified.                                                               |
+| 3\. It incorporates past information: The GARCH model incorporates past information on the volatility of the time series, which makes it useful for predicting future volatility.                                  | 3\. It can be computationally expensive: The GARCH model can be computationally expensive, especially if more complex models are used.                                                                                     |
+| 4\. Allows the inclusion of exogenous variables: The GARCH model can be extended to include exogenous variables, which can improve the accuracy of the predictions.                                                | 4\. It does not consider extreme events: The GARCH model does not consider extreme or unexpected events in the time series, which can affect the accuracy of the predictions in situations of high volatility.             |
 | 5\. The GARCH model makes it possible to model conditional heteroscedasticity, that is, the variation of the variance of a time series as a function of time and of the previous values of the time series itself. | 5\. The GARCH model assumes that the time series errors are normally distributed, which may not be true in practice. If the errors are not normally distributed, the model may produce inaccurate estimates of volatility. |
-| 6\. The GARCH model can be used to estimate the value at risk (VaR) and the conditional value at risk (CVaR) of an investment portfolio. |  |
+| 6\. The GARCH model can be used to estimate the value at risk (VaR) and the conditional value at risk (CVaR) of an investment portfolio.                                                                           |                                                                                                                                                                                                                            |
 
 ### The Generalized Autoregressive Conditional Heteroskedasticity (GARCH) model can be applied in several fields
 
@@ -182,10 +213,9 @@ especially in finance and economics.
 > **Tip**
 >
 > Statsforecast will be needed. To install, see
-> [instructions](../getting-started/installation.html).
+> [instructions](../getting-started/0_Installation).
 
 Next, we import plotting libraries and configure the plotting style.
-
 
 ```python
 import matplotlib.pyplot as plt
@@ -220,7 +250,6 @@ rcParams['figure.figsize'] = (18,7)
 
 Let’s pull the S&P500 stock data from the Yahoo Finance site.
 
-
 ```python
 import datetime
 
@@ -239,15 +268,14 @@ SP_500 = SP_500.reset_index()
 SP_500.head()
 ```
 
-| Price | Date | Adj Close | Close | High | Low | Open | Volume |
-|----|----|----|----|----|----|----|----|
-| Ticker |  | ^GSPC | ^GSPC | ^GSPC | ^GSPC | ^GSPC | ^GSPC |
-| 0 | 2015-01-02 00:00:00+00:00 | 2058.199951 | 2058.199951 | 2072.360107 | 2046.040039 | 2058.899902 | 2708700000 |
-| 1 | 2015-01-05 00:00:00+00:00 | 2020.579956 | 2020.579956 | 2054.439941 | 2017.339966 | 2054.439941 | 3799120000 |
-| 2 | 2015-01-06 00:00:00+00:00 | 2002.609985 | 2002.609985 | 2030.250000 | 1992.439941 | 2022.150024 | 4460110000 |
-| 3 | 2015-01-07 00:00:00+00:00 | 2025.900024 | 2025.900024 | 2029.609985 | 2005.550049 | 2005.550049 | 3805480000 |
-| 4 | 2015-01-08 00:00:00+00:00 | 2062.139893 | 2062.139893 | 2064.080078 | 2030.609985 | 2030.609985 | 3934010000 |
-
+| Price  | Date                      | Adj Close   | Close       | High        | Low         | Open        | Volume     |
+|--------|---------------------------|-------------|-------------|-------------|-------------|-------------|------------|
+| Ticker |                           | ^GSPC       | ^GSPC       | ^GSPC       | ^GSPC       | ^GSPC       | ^GSPC      |
+| 0      | 2015-01-02 00:00:00+00:00 | 2058.199951 | 2058.199951 | 2072.360107 | 2046.040039 | 2058.899902 | 2708700000 |
+| 1      | 2015-01-05 00:00:00+00:00 | 2020.579956 | 2020.579956 | 2054.439941 | 2017.339966 | 2054.439941 | 3799120000 |
+| 2      | 2015-01-06 00:00:00+00:00 | 2002.609985 | 2002.609985 | 2030.250000 | 1992.439941 | 2022.150024 | 4460110000 |
+| 3      | 2015-01-07 00:00:00+00:00 | 2025.900024 | 2025.900024 | 2029.609985 | 2005.550049 | 2005.550049 | 3805480000 |
+| 4      | 2015-01-08 00:00:00+00:00 | 2062.139893 | 2062.139893 | 2064.080078 | 2030.609985 | 2030.609985 | 3934010000 |
 
 ```python
 df=SP_500[["Date","Close"]]
@@ -265,7 +293,6 @@ three columns: unique_id, ds and y:
 
 -   The `y` (numeric) represents the measurement we wish to forecast.
 
-
 ```python
 df["unique_id"]="1"
 df.columns=["ds", "y", "unique_id"]
@@ -279,7 +306,6 @@ df.head()
 | 2   | 2015-01-06 00:00:00+00:00 | 2002.609985 | 1         |
 | 3   | 2015-01-07 00:00:00+00:00 | 2025.900024 | 1         |
 | 4   | 2015-01-08 00:00:00+00:00 | 2062.139893 | 1         |
-
 
 ```python
 print(df.dtypes)
@@ -298,14 +324,13 @@ Plot a series using the plot method from the StatsForecast class. This
 method prints a random series from the dataset and is useful for basic
 EDA.
 
-
 ```python
 from statsforecast import StatsForecast
 
 StatsForecast.plot(df)
 ```
 
-![](/statsforecast/docs/models/GARCH_files/figure-markdown_strict/cell-7-output-1.png)
+![](GARCH_files/figure-markdown_strict/cell-8-output-1.png)
 
 ### The Augmented Dickey-Fuller Test
 
@@ -336,7 +361,6 @@ reject the null hypothesis, time series is non-stationary.
 Let’s check if our series that we are analyzing is a stationary series.
 Let’s create a function to check, using the `Dickey Fuller` test
 
-
 ```python
 from statsmodels.tsa.stattools import adfuller
 
@@ -347,7 +371,7 @@ def Augmented_Dickey_Fuller_Test_func(series , column_name):
     for key,value in dftest[4].items():
        dfoutput['Critical Value (%s)'%key] = value
     print (dfoutput)
-    if dftest[1] <= 0.05:
+    if dftest[1] \<= 0.05:
         print("Conclusion:====>")
         print("Reject the null hypothesis")
         print("The data is stationary")
@@ -410,7 +434,6 @@ We can estimate the series of returns using the
 periods parameter whose default value is 1. If you want to calculate a
 30-day return, you must change the value to 30.
 
-
 ```python
 df['return'] = 100 * df["y"].pct_change()
 df.dropna(inplace=True, how='any')
@@ -425,17 +448,15 @@ df.head()
 | 4   | 2015-01-08 00:00:00+00:00 | 2062.139893 | 1         | 1.788828  |
 | 5   | 2015-01-09 00:00:00+00:00 | 2044.810059 | 1         | -0.840381 |
 
-
 ```python
 import plotly.express as px
 fig = px.line(df, x=df["ds"], y="return",title="SP500 Return Chart",template = "plotly_dark")
 fig.show()
 ```
 
-![](/statsforecast/docs/models/GARCH_files/figure-markdown_strict/cell-11-output-2.png)
+![](GARCH_files/figure-markdown_strict/cell-12-output-2.png)
 
 ### Creating Squared Returns
-
 
 ```python
 df['sq_return'] = df["return"].mul(df["return"])
@@ -452,7 +473,6 @@ df.head()
 
 ### Returns vs Squared Returns
 
-
 ```python
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
@@ -468,7 +488,7 @@ row=1, col=1
 
 fig.add_trace(go.Scatter(x=df["ds"], y=df["sq_return"],
                          mode='lines',
-                         name='sq_return'), 
+                         name='sq_return'),
     row=1, col=2
 )
 
@@ -476,8 +496,7 @@ fig.update_layout(height=600, width=800, title_text="Returns vs Squared Returns"
 fig.show()
 ```
 
-![](/statsforecast/docs/models/GARCH_files/figure-markdown_strict/cell-13-output-1.png)
-
+![](GARCH_files/figure-markdown_strict/cell-14-output-1.png)
 
 ```python
 from scipy.stats import probplot, moment
@@ -485,7 +504,7 @@ from statsmodels.tsa.stattools import adfuller, q_stat, acf
 import numpy as np
 import seaborn as sns
 
-def plot_correlogram(x, lags=None, title=None):    
+def plot_correlogram(x, lags=None, title=None):
     lags = min(10, int(len(x)/5)) if lags is None else lags
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(14, 8))
     x.plot(ax=axes[0][0], title='Return')
@@ -512,7 +531,7 @@ def plot_correlogram(x, lags=None, title=None):
 plot_correlogram(df["return"], lags=30, title="Time Series Analysis plot \n")
 ```
 
-![](/statsforecast/docs/models/GARCH_files/figure-markdown_strict/cell-15-output-1.png)
+![](GARCH_files/figure-markdown_strict/cell-16-output-1.png)
 
 ### Ljung-Box Test
 
@@ -533,8 +552,7 @@ The Ljung-Box with the Box-Pierce option will return, for each lag, the
 Ljung-Box test statistic, Ljung-Box p-values, Box-Pierce test statistic,
 and Box-Pierce p-values.
 
-If $p<\alpha  (0.05)$ we reject the null hypothesis.
-
+If $p<\alpha (0.05)$ we reject the null hypothesis.
 
 ```python
 from statsmodels.stats.diagnostic import acorr_ljungbox
@@ -554,13 +572,11 @@ ljung_res.head()
 
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
-Let’s divide our data into sets 1. Data to train our
-[`GARCH`](https://Nixtla.github.io/statsforecast/src/core/models.html#garch)
-model 2. Data to test our model
+Let’s divide our data into sets 1. Data to train our `GARCH` model 2.
+Data to test our model
 
 For the test data we will use the last 30 day to test and evaluate the
 performance of our model.
-
 
 ```python
 df=df[["ds","unique_id","return"]]
@@ -569,7 +585,7 @@ df.columns=["ds", "unique_id", "y"]
 
 
 ```python
-train = df[df.ds<='2023-05-31'] # Let's forecast the last 30 days
+train = df[df.ds\<='2023-05-31'] # Let's forecast the last 30 days
 test = df[df.ds>'2023-05-31']
 ```
 
@@ -586,9 +602,8 @@ train.shape, test.shape
 
 ### Load libraries
 
-
 ```python
-from statsforecast import StatsForecast 
+from statsforecast import StatsForecast
 from statsforecast.models import GARCH
 ```
 
@@ -599,9 +614,8 @@ tricky. This article on [Seasonal
 periods](https://robjhyndman.com/hyndsight/seasonal-periods/) by the
 master, Rob Hyndmann, can be useful.season_length.
 
-
 ```python
-season_length = 7 # Dayly data 
+season_length = 7 # Dayly data
 horizon = len(test) # number of predictions biasadj=True, include_drift=True,
 
 models = [GARCH(1,1),
@@ -610,8 +624,8 @@ models = [GARCH(1,1),
           GARCH(2,1),
           GARCH(3,1),
           GARCH(3,2),
-          GARCH(3,3), 
-          GARCH(1,3), 
+          GARCH(3,3),
+          GARCH(1,3),
           GARCH(2,3)]
 ```
 
@@ -632,7 +646,6 @@ import them.
 
 Any settings are passed into the constructor. Then you call its fit
 method and pass in the historical data frame.
-
 
 ```python
 sf = StatsForecast(
@@ -682,7 +695,6 @@ following arguments.
     other words: what number of forecasting processes in the past do you
     want to evaluate.
 
-
 ```python
 crossvalidation_df = sf.cross_validation(df=train,
                                          h=horizon,
@@ -699,21 +711,19 @@ following columns:
 -   `y:` true value
 -   `"model":` columns with the model’s name and fitted value.
 
-
 ```python
 crossvalidation_df
 ```
 
-|  | unique_id | ds | cutoff | y | GARCH(1,1) | GARCH(1,2) | GARCH(2,2) | GARCH(2,1) | GARCH(3,1) | GARCH(3,2) | GARCH(3,3) | GARCH(1,3) | GARCH(2,3) |
-|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
-| 0 | 1 | 2023-01-04 00:00:00+00:00 | 2023-01-03 00:00:00+00:00 | 0.753897 | 1.678755 | 1.678412 | 1.680475 | 1.686649 | 1.719494 | 2.210902 | 1.702743 | 1.647114 | 1.637795 |
-| 1 | 1 | 2023-01-05 00:00:00+00:00 | 2023-01-03 00:00:00+00:00 | -1.164553 | -0.728069 | -0.745487 | -0.730648 | -0.722156 | -0.738119 | -0.824748 | -0.755277 | -0.740976 | -0.744150 |
-| 2 | 1 | 2023-01-06 00:00:00+00:00 | 2023-01-03 00:00:00+00:00 | 2.284078 | -0.589733 | -0.582982 | -0.590078 | -0.598076 | -0.587109 | -0.866347 | -0.571160 | -0.587807 | -0.584692 |
-| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
-| 387 | 1 | 2023-05-26 00:00:00+00:00 | 2023-02-07 00:00:00+00:00 | 1.304909 | -1.697814 | -1.694747 | -1.702537 | -1.735631 | -1.729903 | -1.712997 | -1.663399 | -1.702160 | -1.687723 |
-| 388 | 1 | 2023-05-30 00:00:00+00:00 | 2023-02-07 00:00:00+00:00 | 0.001660 | -0.326945 | -0.337504 | -0.329686 | -0.330120 | -0.334717 | -0.327583 | -0.330260 | -0.338245 | -0.332412 |
-| 389 | 1 | 2023-05-31 00:00:00+00:00 | 2023-02-07 00:00:00+00:00 | -0.610862 | 0.807625 | 0.787054 | 0.807819 | 0.841536 | 0.811702 | 0.836159 | 0.772193 | 0.801933 | 0.804526 |
-
+|     | unique_id | ds                        | cutoff                    | y         | GARCH(1,1) | GARCH(1,2) | GARCH(2,2) | GARCH(2,1) | GARCH(3,1) | GARCH(3,2) | GARCH(3,3) | GARCH(1,3) | GARCH(2,3) |
+|-----|-----------|---------------------------|---------------------------|-----------|------------|------------|------------|------------|------------|------------|------------|------------|------------|
+| 0   | 1         | 2023-01-04 00:00:00+00:00 | 2023-01-03 00:00:00+00:00 | 0.753897  | 1.678755   | 1.678412   | 1.680475   | 1.686649   | 1.719494   | 2.210902   | 1.702743   | 1.647114   | 1.637795   |
+| 1   | 1         | 2023-01-05 00:00:00+00:00 | 2023-01-03 00:00:00+00:00 | -1.164553 | -0.728069  | -0.745487  | -0.730648  | -0.722156  | -0.738119  | -0.824748  | -0.755277  | -0.740976  | -0.744150  |
+| 2   | 1         | 2023-01-06 00:00:00+00:00 | 2023-01-03 00:00:00+00:00 | 2.284078  | -0.589733  | -0.582982  | -0.590078  | -0.598076  | -0.587109  | -0.866347  | -0.571160  | -0.587807  | -0.584692  |
+| ... | ...       | ...                       | ...                       | ...       | ...        | ...        | ...        | ...        | ...        | ...        | ...        | ...        | ...        |
+| 387 | 1         | 2023-05-26 00:00:00+00:00 | 2023-02-07 00:00:00+00:00 | 1.304909  | -1.697814  | -1.694747  | -1.702537  | -1.735631  | -1.729903  | -1.712997  | -1.663399  | -1.702160  | -1.687723  |
+| 388 | 1         | 2023-05-30 00:00:00+00:00 | 2023-02-07 00:00:00+00:00 | 0.001660  | -0.326945  | -0.337504  | -0.329686  | -0.330120  | -0.334717  | -0.327583  | -0.330260  | -0.338245  | -0.332412  |
+| 389 | 1         | 2023-05-31 00:00:00+00:00 | 2023-02-07 00:00:00+00:00 | -0.610862 | 0.807625   | 0.787054   | 0.807819   | 0.841536   | 0.811702   | 0.836159   | 0.772193   | 0.801933   | 0.804526   |
 
 ```python
 from utilsforecast.evaluation import evaluate
@@ -726,10 +736,9 @@ evals = evaluate(crossvalidation_df.drop(columns='cutoff'), metrics=[rmse], agg_
 evals
 ```
 
-|  | metric | GARCH(1,1) | GARCH(1,2) | GARCH(2,2) | GARCH(2,1) | GARCH(3,1) | GARCH(3,2) | GARCH(3,3) | GARCH(1,3) | GARCH(2,3) |
-|----|----|----|----|----|----|----|----|----|----|----|
-| 0 | rmse | 1.383143 | 1.526258 | 1.481056 | 1.389969 | 1.453538 | 1.539906 | 1.392352 | 1.515796 | 1.389061 |
-
+|     | metric | GARCH(1,1) | GARCH(1,2) | GARCH(2,2) | GARCH(2,1) | GARCH(3,1) | GARCH(3,2) | GARCH(3,3) | GARCH(1,3) | GARCH(2,3) |
+|-----|--------|------------|------------|------------|------------|------------|------------|------------|------------|------------|
+| 0   | rmse   | 1.383143   | 1.526258   | 1.481056   | 1.389969   | 1.453538   | 1.539906   | 1.392352   | 1.515796   | 1.389061   |
 
 ```python
 evals.drop(columns='metric').loc[0].idxmin()
@@ -742,10 +751,9 @@ evals.drop(columns='metric').loc[0].idxmin()
 **Note:** This result can vary depending on the data and period you use
 to train and test the model, and the models you want to test. This is an
 example, where the objective is to be able to teach a methodology for
-the use of
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast),
-and in particular the GARCH model and the parameters used in Cross
-Validation to determine the best model for this example.
+the use of `StatsForecast`, and in particular the GARCH model and the
+parameters used in Cross Validation to determine the best model for this
+example.
 
 In the previous result it can be seen that the best model is the model
 $\text{GARCH}(1,1)$
@@ -756,9 +764,8 @@ the predictions.
 
 ### Fit the Model
 
-
 ```python
-season_length = 7 # Dayly data 
+season_length = 7 # Dayly data
 horizon = len(test) # number of predictions biasadj=True, include_drift=True,
 
 models = [GARCH(1,1)]
@@ -782,7 +789,6 @@ StatsForecast(models=[GARCH(1,1)])
 
 Let’s see the results of our Theta model. We can observe it with the
 following instruction:
-
 
 ```python
 result=sf.fitted_[0,0].model_
@@ -809,7 +815,6 @@ to extract each element from the dictionary we are going to use the
 `.get()` function to extract the element and then we are going to save
 it in a `pd.DataFrame()`.
 
-
 ```python
 residual=pd.DataFrame(result.get("actual_residuals"), columns=["residual Model"])
 residual
@@ -824,7 +829,6 @@ residual
 | 2113 | 1.502385       |
 | 2114 | -0.768274      |
 | 2115 | -0.742694      |
-
 
 ```python
 from scipy import stats
@@ -850,14 +854,13 @@ axs[1,1].set_title("Autocorrelation");
 plt.show();
 ```
 
-![](/statsforecast/docs/models/GARCH_files/figure-markdown_strict/cell-33-output-1.png)
+![](GARCH_files/figure-markdown_strict/cell-34-output-1.png)
 
 ### Forecast Method
 
 If you want to gain speed in productive settings where you have multiple
-series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
-method instead of `.fit` and `.predict`.
+series or models we recommend using the `StatsForecast.forecast` method
+instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
 values and is highly scalable in distributed environments.
@@ -878,11 +881,7 @@ The forecast object here is a new data frame that includes a column with
 the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min. (If you want to speed things up to a couple of seconds,
-remove the AutoModels like
-[`ARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#arima)
-and
-[`Theta`](https://Nixtla.github.io/statsforecast/src/core/models.html#theta))
-
+remove the AutoModels like `ARIMA` and `Theta`)
 
 ```python
 Y_hat = sf.forecast(df=train, h=horizon, fitted=True)
@@ -897,57 +896,53 @@ Y_hat.head()
 | 3   | 1         | 2023-06-06 00:00:00+00:00 | -0.927145  |
 | 4   | 1         | 2023-06-07 00:00:00+00:00 | 0.766640   |
 
-
 ```python
 Y_hat = sf.forecast(df=train, h=horizon, fitted=True, level=[95])
 Y_hat.head()
 ```
 
-|  | unique_id | ds | GARCH(1,1) | GARCH(1,1)-lo-95 | GARCH(1,1)-hi-95 |
-|----|----|----|----|----|----|
-| 0 | 1 | 2023-06-01 00:00:00+00:00 | 1.366914 | -0.021035 | 2.754863 |
-| 1 | 1 | 2023-06-02 00:00:00+00:00 | -0.593121 | -2.435497 | 1.249254 |
-| 2 | 1 | 2023-06-05 00:00:00+00:00 | -0.485200 | -2.139216 | 1.168815 |
-| 3 | 1 | 2023-06-06 00:00:00+00:00 | -0.927145 | -2.390566 | 0.536276 |
-| 4 | 1 | 2023-06-07 00:00:00+00:00 | 0.766640 | -0.771479 | 2.304759 |
-
+|     | unique_id | ds                        | GARCH(1,1) | GARCH(1,1)-lo-95 | GARCH(1,1)-hi-95 |
+|-----|-----------|---------------------------|------------|------------------|------------------|
+| 0   | 1         | 2023-06-01 00:00:00+00:00 | 1.366914   | -0.021035        | 2.754863         |
+| 1   | 1         | 2023-06-02 00:00:00+00:00 | -0.593121  | -2.435497        | 1.249254         |
+| 2   | 1         | 2023-06-05 00:00:00+00:00 | -0.485200  | -2.139216        | 1.168815         |
+| 3   | 1         | 2023-06-06 00:00:00+00:00 | -0.927145  | -2.390566        | 0.536276         |
+| 4   | 1         | 2023-06-07 00:00:00+00:00 | 0.766640   | -0.771479        | 2.304759         |
 
 ```python
 values=sf.forecast_fitted_values()
 values.head()
 ```
 
-|  | unique_id | ds | y | GARCH(1,1) | GARCH(1,1)-lo-95 | GARCH(1,1)-hi-95 |
-|----|----|----|----|----|----|----|
-| 0 | 1 | 2015-01-05 00:00:00+00:00 | -1.827811 | NaN | NaN | NaN |
-| 1 | 1 | 2015-01-06 00:00:00+00:00 | -0.889347 | 2.146389 | -0.972874 | 5.265652 |
-| 2 | 1 | 2015-01-07 00:00:00+00:00 | 1.162984 | -0.764263 | -3.883526 | 2.355000 |
-| 3 | 1 | 2015-01-08 00:00:00+00:00 | 1.788828 | -0.650707 | -3.769970 | 2.468556 |
-| 4 | 1 | 2015-01-09 00:00:00+00:00 | -0.840381 | -1.449049 | -4.568312 | 1.670214 |
+|     | unique_id | ds                        | y         | GARCH(1,1) | GARCH(1,1)-lo-95 | GARCH(1,1)-hi-95 |
+|-----|-----------|---------------------------|-----------|------------|------------------|------------------|
+| 0   | 1         | 2015-01-05 00:00:00+00:00 | -1.827811 | NaN        | NaN              | NaN              |
+| 1   | 1         | 2015-01-06 00:00:00+00:00 | -0.889347 | 2.146389   | -0.972874        | 5.265652         |
+| 2   | 1         | 2015-01-07 00:00:00+00:00 | 1.162984  | -0.764263  | -3.883526        | 2.355000         |
+| 3   | 1         | 2015-01-08 00:00:00+00:00 | 1.788828  | -0.650707  | -3.769970        | 2.468556         |
+| 4   | 1         | 2015-01-09 00:00:00+00:00 | -0.840381 | -1.449049  | -4.568312        | 1.670214         |
 
 Adding 95% confidence interval with the forecast method
-
 
 ```python
 sf.forecast(df=train, h=horizon, level=[95])
 ```
 
-|  | unique_id | ds | GARCH(1,1) | GARCH(1,1)-lo-95 | GARCH(1,1)-hi-95 |
-|----|----|----|----|----|----|
-| 0 | 1 | 2023-06-01 00:00:00+00:00 | 1.366914 | -0.021035 | 2.754863 |
-| 1 | 1 | 2023-06-02 00:00:00+00:00 | -0.593121 | -2.435497 | 1.249254 |
-| 2 | 1 | 2023-06-05 00:00:00+00:00 | -0.485200 | -2.139216 | 1.168815 |
-| ... | ... | ... | ... | ... | ... |
-| 75 | 1 | 2023-09-14 00:00:00+00:00 | -1.686546 | -3.049859 | -0.323233 |
-| 76 | 1 | 2023-09-15 00:00:00+00:00 | -0.322556 | -2.497448 | 1.852335 |
-| 77 | 1 | 2023-09-18 00:00:00+00:00 | 0.799407 | -1.027642 | 2.626457 |
-
+|     | unique_id | ds                        | GARCH(1,1) | GARCH(1,1)-lo-95 | GARCH(1,1)-hi-95 |
+|-----|-----------|---------------------------|------------|------------------|------------------|
+| 0   | 1         | 2023-06-01 00:00:00+00:00 | 1.366914   | -0.021035        | 2.754863         |
+| 1   | 1         | 2023-06-02 00:00:00+00:00 | -0.593121  | -2.435497        | 1.249254         |
+| 2   | 1         | 2023-06-05 00:00:00+00:00 | -0.485200  | -2.139216        | 1.168815         |
+| ... | ...       | ...                       | ...        | ...              | ...              |
+| 75  | 1         | 2023-09-14 00:00:00+00:00 | -1.686546  | -3.049859        | -0.323233        |
+| 76  | 1         | 2023-09-15 00:00:00+00:00 | -0.322556  | -2.497448        | 1.852335         |
+| 77  | 1         | 2023-09-18 00:00:00+00:00 | 0.799407   | -1.027642        | 2.626457         |
 
 ```python
 sf.plot(train, Y_hat.merge(test), max_insample_length=200)
 ```
 
-![](/statsforecast/docs/models/GARCH_files/figure-markdown_strict/cell-38-output-1.png)
+![](GARCH_files/figure-markdown_strict/cell-39-output-1.png)
 
 ### Predict method with confidence interval
 
@@ -971,7 +966,6 @@ uncertainty intervals.
 
 This step should take less than 1 second.
 
-
 ```python
 sf.predict(h=horizon)
 ```
@@ -986,35 +980,32 @@ sf.predict(h=horizon)
 | 76  | 1         | 2023-09-15 00:00:00+00:00 | -0.322556  |
 | 77  | 1         | 2023-09-18 00:00:00+00:00 | 0.799407   |
 
-
 ```python
-forecast_df = sf.predict(h=horizon, level=[80,95]) 
+forecast_df = sf.predict(h=horizon, level=[80,95])
 forecast_df.head(10)
 ```
 
-|  | unique_id | ds | GARCH(1,1) | GARCH(1,1)-lo-95 | GARCH(1,1)-lo-80 | GARCH(1,1)-hi-80 | GARCH(1,1)-hi-95 |
-|----|----|----|----|----|----|----|----|
-| 0 | 1 | 2023-06-01 00:00:00+00:00 | 1.366914 | -0.021035 | 0.459383 | 2.274445 | 2.754863 |
-| 1 | 1 | 2023-06-02 00:00:00+00:00 | -0.593121 | -2.435497 | -1.797786 | 0.611543 | 1.249254 |
-| 2 | 1 | 2023-06-05 00:00:00+00:00 | -0.485200 | -2.139216 | -1.566703 | 0.596303 | 1.168815 |
-| ... | ... | ... | ... | ... | ... | ... | ... |
-| 7 | 1 | 2023-06-12 00:00:00+00:00 | -1.051435 | -4.790880 | -3.496526 | 1.393657 | 2.688010 |
-| 8 | 1 | 2023-06-13 00:00:00+00:00 | 0.421605 | -3.001123 | -1.816396 | 2.659607 | 3.844333 |
-| 9 | 1 | 2023-06-14 00:00:00+00:00 | -0.300086 | -3.138338 | -2.155920 | 1.555747 | 2.538166 |
-
+|     | unique_id | ds                        | GARCH(1,1) | GARCH(1,1)-lo-95 | GARCH(1,1)-lo-80 | GARCH(1,1)-hi-80 | GARCH(1,1)-hi-95 |
+|-----|-----------|---------------------------|------------|------------------|------------------|------------------|------------------|
+| 0   | 1         | 2023-06-01 00:00:00+00:00 | 1.366914   | -0.021035        | 0.459383         | 2.274445         | 2.754863         |
+| 1   | 1         | 2023-06-02 00:00:00+00:00 | -0.593121  | -2.435497        | -1.797786        | 0.611543         | 1.249254         |
+| 2   | 1         | 2023-06-05 00:00:00+00:00 | -0.485200  | -2.139216        | -1.566703        | 0.596303         | 1.168815         |
+| ... | ...       | ...                       | ...        | ...              | ...              | ...              | ...              |
+| 7   | 1         | 2023-06-12 00:00:00+00:00 | -1.051435  | -4.790880        | -3.496526        | 1.393657         | 2.688010         |
+| 8   | 1         | 2023-06-13 00:00:00+00:00 | 0.421605   | -3.001123        | -1.816396        | 2.659607         | 3.844333         |
+| 9   | 1         | 2023-06-14 00:00:00+00:00 | -0.300086  | -3.138338        | -2.155920        | 1.555747         | 2.538166         |
 
 ```python
 sf.plot(train, test.merge(forecast_df), level=[80, 95], max_insample_length=200)
 ```
 
-![](/statsforecast/docs/models/GARCH_files/figure-markdown_strict/cell-41-output-1.png)
+![](GARCH_files/figure-markdown_strict/cell-42-output-1.png)
 
 ## Model Evaluation <a class="anchor" id="evaluate"></a>
 
 Now we are going to evaluate our model with the results of the
 predictions, we will use different types of metrics MAE, MAPE, MASE,
 RMSE, SMAPE to evaluate the accuracy.
-
 
 ```python
 from functools import partial
@@ -1047,7 +1038,7 @@ evaluate(
     Python.](https://link.springer.com/book/10.1007/978-3-031-13584-2)
 2.  [Bollerslev, T. (1986). Generalized autoregressive conditional
     heteroskedasticity. Journal of econometrics, 31(3),
-    307-327.](https://www.sciencedirect.com/science/article/abs/pii/0304407686900631)
+    307-327.](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=7da8bfa5295375c1141d797e80065a599153c19d)
 3.  [Engle, R. F. (1982). Autoregressive conditional heteroscedasticity
     with estimates of the variance of United Kingdom inflation.
     Econometrica: Journal of the econometric society,
@@ -1055,8 +1046,7 @@ evaluate(
 4.  [James D. Hamilton. Time Series Analysis Princeton University Press,
     Princeton, New Jersey, 1st Edition,
     1994.](https://press.princeton.edu/books/hardcover/9780691042893/time-series-analysis)
-5.  [Nixtla
-    Parameters](https://nixtla.github.io/statsforecast/src/core/models.html#arch-model).
+5.  [Nixtla Garch API](../../models#class-garch)
 6.  [Pandas available
     frequencies](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases).
 7.  [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting

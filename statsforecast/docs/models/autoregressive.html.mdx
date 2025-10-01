@@ -1,9 +1,41 @@
 ---
-description: Step-by-step guide on using the `AutoRegressive Model` with `Statsforecast`.
-output-file: autoregressive.html
 title: AutoRegressive Model
 ---
 
+
+```python
+# This cell will not be rendered but is to hide warnings and limit the rows shown
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger('statsforecast').setLevel(logging.ERROR)
+
+import pandas as pd
+pd.set_option('display.max_rows', 6)
+```
+
+
+> Step-by-step guide on using the `AutoRegressive Model` with
+> `Statsforecast`.
+
+During this walkthrough, we will become familiar with the main
+`StatsForecast` class and some relevant methods such as
+`StatsForecast.plot`, `StatsForecast.forecast` and
+`StatsForecast.cross_validation` in other.
+
+The text in this article is largely taken from: 1. [Changquan Huang •
+Alla Petukhina. Springer series (2022). Applied Time Series Analysis and
+Forecasting with
+Python.](https://link.springer.com/book/10.1007/978-3-031-13584-2) 2.
+[Jose A. Fiorucci, Tiago R. Pellegrini, Francisco Louzada, Fotios
+Petropoulos, Anne B. Koehler (2016). “Models for optimising the theta
+method and their relationship to state space models”. International
+Journal of
+Forecasting](https://www.sciencedirect.com/science/article/pii/S0169207016300243).
+3. [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting
+Principles and Practice (3rd ed)”](https://otexts.com/fpp3/tscv.html)
 
 ## Table of Contents
 
@@ -75,11 +107,9 @@ its future, and do not rely on other explanatory variables.
 autoregressive model of order $p$ and denoted by $\text{AR(p)}$:
 
 $$
-
 \begin{equation}
 Xt =\varphi_0 +\varphi_1X_{t−1}+\varphi_2X_{t−2}+\cdots+\varphi_p X_{t−p}+\varepsilon_t  \tag 1
 \end{equation}
-
 $$
 
 where $\{\varepsilon_t \} \sim WN(0,\sigma_{\epsilon}^2)$,
@@ -227,11 +257,9 @@ By Definition 2, $\phi_{kk} = 0$.
     autocorrelations:
 
 $$
-
 \begin{equation}
     for \ k ≥ 1, \rho_k = \varphi_1 \rho_{k−1} + \varphi_2 \rho_{k−2} + \cdots + \varphi_p \rho_{k−p} \tag 2
 \end{equation}
-
 $$
 
 For Eq.(2), let $k = 1,2,··· ,p$. Then we arrive at a set of difference
@@ -255,11 +283,9 @@ and the solutions are called the Yule-Walker estimates.
 Consider the AR(1) model:
 
 $$
-
 \begin{equation}
     X_t = \varphi X_{t − 1} + \varepsilon_t , \varepsilon_t \sim W N( 0 , \sigma_{\varepsilon}^2 ) \tag 3
 \end{equation}
-
 $$
 
 For $|\varphi|<1$,let
@@ -270,7 +296,7 @@ easy to show that both $\{X_{1t } \}$ and $\{X_{2t } \}$ are stationary
 and satisfy Eq. (3). That is, both are the stationary solution of Eq.
 (3). This gives rise to a question: which one of both is preferable?
 Obviously, $\{X_{2t } \}$ depends on future values of unobservable
-$\{\varepsilon_t  \}$, and so it is unnatural. Hence we take
+$\{\varepsilon_t \}$, and so it is unnatural. Hence we take
 $\{X_{1t } \}$ and abandon $\{X_{2t } \}$. In other words, we require
 that the coefficient $\varphi$ in Eq. (3) is less 1 in absolute value.
 At this point, the $\text{AR}(1)$ model is said to be causal and its
@@ -395,10 +421,9 @@ This is where the Augmented Dickey Fuller (ADF) test comes in handy.
 > **Tip**
 >
 > Statsforecast will be needed. To install, see
-> [instructions](../getting-started/installation.html).
+> [instructions](../getting-started/0_Installation../getting-started/0_Installation).
 
 Next, we import plotting libraries and configure the plotting style.
-
 
 ```python
 import pandas as pd
@@ -442,7 +467,6 @@ rcParams['figure.figsize'] = (18,7)
 
 ### Read Data
 
-
 ```python
 df= pd.read_csv("https://raw.githubusercontent.com/Naren8520/Serie-de-tiempo-con-Machine-Learning/main/Data/catfish.csv")
 df.head()
@@ -468,7 +492,6 @@ three columns: unique_id, ds and y:
 
 -   The `y` (numeric) represents the measurement we wish to forecast.
 
-
 ```python
 df["unique_id"]="1"
 df.columns=["ds", "y", "unique_id"]
@@ -482,7 +505,6 @@ df.head()
 | 2   | 1986-3-01 | 10558 | 1         |
 | 3   | 1986-4-01 | 9002  | 1         |
 | 4   | 1986-5-01 | 9239  | 1         |
-
 
 ```python
 print(df.dtypes)
@@ -498,7 +520,6 @@ dtype: object
 We can see that our time variable `ds` is in an object format, we need
 to convert to a date format
 
-
 ```python
 df["ds"] = pd.to_datetime(df["ds"])
 ```
@@ -509,14 +530,13 @@ Plot some series using the plot method from the StatsForecast class.
 This method prints 8 random series from the dataset and is useful for
 basic EDA.
 
-
 ```python
 from statsforecast import StatsForecast
 
 StatsForecast.plot(df)
 ```
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-8-output-1.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-9-output-1.png)
 
 ### The Augmented Dickey-Fuller Test
 
@@ -547,7 +567,6 @@ reject the null hypothesis, time series is non-stationary.
 Let’s check if our series that we are analyzing is a stationary series.
 Let’s create a function to check, using the `Dickey Fuller` test
 
-
 ```python
 from statsmodels.tsa.stattools import adfuller
 ```
@@ -561,7 +580,7 @@ def Augmented_Dickey_Fuller_Test_func(series , column_name):
     for key,value in dftest[4].items():
        dfoutput['Critical Value (%s)'%key] = value
     print (dfoutput)
-    if dftest[1] <= 0.05:
+    if dftest[1] \<= 0.05:
         print("Conclusion:====>")
         print("Reject the null hypothesis")
         print("The data is stationary")
@@ -599,7 +618,6 @@ series are not stationary.
 We need to differentiate our time series, in order to convert the data
 to stationary.
 
-
 ```python
 Augmented_Dickey_Fuller_Test_func(df["y"].diff().dropna(),"Sales")
 ```
@@ -621,19 +639,18 @@ The data is stationary
 
 By applying a differential, our time series now is stationary.
 
-
 ```python
 def tsplot(y, lags=None, figsize=(12, 7), style='bmh'): # [3]
     if not isinstance(y, pd.Series):
         y = pd.Series(y)
-        
-    with plt.style.context(style):    
+
+    with plt.style.context(style):
         fig = plt.figure(figsize=figsize)
         layout = (2, 2)
         ts_ax = plt.subplot2grid(layout, (0, 0), colspan=2)
         acf_ax = plt.subplot2grid(layout, (1, 0))
         pacf_ax = plt.subplot2grid(layout, (1, 1))
-        
+
         y.plot(ax=ts_ax)
         p_value = sm.tsa.stattools.adfuller(y)[1]
         ts_ax.set_title('Time Series Analysis plot\n Dickey-Fuller: p={0:.5f}'.format(p_value))
@@ -647,7 +664,7 @@ def tsplot(y, lags=None, figsize=(12, 7), style='bmh'): # [3]
 tsplot(df["y"].diff().dropna(), lags=20);
 ```
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-14-output-1.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-15-output-1.png)
 
 As you can see, based on the blue background shaded area of the graph,
 the PACF shows the first, second, third, fourth, sixth, seventh, ninth,
@@ -688,16 +705,14 @@ the AR model.
 
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
-Let’s divide our data into sets 1. Data to train our
-[`AutoRegressive`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoregressive)
+Let’s divide our data into sets 1. Data to train our `AutoRegressive`
 model 2. Data to test our model
 
 For the test data we will use the last 12 months to test and evaluate
 the performance of our model.
 
-
 ```python
-train = df[df.ds<='2011-12-01'] 
+train = df[df.ds\<='2011-12-01']
 test = df[df.ds>'2011-12-01']
 ```
 
@@ -712,19 +727,17 @@ train.shape, test.shape
 
 Now let’s plot the training data and the test data.
 
-
 ```python
 sns.lineplot(train,x="ds", y="y", label="Train")
 sns.lineplot(test, x="ds", y="y", label="Test")
 plt.show()
 ```
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-17-output-1.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-18-output-1.png)
 
 # Implementation of AutoRegressive with StatsForecast <a class="anchor" id="implementation"></a>
 
 ### Load libraries
-
 
 ```python
 from statsforecast import StatsForecast
@@ -741,9 +754,8 @@ master, Rob Hyndmann, can be useful.season_length.
 **Method 1:** We use the lags parameter in an integer format, that is,
 we put the lags we want to evaluate in the model.
 
-
 ```python
-season_length = 12 # Monthly data 
+season_length = 12 # Monthly data
 horizon = len(test) # number of predictions biasadj=True, include_drift=True,
 
 models2 = [AutoRegressive(lags=[14], include_mean=True)]
@@ -753,9 +765,8 @@ models2 = [AutoRegressive(lags=[14], include_mean=True)]
 put the lags that we want to evaluate in the model in the form of a list
 as shown below.
 
-
 ```python
-season_length = 12 # Monthly data 
+season_length = 12 # Monthly data
 horizon = len(test) # number of predictions
 
 models = [AutoRegressive(lags=[3,4,6,7,9,10,11,12,13,14], include_mean=True)]
@@ -779,13 +790,11 @@ import them.
 Any settings are passed into the constructor. Then you call its fit
 method and pass in the historical data frame.
 
-
 ```python
 sf = StatsForecast(models=models, freq='MS')
 ```
 
 ### Fit Model
-
 
 ```python
 sf.fit(df=train)
@@ -797,7 +806,6 @@ StatsForecast(models=[AutoRegressive])
 
 Let’s see the results of our Theta model. We can observe it with the
 following instruction:
-
 
 ```python
 result=sf.fitted_[0,0].model_
@@ -815,7 +823,6 @@ to extract each element from the dictionary we are going to use the
 `.get()` function to extract the element and then we are going to save
 it in a `pd.DataFrame()`.
 
-
 ```python
 residual=pd.DataFrame(result.get("residuals"), columns=["residual Model"])
 residual
@@ -830,7 +837,6 @@ residual
 | 309 | -2718.312961   |
 | 310 | -1306.795172   |
 | 311 | -2713.284999   |
-
 
 ```python
 fig, axs = plt.subplots(nrows=2, ncols=2)
@@ -854,14 +860,13 @@ axs[1,1].set_title("Autocorrelation");
 plt.show();
 ```
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-25-output-1.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-26-output-1.png)
 
 ### Forecast Method
 
 If you want to gain speed in productive settings where you have multiple
-series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
-method instead of `.fit` and `.predict`.
+series or models we recommend using the `StatsForecast.forecast` method
+instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
 values and is highly scalable in distributed environments.
@@ -882,11 +887,7 @@ The forecast object here is a new data frame that includes a column with
 the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min. (If you want to speed things up to a couple of seconds,
-remove the AutoModels like
-[`ARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#arima)
-and
-[`Theta`](https://Nixtla.github.io/statsforecast/src/core/models.html#theta))
-
+remove the AutoModels like `ARIMA` and `Theta`)
 
 ```python
 # Prediction
@@ -904,7 +905,6 @@ Y_hat
 | 10  | 1         | 2012-11-01 | 13274.105469   |
 | 11  | 1         | 2012-12-01 | 12498.226562   |
 
-
 ```python
 values=sf.forecast_fitted_values()
 values.head()
@@ -920,21 +920,19 @@ values.head()
 
 Adding 95% confidence interval with the forecast method
 
-
 ```python
 sf.forecast(df=train, h=horizon, level=[95])
 ```
 
-|  | unique_id | ds | AutoRegressive | AutoRegressive-lo-95 | AutoRegressive-hi-95 |
-|----|----|----|----|----|----|
-| 0 | 1 | 2012-01-01 | 15905.582031 | 2119.586426 | 29691.578125 |
-| 1 | 1 | 2012-02-01 | 13597.894531 | -188.101135 | 27383.890625 |
-| 2 | 1 | 2012-03-01 | 15488.883789 | 1702.888062 | 29274.878906 |
-| ... | ... | ... | ... | ... | ... |
-| 9 | 1 | 2012-10-01 | 14087.901367 | -1050.068359 | 29225.871094 |
-| 10 | 1 | 2012-11-01 | 13274.105469 | -1886.973145 | 28435.183594 |
-| 11 | 1 | 2012-12-01 | 12498.226562 | -2675.547607 | 27672.001953 |
-
+|     | unique_id | ds         | AutoRegressive | AutoRegressive-lo-95 | AutoRegressive-hi-95 |
+|-----|-----------|------------|----------------|----------------------|----------------------|
+| 0   | 1         | 2012-01-01 | 15905.582031   | 2119.586426          | 29691.578125         |
+| 1   | 1         | 2012-02-01 | 13597.894531   | -188.101135          | 27383.890625         |
+| 2   | 1         | 2012-03-01 | 15488.883789   | 1702.888062          | 29274.878906         |
+| ... | ...       | ...        | ...            | ...                  | ...                  |
+| 9   | 1         | 2012-10-01 | 14087.901367   | -1050.068359         | 29225.871094         |
+| 10  | 1         | 2012-11-01 | 13274.105469   | -1886.973145         | 28435.183594         |
+| 11  | 1         | 2012-12-01 | 12498.226562   | -2675.547607         | 27672.001953         |
 
 ```python
 # Merge the forecasts with the true values
@@ -952,12 +950,11 @@ Y_hat1
 | 10  | 2012-11-01 | 13352 | 1         | 13274.105469   |
 | 11  | 2012-12-01 | 12716 | 1         | 12498.226562   |
 
-
 ```python
 sf.plot(train, Y_hat1)
 ```
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-30-output-1.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-31-output-1.png)
 
 ### Predict method with confidence interval
 
@@ -981,7 +978,6 @@ uncertainty intervals.
 
 This step should take less than 1 second.
 
-
 ```python
 sf.predict(h=horizon)
 ```
@@ -996,28 +992,26 @@ sf.predict(h=horizon)
 | 10  | 1         | 2012-11-01 | 13274.105469   |
 | 11  | 1         | 2012-12-01 | 12498.226562   |
 
-
 ```python
-forecast_df = sf.predict(h=horizon, level=[95]) 
+forecast_df = sf.predict(h=horizon, level=[95])
 forecast_df
 ```
 
-|  | unique_id | ds | AutoRegressive | AutoRegressive-lo-95 | AutoRegressive-hi-95 |
-|----|----|----|----|----|----|
-| 0 | 1 | 2012-01-01 | 15905.582031 | 2119.586426 | 29691.578125 |
-| 1 | 1 | 2012-02-01 | 13597.894531 | -188.101135 | 27383.890625 |
-| 2 | 1 | 2012-03-01 | 15488.883789 | 1702.888062 | 29274.878906 |
-| ... | ... | ... | ... | ... | ... |
-| 9 | 1 | 2012-10-01 | 14087.901367 | -1050.068359 | 29225.871094 |
-| 10 | 1 | 2012-11-01 | 13274.105469 | -1886.973145 | 28435.183594 |
-| 11 | 1 | 2012-12-01 | 12498.226562 | -2675.547607 | 27672.001953 |
-
+|     | unique_id | ds         | AutoRegressive | AutoRegressive-lo-95 | AutoRegressive-hi-95 |
+|-----|-----------|------------|----------------|----------------------|----------------------|
+| 0   | 1         | 2012-01-01 | 15905.582031   | 2119.586426          | 29691.578125         |
+| 1   | 1         | 2012-02-01 | 13597.894531   | -188.101135          | 27383.890625         |
+| 2   | 1         | 2012-03-01 | 15488.883789   | 1702.888062          | 29274.878906         |
+| ... | ...       | ...        | ...            | ...                  | ...                  |
+| 9   | 1         | 2012-10-01 | 14087.901367   | -1050.068359         | 29225.871094         |
+| 10  | 1         | 2012-11-01 | 13274.105469   | -1886.973145         | 28435.183594         |
+| 11  | 1         | 2012-12-01 | 12498.226562   | -2675.547607         | 27672.001953         |
 
 ```python
 sf.plot(train, test.merge(forecast_df), level=[95])
 ```
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-33-output-1.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-34-output-1.png)
 
 ## Cross-validation <a class="anchor" id="cross_validate"></a>
 
@@ -1065,7 +1059,6 @@ following arguments.
     other words: what number of forecasting processes in the past do you
     want to evaluate.
 
-
 ```python
 crossvalidation_df = sf.cross_validation(df=train,
                                          h=horizon,
@@ -1081,7 +1074,6 @@ following columns:
 -   `cutoff:` the last datestamp or temporal index for the n_windows.
 -   `y:` true value
 -   `"model":` columns with the model’s name and fitted value.
-
 
 ```python
 crossvalidation_df
@@ -1100,38 +1092,36 @@ crossvalidation_df
 We’ll now plot the forecast for each cutoff period. To make the plots
 clearer, we’ll rename the actual values in each period.
 
-
 ```python
 from IPython.display import display
 ```
 
 
 ```python
-crossvalidation_df.rename(columns = {'y' : 'actual'}, inplace = True) # rename actual values 
+crossvalidation_df.rename(columns = {'y' : 'actual'}, inplace = True) # rename actual values
 
 cutoff = crossvalidation_df['cutoff'].unique()
 
-for k in range(len(cutoff)): 
+for k in range(len(cutoff)):
     cv = crossvalidation_df[crossvalidation_df['cutoff'] == cutoff[k]]
     display(StatsForecast.plot(df, cv.loc[:, cv.columns != 'cutoff']))
 ```
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-37-output-1.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-38-output-1.png)
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-37-output-2.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-38-output-2.png)
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-37-output-3.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-38-output-3.png)
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-37-output-4.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-38-output-4.png)
 
-![](/statsforecast/docs/models/AutoRegressive_files/figure-markdown_strict/cell-37-output-5.png)
+![](AutoRegressive_files/figure-markdown_strict/cell-38-output-5.png)
 
 ## Model Evaluation <a class="anchor" id="evaluate"></a>
 
 Now we are going to evaluate our model with the results of the
 predictions, we will use different types of metrics MAE, MAPE, MASE,
 RMSE, SMAPE to evaluate the accuracy.
-
 
 ```python
 from functools import partial
@@ -1168,8 +1158,7 @@ evaluate(
     theta method and their relationship to state space models”.
     International Journal of
     Forecasting](https://www.sciencedirect.com/science/article/pii/S0169207016300243).
-3.  [Nixtla
-    Parameters](https://nixtla.github.io/statsforecast/src/core/models.html#autoregressive).
+3.  [Nixtla AutoRegressive API](../../models#class-autoregressive)
 4.  [Pandas available
     frequencies](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases).
 5.  [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting

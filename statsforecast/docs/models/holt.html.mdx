@@ -1,9 +1,40 @@
 ---
-description: Step-by-step guide on using the `Holt Model` with `Statsforecast`.
-output-file: holt.html
 title: Holt Model
 ---
 
+
+```python
+# This cell will not be rendered but is to hide warnings and limit the rows shown
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger('statsforecast').setLevel(logging.ERROR)
+
+import pandas as pd
+pd.set_option('display.max_rows', 6)
+```
+
+
+> Step-by-step guide on using the `Holt Model` with `Statsforecast`.
+
+During this walkthrough, we will become familiar with the main
+`StatsForecast` class and some relevant methods such as
+`StatsForecast.plot`, `StatsForecast.forecast` and
+`StatsForecast.cross_validation` in other.
+
+The text in this article is largely taken from: 1. [Changquan Huang •
+Alla Petukhina. Springer series (2022). Applied Time Series Analysis and
+Forecasting with
+Python.](https://link.springer.com/book/10.1007/978-3-031-13584-2) 2.
+Ivan Svetunkov. [Forecasting and Analytics with the Augmented Dynamic
+Adaptive Model (ADAM)](https://openforecast.org/adam/) 3. [James D.
+Hamilton. Time Series Analysis Princeton University Press, Princeton,
+New Jersey, 1st Edition,
+1994.](https://press.princeton.edu/books/hardcover/9780691042893/time-series-analysis)
+4. [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting
+Principles and Practice (3rd ed)”](https://otexts.com/fpp3/tscv.html).
 
 ## Table of Contents
 
@@ -219,63 +250,63 @@ equations.
 
 Table 1: Additive error ETS models \| \| Nonseasonal \|Additive
 \|Multiplicative\| \|—-\|———–\|———–\|————–\| \|No
-trend\|$\begin{aligned} &y_{t} = l_{t-1} + \epsilon_t \\  &l_t = l_{t-1} + \alpha \epsilon_t  \end{aligned}$
-\|$\begin{aligned} &y_{t} = l_{t-1} + s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} + \alpha \epsilon_t \\  &s_t = s_{t-m} + \gamma \epsilon_t  \end{aligned}$
-\|$\begin{aligned} &y_{t} = l_{t-1} s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} + \alpha \frac{\epsilon_t}{s_{t-m}} \\  &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1}}  \end{aligned}$\|
+trend\|$\begin{aligned} &y_{t} = l_{t-1} + \epsilon_t \\ &l_t = l_{t-1} + \alpha \epsilon_t \end{aligned}$
+\|$\begin{aligned} &y_{t} = l_{t-1} + s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} + \alpha \epsilon_t \\ &s_t = s_{t-m} + \gamma \epsilon_t \end{aligned}$
+\|$\begin{aligned} &y_{t} = l_{t-1} s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} + \alpha \frac{\epsilon_t}{s_{t-m}} \\ &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1}} \end{aligned}$\|
 \|Additive\|
-$\begin{aligned} &y_{t} = l_{t-1} + b_{t-1} + \epsilon_t \\  &l_t = l_{t-1} + b_{t-1} + \alpha \epsilon_t \\  &b_t = b_{t-1} + \beta \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} + b_{t-1} + \epsilon_t \\ &l_t = l_{t-1} + b_{t-1} + \alpha \epsilon_t \\ &b_t = b_{t-1} + \beta \epsilon_t \end{aligned}$
 \|
-$\begin{aligned}  &y_{t} = l_{t-1} + b_{t-1} + s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} + b_{t-1} + \alpha \epsilon_t \\  &b_t = b_{t-1} + \beta \epsilon_t \\  &s_t = s_{t-m} + \gamma \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} + b_{t-1} + s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} + b_{t-1} + \alpha \epsilon_t \\ &b_t = b_{t-1} + \beta \epsilon_t \\ &s_t = s_{t-m} + \gamma \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = (l_{t-1} + b_{t-1}) s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} + b_{t-1} + \alpha \frac{\epsilon_t}{s_{t-m}} \\  &b_t = b_{t-1} + \beta \frac{\epsilon_t}{s_{t-m}} \\  &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1} + b_{t-1}}  \end{aligned}$\|
+$\begin{aligned} &y_{t} = (l_{t-1} + b_{t-1}) s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} + b_{t-1} + \alpha \frac{\epsilon_t}{s_{t-m}} \\ &b_t = b_{t-1} + \beta \frac{\epsilon_t}{s_{t-m}} \\ &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1} + b_{t-1}} \end{aligned}$\|
 \|Additive damped\|
-$\begin{aligned} &y_{t} = l_{t-1} + \phi b_{t-1} + \epsilon_t \\  &l_t = l_{t-1} + \phi b_{t-1} + \alpha \epsilon_t \\  &b_t = \phi b_{t-1} + \beta \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} + \phi b_{t-1} + \epsilon_t \\ &l_t = l_{t-1} + \phi b_{t-1} + \alpha \epsilon_t \\ &b_t = \phi b_{t-1} + \beta \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = l_{t-1} + \phi b_{t-1} + s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} + \phi b_{t-1} + \alpha \epsilon_t \\  &b_t = \phi b_{t-1} + \beta \epsilon_t \\  &s_t = s_{t-m} + \gamma \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} + \phi b_{t-1} + s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} + \phi b_{t-1} + \alpha \epsilon_t \\ &b_t = \phi b_{t-1} + \beta \epsilon_t \\ &s_t = s_{t-m} + \gamma \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = (l_{t-1} + \phi b_{t-1}) s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} + \phi b_{t-1} + \alpha \frac{\epsilon_t}{s_{t-m}} \\  &b_t = \phi b_{t-1} + \beta \frac{\epsilon_t}{s_{t-m}} \\  &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1} + \phi b_{t-1}}  \end{aligned}$\|
+$\begin{aligned} &y_{t} = (l_{t-1} + \phi b_{t-1}) s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} + \phi b_{t-1} + \alpha \frac{\epsilon_t}{s_{t-m}} \\ &b_t = \phi b_{t-1} + \beta \frac{\epsilon_t}{s_{t-m}} \\ &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1} + \phi b_{t-1}} \end{aligned}$\|
 \|Multiplicative\|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} + \epsilon_t \\  &l_t = l_{t-1} b_{t-1} + \alpha \epsilon_t \\  &b_t = b_{t-1} + \beta \frac{\epsilon_t}{l_{t-1}}  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} + \epsilon_t \\ &l_t = l_{t-1} b_{t-1} + \alpha \epsilon_t \\ &b_t = b_{t-1} + \beta \frac{\epsilon_t}{l_{t-1}} \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} + s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} b_{t-1} + \alpha \epsilon_t \\  &b_t = b_{t-1} + \beta \frac{\epsilon_t}{l_{t-1}} \\  &s_t = s_{t-m} + \gamma \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} + s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} b_{t-1} + \alpha \epsilon_t \\ &b_t = b_{t-1} + \beta \frac{\epsilon_t}{l_{t-1}} \\ &s_t = s_{t-m} + \gamma \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} b_{t-1} + \alpha \frac{\epsilon_t}{s_{t-m}} \\  &b_t = b_{t-1} + \beta \frac{\epsilon_t}{l_{t-1}s_{t-m}} \\  &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1} b_{t-1}}  \end{aligned}$\|
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} b_{t-1} + \alpha \frac{\epsilon_t}{s_{t-m}} \\ &b_t = b_{t-1} + \beta \frac{\epsilon_t}{l_{t-1}s_{t-m}} \\ &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1} b_{t-1}} \end{aligned}$\|
 \|Multiplicative damped\|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi + \epsilon_t \\  &l_t = l_{t-1} b_{t-1}^\phi + \alpha \epsilon_t \\  &b_t = b_{t-1}^\phi + \beta \frac{\epsilon_t}{l_{t-1}}  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi + \epsilon_t \\ &l_t = l_{t-1} b_{t-1}^\phi + \alpha \epsilon_t \\ &b_t = b_{t-1}^\phi + \beta \frac{\epsilon_t}{l_{t-1}} \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi + s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} b_{t-1}^\phi + \alpha \epsilon_t \\  &b_t = b_{t-1}^\phi + \beta \frac{\epsilon_t}{l_{t-1}} \\  &s_t = s_{t-m} + \gamma \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi + s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} b_{t-1}^\phi + \alpha \epsilon_t \\ &b_t = b_{t-1}^\phi + \beta \frac{\epsilon_t}{l_{t-1}} \\ &s_t = s_{t-m} + \gamma \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi s_{t-m} + \epsilon_t \\  &l_t = l_{t-1} b_{t-1}^\phi + \alpha \frac{\epsilon_t}{s_{t-m}} \\  &b_t = b_{t-1}^\phi + \beta \frac{\epsilon_t}{l_{t-1}s_{t-m}} \\  &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1} b_{t-1}}  \end{aligned}$\|
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi s_{t-m} + \epsilon_t \\ &l_t = l_{t-1} b_{t-1}^\phi + \alpha \frac{\epsilon_t}{s_{t-m}} \\ &b_t = b_{t-1}^\phi + \beta \frac{\epsilon_t}{l_{t-1}s_{t-m}} \\ &s_t = s_{t-m} + \gamma \frac{\epsilon_t}{l_{t-1} b_{t-1}} \end{aligned}$\|
 
 Table 2: Multiplicative error ETS models \| \|Nonseasonal \|Additive
 \|Multiplicative\| \|——\|————-\|———-\|————–\| \|No trend\|
-$\begin{aligned} &y_{t} = l_{t-1}(1 + \epsilon_t) \\  &l_t = l_{t-1}(1 + \alpha \epsilon_t)  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1}(1 + \epsilon_t) \\ &l_t = l_{t-1}(1 + \alpha \epsilon_t) \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = (l_{t-1} + s_{t-m})(1 + \epsilon_t) \\  &l_t = l_{t-1} + \alpha \mu_{y,t} \epsilon_t \\  &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = (l_{t-1} + s_{t-m})(1 + \epsilon_t) \\ &l_t = l_{t-1} + \alpha \mu_{y,t} \epsilon_t \\ &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = l_{t-1} s_{t-m}(1 + \epsilon_t) \\  &l_t = l_{t-1}(1 + \alpha \epsilon_t) \\  &s_t = s_{t-m}(1 + \gamma \epsilon_t)  \end{aligned}$\|
+$\begin{aligned} &y_{t} = l_{t-1} s_{t-m}(1 + \epsilon_t) \\ &l_t = l_{t-1}(1 + \alpha \epsilon_t) \\ &s_t = s_{t-m}(1 + \gamma \epsilon_t) \end{aligned}$\|
 \|Additive\|
-$\begin{aligned} &y_{t} = (l_{t-1} + b_{t-1})(1 + \epsilon_t) \\  &l_t = (l_{t-1} + b_{t-1})(1 + \alpha \epsilon_t) \\  &b_t = b_{t-1} + \beta \mu_{y,t} \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = (l_{t-1} + b_{t-1})(1 + \epsilon_t) \\ &l_t = (l_{t-1} + b_{t-1})(1 + \alpha \epsilon_t) \\ &b_t = b_{t-1} + \beta \mu_{y,t} \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = (l_{t-1} + b_{t-1} + s_{t-m})(1 + \epsilon_t) \\  &l_t = l_{t-1} + b_{t-1} + \alpha \mu_{y,t} \epsilon_t \\  &b_t = b_{t-1} + \beta \mu_{y,t} \epsilon_t \\  &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = (l_{t-1} + b_{t-1} + s_{t-m})(1 + \epsilon_t) \\ &l_t = l_{t-1} + b_{t-1} + \alpha \mu_{y,t} \epsilon_t \\ &b_t = b_{t-1} + \beta \mu_{y,t} \epsilon_t \\ &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = (l_{t-1} + b_{t-1}) s_{t-m}(1 + \epsilon_t) \\  &l_t = (l_{t-1} + b_{t-1})(1 + \alpha \epsilon_t) \\  &b_t = b_{t-1} + \beta (l_{t-1} + b_{t-1}) \epsilon_t \\  &s_t = s_{t-m} (1 + \gamma \epsilon_t)  \end{aligned}$\|
+$\begin{aligned} &y_{t} = (l_{t-1} + b_{t-1}) s_{t-m}(1 + \epsilon_t) \\ &l_t = (l_{t-1} + b_{t-1})(1 + \alpha \epsilon_t) \\ &b_t = b_{t-1} + \beta (l_{t-1} + b_{t-1}) \epsilon_t \\ &s_t = s_{t-m} (1 + \gamma \epsilon_t) \end{aligned}$\|
 \|Additive damped\|
-$\begin{aligned} &y_{t} = (l_{t-1} + \phi b_{t-1})(1 + \epsilon_t) \\  &l_t = (l_{t-1} + \phi b_{t-1})(1 + \alpha \epsilon_t) \\  &b_t = \phi b_{t-1} + \beta \mu_{y,t} \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = (l_{t-1} + \phi b_{t-1})(1 + \epsilon_t) \\ &l_t = (l_{t-1} + \phi b_{t-1})(1 + \alpha \epsilon_t) \\ &b_t = \phi b_{t-1} + \beta \mu_{y,t} \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = (l_{t-1} + \phi b_{t-1} + s_{t-m})(1 + \epsilon_t) \\  &l_t = l_{t-1} + \phi b_{t-1} + \alpha \mu_{y,t} \epsilon_t \\  &b_t = \phi b_{t-1} + \beta \mu_{y,t} \epsilon_t \\  &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = (l_{t-1} + \phi b_{t-1} + s_{t-m})(1 + \epsilon_t) \\ &l_t = l_{t-1} + \phi b_{t-1} + \alpha \mu_{y,t} \epsilon_t \\ &b_t = \phi b_{t-1} + \beta \mu_{y,t} \epsilon_t \\ &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = (l_{t-1} + \phi b_{t-1}) s_{t-m}(1 + \epsilon_t) \\  &l_t = l_{t-1} + \phi b_{t-1} (1 + \alpha \epsilon_t) \\  &b_t = \phi b_{t-1} + \beta (l_{t-1} + \phi b_{t-1}) \epsilon_t \\  &s_t = s_{t-m}(1 + \gamma \epsilon_t)  \end{aligned}$\|
+$\begin{aligned} &y_{t} = (l_{t-1} + \phi b_{t-1}) s_{t-m}(1 + \epsilon_t) \\ &l_t = l_{t-1} + \phi b_{t-1} (1 + \alpha \epsilon_t) \\ &b_t = \phi b_{t-1} + \beta (l_{t-1} + \phi b_{t-1}) \epsilon_t \\ &s_t = s_{t-m}(1 + \gamma \epsilon_t) \end{aligned}$\|
 \|Multiplicative\|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} (1 + \epsilon_t) \\  &l_t = l_{t-1} b_{t-1} (1 + \alpha \epsilon_t) \\  &b_t = b_{t-1} (1 + \beta \epsilon_t)  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} (1 + \epsilon_t) \\ &l_t = l_{t-1} b_{t-1} (1 + \alpha \epsilon_t) \\ &b_t = b_{t-1} (1 + \beta \epsilon_t) \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = (l_{t-1} b_{t-1} + s_{t-m})(1 + \epsilon_t) \\  &l_t = l_{t-1} b_{t-1} + \alpha \mu_{y,t} \epsilon_t \\  &b_t = b_{t-1} + \beta \frac{\mu_{y,t}}{l_{t-1}} \epsilon_t \\  &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t  \end{aligned}$\|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} s_{t-m} (1 + \epsilon_t) \\  &l_t = l_{t-1} b_{t-1} (1 + \alpha \epsilon_t) \\  &b_t = b_{t-1} (1 + \beta \epsilon_t) \\  &s_t = s_{t-m} (1 + \gamma \epsilon_t)  \end{aligned}$\|
+$\begin{aligned} &y_{t} = (l_{t-1} b_{t-1} + s_{t-m})(1 + \epsilon_t) \\ &l_t = l_{t-1} b_{t-1} + \alpha \mu_{y,t} \epsilon_t \\ &b_t = b_{t-1} + \beta \frac{\mu_{y,t}}{l_{t-1}} \epsilon_t \\ &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t \end{aligned}$\|
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1} s_{t-m} (1 + \epsilon_t) \\ &l_t = l_{t-1} b_{t-1} (1 + \alpha \epsilon_t) \\ &b_t = b_{t-1} (1 + \beta \epsilon_t) \\ &s_t = s_{t-m} (1 + \gamma \epsilon_t) \end{aligned}$\|
 \|Multiplicative damped\|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi (1 + \epsilon_t) \\  &l_t = l_{t-1} b_{t-1}^\phi (1 + \alpha \epsilon_t) \\  &b_t = b_{t-1}^\phi (1 + \beta \epsilon_t)  \end{aligned}$\|
-$\begin{aligned} &y_{t} = (l_{t-1} b_{t-1}^\phi + s_{t-m})(1 + \epsilon_t) \\  &l_t = l_{t-1} b_{t-1}^\phi + \alpha \mu_{y,t} \epsilon_t \\  &b_t = b_{t-1}^\phi + \beta \frac{\mu_{y,t}}{l_{t-1}} \epsilon_t \\  &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t  \end{aligned}$
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi (1 + \epsilon_t) \\ &l_t = l_{t-1} b_{t-1}^\phi (1 + \alpha \epsilon_t) \\ &b_t = b_{t-1}^\phi (1 + \beta \epsilon_t) \end{aligned}$\|
+$\begin{aligned} &y_{t} = (l_{t-1} b_{t-1}^\phi + s_{t-m})(1 + \epsilon_t) \\ &l_t = l_{t-1} b_{t-1}^\phi + \alpha \mu_{y,t} \epsilon_t \\ &b_t = b_{t-1}^\phi + \beta \frac{\mu_{y,t}}{l_{t-1}} \epsilon_t \\ &s_t = s_{t-m} + \gamma \mu_{y,t} \epsilon_t \end{aligned}$
 \|
-$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi s_{t-m} (1 + \epsilon_t) \\  &l_t = l_{t-1} b_{t-1}^\phi \left(1 + \alpha \epsilon_t\right) \\  &b_t = b_{t-1}^\phi \left(1 + \beta \epsilon_t\right) \\  &s_t = s_{t-m} \left(1 + \gamma \epsilon_t\right)  \end{aligned}$\|
+$\begin{aligned} &y_{t} = l_{t-1} b_{t-1}^\phi s_{t-m} (1 + \epsilon_t) \\ &l_t = l_{t-1} b_{t-1}^\phi \left(1 + \alpha \epsilon_t\right) \\ &b_t = b_{t-1}^\phi \left(1 + \beta \epsilon_t\right) \\ &s_t = s_{t-m} \left(1 + \gamma \epsilon_t\right) \end{aligned}$\|
 
 From a statistical point of view, formulae in Tables 1 and 2 correspond
 to the “true models”, they explain the models underlying potential data,
@@ -334,10 +365,9 @@ variations.
 > **Tip**
 >
 > Statsforecast will be needed. To install, see
-> [instructions](../getting-started/installation.html).
+> [instructions](../getting-started/0_Installation).
 
 Next, we import plotting libraries and configure the plotting style.
-
 
 ```python
 import matplotlib.pyplot as plt
@@ -371,7 +401,6 @@ rcParams['figure.figsize'] = (18,7)
 
 ### Read Data
 
-
 ```python
 import pandas as pd
 
@@ -399,7 +428,6 @@ three columns: unique_id, ds and y:
 
 -   The `y` (numeric) represents the measurement we wish to forecast.
 
-
 ```python
 df["unique_id"]="1"
 df.columns=["ds", "y", "unique_id"]
@@ -413,7 +441,6 @@ df.head()
 | 2   | 2017-09-13T02:00:00 | 89325  | 1         |
 | 3   | 2017-09-13T03:00:00 | 101930 | 1         |
 | 4   | 2017-09-13T04:00:00 | 121630 | 1         |
-
 
 ```python
 print(df.dtypes)
@@ -429,7 +456,6 @@ dtype: object
 We can see that our time variable `(ds)` is in an object format, we need
 to convert to a date format
 
-
 ```python
 df["ds"] = pd.to_datetime(df["ds"])
 ```
@@ -440,14 +466,13 @@ Plot some series using the plot method from the StatsForecast class.
 This method prints a random series from the dataset and is useful for
 basic EDA.
 
-
 ```python
 from statsforecast import StatsForecast
 
 StatsForecast.plot(df)
 ```
 
-![](/statsforecast/docs/models/Holt_files/figure-markdown_strict/cell-7-output-1.png)
+![](Holt_files/figure-markdown_strict/cell-8-output-1.png)
 
 ### The Augmented Dickey-Fuller Test
 
@@ -479,7 +504,6 @@ defining the null and alternate hypothesis.
 -   ADF or t Statistic \> critical values: Failed to reject the null
     hypothesis, time series is non-stationary.
 
-
 ```python
 from statsmodels.tsa.stattools import adfuller
 
@@ -490,7 +514,7 @@ def Augmented_Dickey_Fuller_Test_func(series , column_name):
     for key,value in dftest[4].items():
        dfoutput['Critical Value (%s)'%key] = value
     print (dfoutput)
-    if dftest[1] <= 0.05:
+    if dftest[1] \<= 0.05:
         print("Conclusion:====>")
         print("Reject the null hypothesis")
         print("The data is stationary")
@@ -614,7 +638,6 @@ $$\{a_{1k},··· ,a_{kk}\}= \argmin_{a_1 ,··· ,a_k}  E(X_t − a_1 X_{t−1}
 
 Then $\phi_{kk} =a_{kk}$ for $k≥1$.
 
-
 ```python
 fig, axs = plt.subplots(nrows=1, ncols=2)
 
@@ -627,7 +650,7 @@ axs[1].set_title('Partial Autocorrelation')
 plt.show();
 ```
 
-![](/statsforecast/docs/models/Holt_files/figure-markdown_strict/cell-10-output-1.png)
+![](Holt_files/figure-markdown_strict/cell-11-output-1.png)
 
 ### Decomposition of the time series
 
@@ -684,25 +707,23 @@ $$y(t) = Level * Trend * seasonality * Noise$$
 
 ### Additive
 
-
 ```python
-from statsmodels.tsa.seasonal import seasonal_decompose 
+from statsmodels.tsa.seasonal import seasonal_decompose
 a = seasonal_decompose(df["y"], model = "additive", period=12)
 a.plot();
 ```
 
-![](/statsforecast/docs/models/Holt_files/figure-markdown_strict/cell-11-output-1.png)
+![](Holt_files/figure-markdown_strict/cell-12-output-1.png)
 
 ### Multiplicative
 
-
 ```python
-from statsmodels.tsa.seasonal import seasonal_decompose 
+from statsmodels.tsa.seasonal import seasonal_decompose
 a = seasonal_decompose(df["y"], model = "Multiplicative", period=12)
 a.plot();
 ```
 
-![](/statsforecast/docs/models/Holt_files/figure-markdown_strict/cell-12-output-1.png)
+![](Holt_files/figure-markdown_strict/cell-13-output-1.png)
 
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
@@ -712,9 +733,8 @@ Data to test our model
 For the test data we will use the last 30 hours to test and evaluate the
 performance of our model.
 
-
 ```python
-train = df[df.ds<='2017-09-20 17:00:00'] 
+train = df[df.ds\<='2017-09-20 17:00:00']
 test = df[df.ds>'2017-09-20 17:00:00']
 ```
 
@@ -729,7 +749,6 @@ train.shape, test.shape
 
 Now let’s plot the training data and the test data.
 
-
 ```python
 sns.lineplot(train,x="ds", y="y", label="Train", linestyle="--")
 sns.lineplot(test, x="ds", y="y", label="Test")
@@ -737,12 +756,11 @@ plt.title("Ads watched (hourly data)");
 plt.show()
 ```
 
-![](/statsforecast/docs/models/Holt_files/figure-markdown_strict/cell-15-output-1.png)
+![](Holt_files/figure-markdown_strict/cell-16-output-1.png)
 
 ## Implementation of Holt Method with StatsForecast <a class="anchor" id="implementation"></a>
 
 ### Load libraries
-
 
 ```python
 from statsforecast import StatsForecast
@@ -756,9 +774,8 @@ tricky. This article on [Seasonal
 periods](https://robjhyndman.com/hyndsight/seasonal-periods/) by the
 master, Rob Hyndmann, can be useful for `season_length`.
 
-
 ```python
-season_length = 24 # Hourly data 
+season_length = 24 # Hourly data
 horizon = len(test) # number of predictions
 
 models = [Holt(season_length=season_length, error_type="A", alias="Add"),
@@ -783,13 +800,11 @@ import them.
 Any settings are passed into the constructor. Then you call its fit
 method and pass in the historical data frame.
 
-
 ```python
 sf = StatsForecast(models=models, freq='h')
 ```
 
 ### Fit the Model
-
 
 ```python
 sf.fit(df=train)
@@ -801,7 +816,6 @@ StatsForecast(models=[Add,Multi])
 
 Let’s see the results of our `Holt Model`. We can observe it with the
 following instruction:
-
 
 ```python
 result=sf.fitted_[0,0].model_
@@ -821,7 +835,6 @@ to extract each element from the dictionary we are going to use the
 `.get()` function to extract the element and then we are going to save
 it in a `pd.DataFrame()`.
 
-
 ```python
 residual=pd.DataFrame(result.get("residuals"), columns=["residual Model"])
 residual
@@ -836,7 +849,6 @@ residual
 | 183 | -268.370897    |
 | 184 | -1313.391081   |
 | 185 | -1428.364244   |
-
 
 ```python
 import scipy.stats as stats
@@ -858,14 +870,13 @@ axs[1,1].set_title("Autocorrelation");
 plt.show();
 ```
 
-![](/statsforecast/docs/models/Holt_files/figure-markdown_strict/cell-22-output-1.png)
+![](Holt_files/figure-markdown_strict/cell-23-output-1.png)
 
 ### Forecast Method
 
 If you want to gain speed in productive settings where you have multiple
-series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
-method instead of `.fit` and `.predict`.
+series or models we recommend using the `StatsForecast.forecast` method
+instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
 values and is highly scalable in distributed environments.
@@ -887,7 +898,6 @@ the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min.
 
-
 ```python
 Y_hat = sf.forecast(df=train, h=horizon, fitted=True)
 Y_hat
@@ -903,7 +913,6 @@ Y_hat
 | 28  | 1         | 2017-09-21 22:00:00 | 149174.750000 | 185171.812500 |
 | 29  | 1         | 2017-09-21 23:00:00 | 149507.843750 | 186746.187500 |
 
-
 ```python
 values=sf.forecast_fitted_values()
 values.head()
@@ -917,36 +926,33 @@ values.head()
 | 3   | 1         | 2017-09-13 03:00:00 | 101930.0 | 89658.281250  | 90922.609375  |
 | 4   | 1         | 2017-09-13 04:00:00 | 121630.0 | 102264.195312 | 103528.398438 |
 
-
 ```python
 StatsForecast.plot(values)
 ```
 
-![](/statsforecast/docs/models/Holt_files/figure-markdown_strict/cell-25-output-1.png)
+![](Holt_files/figure-markdown_strict/cell-26-output-1.png)
 
 Adding 95% confidence interval with the forecast method
-
 
 ```python
 sf.forecast(df=train, h=horizon, level=[95])
 ```
 
-|  | unique_id | ds | Add | Add-lo-95 | Add-hi-95 | Multi | Multi-lo-95 | Multi-hi-95 |
-|----|----|----|----|----|----|----|----|----|
-| 0 | 1 | 2017-09-20 18:00:00 | 139848.234375 | 116559.250000 | 163137.218750 | 141089.625000 | 113501.140625 | 168678.125000 |
-| 1 | 1 | 2017-09-20 19:00:00 | 140181.328125 | 107245.734375 | 173116.906250 | 142664.000000 | 103333.265625 | 181994.718750 |
-| 2 | 1 | 2017-09-20 20:00:00 | 140514.406250 | 100175.375000 | 180853.453125 | 144238.359375 | 95679.804688 | 192796.921875 |
-| ... | ... | ... | ... | ... | ... | ... | ... | ... |
-| 27 | 1 | 2017-09-21 21:00:00 | 148841.671875 | 25453.445312 | 272229.875000 | 183597.453125 | 4082.392090 | 363112.531250 |
-| 28 | 1 | 2017-09-21 22:00:00 | 149174.750000 | 23596.246094 | 274753.250000 | 185171.812500 | 1151.084961 | 369192.562500 |
-| 29 | 1 | 2017-09-21 23:00:00 | 149507.843750 | 21776.173828 | 277239.531250 | 186746.187500 | -1776.010254 | 375268.375000 |
-
+|     | unique_id | ds                  | Add           | Add-lo-95     | Add-hi-95     | Multi         | Multi-lo-95   | Multi-hi-95   |
+|-----|-----------|---------------------|---------------|---------------|---------------|---------------|---------------|---------------|
+| 0   | 1         | 2017-09-20 18:00:00 | 139848.234375 | 116559.250000 | 163137.218750 | 141089.625000 | 113501.140625 | 168678.125000 |
+| 1   | 1         | 2017-09-20 19:00:00 | 140181.328125 | 107245.734375 | 173116.906250 | 142664.000000 | 103333.265625 | 181994.718750 |
+| 2   | 1         | 2017-09-20 20:00:00 | 140514.406250 | 100175.375000 | 180853.453125 | 144238.359375 | 95679.804688  | 192796.921875 |
+| ... | ...       | ...                 | ...           | ...           | ...           | ...           | ...           | ...           |
+| 27  | 1         | 2017-09-21 21:00:00 | 148841.671875 | 25453.445312  | 272229.875000 | 183597.453125 | 4082.392090   | 363112.531250 |
+| 28  | 1         | 2017-09-21 22:00:00 | 149174.750000 | 23596.246094  | 274753.250000 | 185171.812500 | 1151.084961   | 369192.562500 |
+| 29  | 1         | 2017-09-21 23:00:00 | 149507.843750 | 21776.173828  | 277239.531250 | 186746.187500 | -1776.010254  | 375268.375000 |
 
 ```python
 sf.plot(train, Y_hat)
 ```
 
-![](/statsforecast/docs/models/Holt_files/figure-markdown_strict/cell-27-output-1.png)
+![](Holt_files/figure-markdown_strict/cell-28-output-1.png)
 
 ### Predict method with confidence interval
 
@@ -970,7 +976,6 @@ uncertainty intervals.
 
 This step should take less than 1 second.
 
-
 ```python
 sf.predict(h=horizon)
 ```
@@ -985,28 +990,26 @@ sf.predict(h=horizon)
 | 28  | 1         | 2017-09-21 22:00:00 | 149174.750000 | 185171.812500 |
 | 29  | 1         | 2017-09-21 23:00:00 | 149507.843750 | 186746.187500 |
 
-
 ```python
-forecast_df = sf.predict(h=horizon, level=[80,95]) 
+forecast_df = sf.predict(h=horizon, level=[80,95])
 forecast_df
 ```
 
-|  | unique_id | ds | Add | Add-lo-95 | Add-lo-80 | Add-hi-80 | Add-hi-95 | Multi | Multi-lo-95 | Multi-lo-80 | Multi-hi-80 | Multi-hi-95 |
-|----|----|----|----|----|----|----|----|----|----|----|----|----|
-| 0 | 1 | 2017-09-20 18:00:00 | 139848.234375 | 116559.250000 | 124620.390625 | 155076.078125 | 163137.218750 | 141089.625000 | 113501.140625 | 123050.484375 | 159128.781250 | 168678.125000 |
-| 1 | 1 | 2017-09-20 19:00:00 | 140181.328125 | 107245.734375 | 118645.898438 | 161716.750000 | 173116.906250 | 142664.000000 | 103333.265625 | 116947.015625 | 168380.984375 | 181994.718750 |
-| 2 | 1 | 2017-09-20 20:00:00 | 140514.406250 | 100175.375000 | 114138.132812 | 166890.687500 | 180853.453125 | 144238.359375 | 95679.804688 | 112487.625000 | 175989.093750 | 192796.921875 |
-| ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... | ... |
-| 27 | 1 | 2017-09-21 21:00:00 | 148841.671875 | 25453.445312 | 68162.445312 | 229520.890625 | 272229.875000 | 183597.453125 | 4082.392090 | 66218.867188 | 300976.031250 | 363112.531250 |
-| 28 | 1 | 2017-09-21 22:00:00 | 149174.750000 | 23596.246094 | 67063.382812 | 231286.125000 | 274753.250000 | 185171.812500 | 1151.084961 | 64847.128906 | 305496.500000 | 369192.562500 |
-| 29 | 1 | 2017-09-21 23:00:00 | 149507.843750 | 21776.173828 | 65988.593750 | 233027.093750 | 277239.531250 | 186746.187500 | -1776.010254 | 63478.144531 | 310014.218750 | 375268.375000 |
-
+|     | unique_id | ds                  | Add           | Add-lo-95     | Add-lo-80     | Add-hi-80     | Add-hi-95     | Multi         | Multi-lo-95   | Multi-lo-80   | Multi-hi-80   | Multi-hi-95   |
+|-----|-----------|---------------------|---------------|---------------|---------------|---------------|---------------|---------------|---------------|---------------|---------------|---------------|
+| 0   | 1         | 2017-09-20 18:00:00 | 139848.234375 | 116559.250000 | 124620.390625 | 155076.078125 | 163137.218750 | 141089.625000 | 113501.140625 | 123050.484375 | 159128.781250 | 168678.125000 |
+| 1   | 1         | 2017-09-20 19:00:00 | 140181.328125 | 107245.734375 | 118645.898438 | 161716.750000 | 173116.906250 | 142664.000000 | 103333.265625 | 116947.015625 | 168380.984375 | 181994.718750 |
+| 2   | 1         | 2017-09-20 20:00:00 | 140514.406250 | 100175.375000 | 114138.132812 | 166890.687500 | 180853.453125 | 144238.359375 | 95679.804688  | 112487.625000 | 175989.093750 | 192796.921875 |
+| ... | ...       | ...                 | ...           | ...           | ...           | ...           | ...           | ...           | ...           | ...           | ...           | ...           |
+| 27  | 1         | 2017-09-21 21:00:00 | 148841.671875 | 25453.445312  | 68162.445312  | 229520.890625 | 272229.875000 | 183597.453125 | 4082.392090   | 66218.867188  | 300976.031250 | 363112.531250 |
+| 28  | 1         | 2017-09-21 22:00:00 | 149174.750000 | 23596.246094  | 67063.382812  | 231286.125000 | 274753.250000 | 185171.812500 | 1151.084961   | 64847.128906  | 305496.500000 | 369192.562500 |
+| 29  | 1         | 2017-09-21 23:00:00 | 149507.843750 | 21776.173828  | 65988.593750  | 233027.093750 | 277239.531250 | 186746.187500 | -1776.010254  | 63478.144531  | 310014.218750 | 375268.375000 |
 
 ```python
 sf.plot(train, forecast_df, level=[80, 95])
 ```
 
-![](/statsforecast/docs/models/Holt_files/figure-markdown_strict/cell-30-output-1.png)
+![](Holt_files/figure-markdown_strict/cell-31-output-1.png)
 
 ## Cross-validation <a class="anchor" id="cross_validate"></a>
 
@@ -1054,7 +1057,6 @@ following arguments.
     other words: what number of forecasting processes in the past do you
     want to evaluate.
 
-
 ```python
 crossvalidation_df = sf.cross_validation(df=df,
                                          h=horizon,
@@ -1071,27 +1073,25 @@ following columns:
 -   `y:` true value
 -   `model:` columns with the model’s name and fitted value.
 
-
 ```python
 crossvalidation_df
 ```
 
-|  | unique_id | ds | cutoff | y | Add | Multi |
-|----|----|----|----|----|----|----|
-| 0 | 1 | 2017-09-18 06:00:00 | 2017-09-18 05:00:00 | 99440.0 | 111573.328125 | 112874.039062 |
-| 1 | 1 | 2017-09-18 07:00:00 | 2017-09-18 05:00:00 | 97655.0 | 111820.390625 | 114421.679688 |
-| 2 | 1 | 2017-09-18 08:00:00 | 2017-09-18 05:00:00 | 97655.0 | 112067.453125 | 115969.320312 |
-| ... | ... | ... | ... | ... | ... | ... |
-| 87 | 1 | 2017-09-21 21:00:00 | 2017-09-20 17:00:00 | 103080.0 | 148841.671875 | 183597.453125 |
-| 88 | 1 | 2017-09-21 22:00:00 | 2017-09-20 17:00:00 | 95155.0 | 149174.750000 | 185171.812500 |
-| 89 | 1 | 2017-09-21 23:00:00 | 2017-09-20 17:00:00 | 80285.0 | 149507.843750 | 186746.187500 |
+|     | unique_id | ds                  | cutoff              | y        | Add           | Multi         |
+|-----|-----------|---------------------|---------------------|----------|---------------|---------------|
+| 0   | 1         | 2017-09-18 06:00:00 | 2017-09-18 05:00:00 | 99440.0  | 111573.328125 | 112874.039062 |
+| 1   | 1         | 2017-09-18 07:00:00 | 2017-09-18 05:00:00 | 97655.0  | 111820.390625 | 114421.679688 |
+| 2   | 1         | 2017-09-18 08:00:00 | 2017-09-18 05:00:00 | 97655.0  | 112067.453125 | 115969.320312 |
+| ... | ...       | ...                 | ...                 | ...      | ...           | ...           |
+| 87  | 1         | 2017-09-21 21:00:00 | 2017-09-20 17:00:00 | 103080.0 | 148841.671875 | 183597.453125 |
+| 88  | 1         | 2017-09-21 22:00:00 | 2017-09-20 17:00:00 | 95155.0  | 149174.750000 | 185171.812500 |
+| 89  | 1         | 2017-09-21 23:00:00 | 2017-09-20 17:00:00 | 80285.0  | 149507.843750 | 186746.187500 |
 
 ## Model Evaluation <a class="anchor" id="evaluate"></a>
 
 Now we are going to evaluate our model with the results of the
 predictions, we will use different types of metrics MAE, MAPE, MASE,
 RMSE, SMAPE to evaluate the accuracy.
-
 
 ```python
 from functools import partial
@@ -1127,8 +1127,7 @@ evaluate(
 3.  [James D. Hamilton. Time Series Analysis Princeton University Press,
     Princeton, New Jersey, 1st Edition,
     1994.](https://press.princeton.edu/books/hardcover/9780691042893/time-series-analysis)
-4.  [Nixtla
-    Parameters](https://nixtla.github.io/statsforecast/src/core/models.html#arch-model).
+4.  [Nixtla Holt API](../../models#class-holt)
 5.  [Pandas available
     frequencies](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases).
 6.  [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting

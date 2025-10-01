@@ -1,11 +1,35 @@
 ---
-description: >-
-  Step-by-step guide on using the `DynamicStandardTheta Model` with
-  `Statsforecast`.
-output-file: dynamicstandardtheta.html
 title: Dynamic Standard Theta Model
 ---
 
+
+```python
+# This cell will not be rendered but is to hide warnings and limit the rows shown
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger('statsforecast').setLevel(logging.ERROR)
+
+import pandas as pd
+pd.set_option('display.max_rows', 6)
+```
+
+
+> Step-by-step guide on using the `DynamicStandardTheta Model` with
+> `Statsforecast`.
+
+During this walkthrough, we will become familiar with the main
+`StatsForecast` class and some relevant methods such as
+`StatsForecast.plot`, `StatsForecast.forecast` and
+`StatsForecast.cross_validation` in other.
+
+The text in this article is largely taken from [Jose A. Fiorucci, Tiago
+R. Pellegrini, Francisco Louzada, Fotios Petropoulos, Anne B. Koehler
+(2016). “Models for optimising the theta method and their relationship
+to state space models”. International Journal of
+Forecasting](https://www.sciencedirect.com/science/article/pii/S0169207016300243).
 
 ## Table of Contents
 
@@ -22,7 +46,7 @@ title: Dynamic Standard Theta Model
 ## Dynamic Standard Theta Models (DSTM) <a class="anchor" id="model"></a>
 
 The Dynamic Standard Theta Model is a case-specific variation of the
-[Optimized Dynamic Theta Model](./dynamicoptimizedtheta.html).
+[Optimized Dynamic Theta Model](./DynamicOptimizedTheta).
 
 Also, for $\theta=2$, we have a stochastic approach of Theta, which is
 referred to hereafter as the dynamic standard Theta model (DSTM).
@@ -32,10 +56,9 @@ referred to hereafter as the dynamic standard Theta model (DSTM).
 > **Tip**
 >
 > Statsforecast will be needed. To install, see
-> [instructions](../getting-started/installation.html).
+> [instructions](../getting-started/0_Installation).
 
 Next, we import plotting libraries and configure the plotting style.
-
 
 ```python
 import matplotlib.pyplot as plt
@@ -69,7 +92,6 @@ rcParams['figure.figsize'] = (18,7)
 
 ### Read Data
 
-
 ```python
 import pandas as pd
 df = pd.read_csv("https://raw.githubusercontent.com/Naren8520/Serie-de-tiempo-con-Machine-Learning/main/Data/milk_production.csv", usecols=[1,2])
@@ -96,7 +118,6 @@ three columns: unique_id, ds and y:
 
 -   The `y` (numeric) represents the measurement we wish to forecast.
 
-
 ```python
 df["unique_id"]="1"
 df.columns=["ds", "y", "unique_id"]
@@ -110,7 +131,6 @@ df.head()
 | 2   | 1962-03-01 | 640 | 1         |
 | 3   | 1962-04-01 | 656 | 1         |
 | 4   | 1962-05-01 | 727 | 1         |
-
 
 ```python
 print(df.dtypes)
@@ -126,7 +146,6 @@ dtype: object
 We can see that our time variable `(ds)` is in an object format, we need
 to convert to a date format
 
-
 ```python
 df["ds"] = pd.to_datetime(df["ds"])
 ```
@@ -137,17 +156,15 @@ Plot some series using the plot method from the StatsForecast class.
 This method prints a random series from the dataset and is useful for
 basic EDA.
 
-
 ```python
 from statsforecast import StatsForecast
 
 StatsForecast.plot(df)
 ```
 
-![](/statsforecast/docs/models/DynamicStandardTheta_files/figure-markdown_strict/cell-7-output-1.png)
+![](DynamicStandardTheta_files/figure-markdown_strict/cell-8-output-1.png)
 
 ### Autocorrelation plots
-
 
 ```python
 fig, axs = plt.subplots(nrows=1, ncols=2)
@@ -161,7 +178,7 @@ axs[1].set_title('Partial Autocorrelation')
 plt.show();
 ```
 
-![](/statsforecast/docs/models/DynamicStandardTheta_files/figure-markdown_strict/cell-8-output-1.png)
+![](DynamicStandardTheta_files/figure-markdown_strict/cell-9-output-1.png)
 
 ### Decomposition of the time series
 
@@ -218,25 +235,23 @@ $$y(t) = Level * Trend * seasonality * Noise$$
 
 ### Additive
 
-
 ```python
-from statsmodels.tsa.seasonal import seasonal_decompose 
+from statsmodels.tsa.seasonal import seasonal_decompose
 a = seasonal_decompose(df["y"], model = "additive", period=12)
 a.plot();
 ```
 
-![](/statsforecast/docs/models/DynamicStandardTheta_files/figure-markdown_strict/cell-9-output-1.png)
+![](DynamicStandardTheta_files/figure-markdown_strict/cell-10-output-1.png)
 
 ### Multiplicative
 
-
 ```python
-from statsmodels.tsa.seasonal import seasonal_decompose 
+from statsmodels.tsa.seasonal import seasonal_decompose
 a = seasonal_decompose(df["y"], model = "Multiplicative", period=12)
 a.plot();
 ```
 
-![](/statsforecast/docs/models/DynamicStandardTheta_files/figure-markdown_strict/cell-10-output-1.png)
+![](DynamicStandardTheta_files/figure-markdown_strict/cell-11-output-1.png)
 
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
@@ -246,9 +261,8 @@ Let’s divide our data into sets 1. Data to train our
 For the test data we will use the last 12 months to test and evaluate
 the performance of our model.
 
-
 ```python
-train = df[df.ds<='1974-12-01'] 
+train = df[df.ds\<='1974-12-01']
 test = df[df.ds>'1974-12-01']
 ```
 
@@ -263,7 +277,6 @@ train.shape, test.shape
 
 Now let’s plot the training data and the test data.
 
-
 ```python
 sns.lineplot(train,x="ds", y="y", label="Train", linestyle="--")
 sns.lineplot(test, x="ds", y="y", label="Test")
@@ -271,12 +284,11 @@ plt.title("Monthly Milk Production")
 plt.show()
 ```
 
-![](/statsforecast/docs/models/DynamicStandardTheta_files/figure-markdown_strict/cell-13-output-1.png)
+![](DynamicStandardTheta_files/figure-markdown_strict/cell-14-output-1.png)
 
 ## Implementation of DynamicStandardTheta with StatsForecast <a class="anchor" id="implementation"></a>
 
 ### Load libraries
-
 
 ```python
 from statsforecast import StatsForecast
@@ -290,12 +302,11 @@ tricky. This article on [Seasonal
 periods](https://robjhyndman.com/hyndsight/seasonal-periods/) by the
 master, Rob Hyndmann, can be useful for `season_length`.
 
-
 ```python
-season_length = 12 # Monthly data 
+season_length = 12 # Monthly data
 horizon = len(test) # number of predictions
 
-models = [DynamicTheta(season_length=season_length, 
+models = [DynamicTheta(season_length=season_length,
                 decomposition_type="additive")] # multiplicative additive
 ```
 
@@ -317,13 +328,11 @@ import them.
 Any settings are passed into the constructor. Then you call its fit
 method and pass in the historical data frame.
 
-
 ```python
 sf = StatsForecast(models=models, freq='MS')
 ```
 
 ### Fit Model
-
 
 ```python
 sf.fit(df=train)
@@ -335,7 +344,6 @@ StatsForecast(models=[DynamicTheta])
 
 Let’s see the results of our `Dynamic Standard Theta model`. We can
 observe it with the following instruction:
-
 
 ```python
 result=sf.fitted_[0,0].model_
@@ -357,7 +365,6 @@ to extract each element from the dictionary we are going to use the
 `.get()` function to extract the element and then we are going to save
 it in a `pd.DataFrame()`.
 
-
 ```python
 residual=pd.DataFrame(result.get("residuals"), columns=["residual Model"])
 residual
@@ -372,7 +379,6 @@ residual
 | 153 | -58.941711     |
 | 154 | -91.055420     |
 | 155 | -42.624939     |
-
 
 ```python
 import scipy.stats as stats
@@ -394,14 +400,13 @@ axs[1,1].set_title("Autocorrelation");
 plt.show();
 ```
 
-![](/statsforecast/docs/models/DynamicStandardTheta_files/figure-markdown_strict/cell-20-output-1.png)
+![](DynamicStandardTheta_files/figure-markdown_strict/cell-21-output-1.png)
 
 ### Forecast Method
 
 If you want to gain speed in productive settings where you have multiple
-series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
-method instead of `.fit` and `.predict`.
+series or models we recommend using the `StatsForecast.forecast` method
+instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
 values and is highly scalable in distributed environments.
@@ -423,7 +428,6 @@ the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min.
 
-
 ```python
 Y_hat = sf.forecast(df=train, h=horizon, fitted=True)
 Y_hat
@@ -439,7 +443,6 @@ Y_hat
 | 10  | 1         | 1975-11-01 | 786.716431   |
 | 11  | 1         | 1975-12-01 | 823.539368   |
 
-
 ```python
 values=sf.forecast_fitted_values()
 values.head()
@@ -453,15 +456,13 @@ values.head()
 | 3   | 1         | 1962-04-01 | 656.0 | 606.987793   |
 | 4   | 1         | 1962-05-01 | 727.0 | 605.021179   |
 
-
 ```python
 StatsForecast.plot(values)
 ```
 
-![](/statsforecast/docs/models/DynamicStandardTheta_files/figure-markdown_strict/cell-23-output-1.png)
+![](DynamicStandardTheta_files/figure-markdown_strict/cell-24-output-1.png)
 
 Adding 95% confidence interval with the forecast method
-
 
 ```python
 sf.forecast(df=train, h=horizon, level=[95])
@@ -499,7 +500,6 @@ uncertainty intervals.
 
 This step should take less than 1 second.
 
-
 ```python
 sf.predict(h=horizon)
 ```
@@ -514,28 +514,26 @@ sf.predict(h=horizon)
 | 10  | 1         | 1975-11-01 | 786.716431   |
 | 11  | 1         | 1975-12-01 | 823.539368   |
 
-
 ```python
-forecast_df = sf.predict(h=horizon, level=[80,95]) 
+forecast_df = sf.predict(h=horizon, level=[80,95])
 forecast_df
 ```
 
-|  | unique_id | ds | DynamicTheta | DynamicTheta-lo-80 | DynamicTheta-hi-80 | DynamicTheta-lo-95 | DynamicTheta-hi-95 |
-|----|----|----|----|----|----|----|----|
-| 0 | 1 | 1975-01-01 | 838.531555 | 765.423828 | 927.285339 | 741.237366 | 954.407166 |
-| 1 | 1 | 1975-02-01 | 800.154968 | 701.099854 | 899.316162 | 640.697205 | 945.673096 |
-| 2 | 1 | 1975-03-01 | 893.430786 | 758.326416 | 1007.631165 | 703.900635 | 1065.418701 |
-| ... | ... | ... | ... | ... | ... | ... | ... |
-| 9 | 1 | 1975-10-01 | 815.959351 | 608.699463 | 992.552673 | 536.422791 | 1086.643433 |
-| 10 | 1 | 1975-11-01 | 786.716431 | 558.429810 | 970.648376 | 484.476593 | 1033.687134 |
-| 11 | 1 | 1975-12-01 | 823.539368 | 588.706787 | 1031.564941 | 509.187256 | 1104.107788 |
-
+|     | unique_id | ds         | DynamicTheta | DynamicTheta-lo-80 | DynamicTheta-hi-80 | DynamicTheta-lo-95 | DynamicTheta-hi-95 |
+|-----|-----------|------------|--------------|--------------------|--------------------|--------------------|--------------------|
+| 0   | 1         | 1975-01-01 | 838.531555   | 765.423828         | 927.285339         | 741.237366         | 954.407166         |
+| 1   | 1         | 1975-02-01 | 800.154968   | 701.099854         | 899.316162         | 640.697205         | 945.673096         |
+| 2   | 1         | 1975-03-01 | 893.430786   | 758.326416         | 1007.631165        | 703.900635         | 1065.418701        |
+| ... | ...       | ...        | ...          | ...                | ...                | ...                | ...                |
+| 9   | 1         | 1975-10-01 | 815.959351   | 608.699463         | 992.552673         | 536.422791         | 1086.643433        |
+| 10  | 1         | 1975-11-01 | 786.716431   | 558.429810         | 970.648376         | 484.476593         | 1033.687134        |
+| 11  | 1         | 1975-12-01 | 823.539368   | 588.706787         | 1031.564941        | 509.187256         | 1104.107788        |
 
 ```python
 sf.plot(train, test.merge(forecast_df), level=[80, 95])
 ```
 
-![](/statsforecast/docs/models/DynamicStandardTheta_files/figure-markdown_strict/cell-27-output-1.png)
+![](DynamicStandardTheta_files/figure-markdown_strict/cell-28-output-1.png)
 
 ## Cross-validation <a class="anchor" id="cross_validate"></a>
 
@@ -583,7 +581,6 @@ following arguments.
     other words: what number of forecasting processes in the past do you
     want to evaluate.
 
-
 ```python
 crossvalidation_df = sf.cross_validation(df=train,
                                          h=horizon,
@@ -600,7 +597,6 @@ following columns:
 -   `cutoff:` the last datestamp or temporal index for the n_windows.
 -   `y:` true value
 -   `"model":` columns with the model’s name and fitted value.
-
 
 ```python
 crossvalidation_df
@@ -621,7 +617,6 @@ crossvalidation_df
 Now we are going to evaluate our model with the results of the
 predictions, we will use different types of metrics MAE, MAPE, MASE,
 RMSE, SMAPE to evaluate the accuracy.
-
 
 ```python
 from functools import partial
@@ -657,8 +652,7 @@ evaluate(
     theta method and their relationship to state space models”.
     International Journal of
     Forecasting](https://www.sciencedirect.com/science/article/pii/S0169207016300243).
-3.  [Nixtla
-    Parameters](https://nixtla.github.io/statsforecast/src/core/models.html#autotheta).
+3.  [Nixtla DynamicTheta API](../../models#class-dynamictheta)
 4.  [Pandas available
     frequencies](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases).
 5.  [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting

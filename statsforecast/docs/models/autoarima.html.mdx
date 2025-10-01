@@ -1,9 +1,36 @@
 ---
-description: Step-by-step guide on using the `AutoARIMA Model` with `Statsforecast`.
-output-file: autoarima.html
 title: AutoARIMA Model
 ---
 
+
+```python
+# This cell will not be rendered but is to hide warnings
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger('statsforecast').setLevel(logging.ERROR)
+
+import pandas as pd
+pd.set_option('display.max_rows', 6)
+```
+
+
+> Step-by-step guide on using the `AutoARIMA Model` with
+> `Statsforecast`.
+
+The objective of the following article is to obtain a step-by-step guide
+on building the Arima model using `AutoARIMA` with `Statsforecast`.
+
+During this walkthrough, we will become familiar with the main
+`StatsForecast` class and some relevant methods such as
+`StatsForecast.plot`, `StatsForecast.forecast` and
+`StatsForecast.cross_validation`.
+
+The text in this article is largely taken from [Rob J. Hyndman and
+George Athanasopoulos (2018). “Forecasting Principles and Practice (3rd
+ed)”.](https://otexts.com/fpp3/tscv.html)
 
 ## Table of Contents
 
@@ -38,11 +65,10 @@ process that generates the time series. The autoARIMA model automates
 the parameter selection process and can provide a fast and effective
 solution for time series modeling and forecasting.
 
-The `statsforecast.models` library brings the
-[`AutoARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoarima)
-function from Python provides an implementation of autoARIMA that allows
-to automatically select the optimal parameters for an ARIMA model given
-a time series.
+The `statsforecast.models` library brings the `AutoARIMA` function from
+Python provides an implementation of autoARIMA that allows to
+automatically select the optimal parameters for an ARIMA model given a
+time series.
 
 ## Definition of the Arima model <a class="anchor" id="model"></a>
 
@@ -81,21 +107,21 @@ autoregressive and moving average models also apply to an ARIMA model.
 Many of the models we have already discussed are special cases of the
 ARIMA model, as shown in Table
 
-| Model | p d q | Differenced | Method |
+| Model                      | p d q | Differenced                                                                             | Method                                       |
 |------------------|-------------|-------------------------|-----------------|
-| Arima(0,0,0) | 0 0 0 | $y_t=Y_t$ | White noise |
-| ARIMA (0,1,0) | 0 1 0 | $y_t = Y_t - Y_{t-1}$ | Random walk |
-| ARIMA (0,2,0) | 0 2 0 | $y_t = Y_t - 2Y_{t-1} + Y_{t-2}$ | Constant |
-| ARIMA (1,0,0) | 1 0 0 | $\hat Y_t = \mu + \Phi_1 Y_{t-1} + \epsilon$ | AR(1): AR(1): First-order regression model |
-| ARIMA (2, 0, 0) | 2 0 0 | $\hat Y_t = \Phi_0 + \Phi_1 Y_{t-1} + \Phi_2 Y_{t-2} + \epsilon$ | AR(2): Second-order regression model |
-| ARIMA (1, 1, 0) | 1 1 0 | $\hat Y_t = \mu + Y_{t-1} + \Phi_1 (Y_{t-1}- Y_{t-2})$ | Differenced first-order autoregressive model |
-| ARIMA (0, 1, 1) | 0 1 1 | $\hat Y_t = Y_{t-1} - \Phi_1 e^{t-1}$ | Simple exponential smoothing |
-| ARIMA (0, 0, 1) | 0 0 1 | $\hat Y_t = \mu_0+ \epsilon_t - \omega_1 \epsilon_{t-1}$ | MA(1): First-order regression model |
-| ARIMA (0, 0, 2) | 0 0 2 | $\hat Y_t = \mu_0+ \epsilon_t - \omega_1 \epsilon_{t-1} - \omega_2 \epsilon_{t-2}$ | MA(2): Second-order regression model |
-| ARIMA (1, 0, 1) | 1 0 1 | $\hat Y_t = \Phi_0 + \Phi_1 Y_{t-1}+ \epsilon_t - \omega_1 \epsilon_{t-1}$ | ARMA model |
-| ARIMA (1, 1, 1) | 1 1 1 | $\Delta Y_t = \Phi_1 Y_{t-1} + \epsilon_t - \omega_1 \epsilon_{t-1}$ | ARIMA model |
-| ARIMA (1, 1, 2) | 1 1 2 | $\hat Y_t = Y_{t-1} + \Phi_1 (Y_{t-1} - Y_{t-2} )- \Theta_1 e_{t-1} - \Theta_1 e_{t-1}$ | Damped-trend linear Exponential smoothing |
-| ARIMA (0, 2, 1) OR (0,2,2) | 0 2 1 | $\hat Y_t = 2 Y_{t-1} - Y_{t-2} - \Theta_1 e_{t-1} - \Theta_2 e_{t-2}$ | Linear exponential smoothing |
+| Arima(0,0,0)               | 0 0 0 | $y_t=Y_t$                                                                               | White noise                                  |
+| ARIMA (0,1,0)              | 0 1 0 | $y_t = Y_t - Y_{t-1}$                                                                   | Random walk                                  |
+| ARIMA (0,2,0)              | 0 2 0 | $y_t = Y_t - 2Y_{t-1} + Y_{t-2}$                                                        | Constant                                     |
+| ARIMA (1,0,0)              | 1 0 0 | $\hat Y_t = \mu + \Phi_1 Y_{t-1} + \epsilon$                                            | AR(1): AR(1): First-order regression model   |
+| ARIMA (2, 0, 0)            | 2 0 0 | $\hat Y_t = \Phi_0 + \Phi_1 Y_{t-1} + \Phi_2 Y_{t-2} + \epsilon$                        | AR(2): Second-order regression model         |
+| ARIMA (1, 1, 0)            | 1 1 0 | $\hat Y_t = \mu + Y_{t-1} + \Phi_1 (Y_{t-1}- Y_{t-2})$                                  | Differenced first-order autoregressive model |
+| ARIMA (0, 1, 1)            | 0 1 1 | $\hat Y_t = Y_{t-1} - \Phi_1 e^{t-1}$                                                   | Simple exponential smoothing                 |
+| ARIMA (0, 0, 1)            | 0 0 1 | $\hat Y_t = \mu_0+ \epsilon_t - \omega_1 \epsilon_{t-1}$                                | MA(1): First-order regression model          |
+| ARIMA (0, 0, 2)            | 0 0 2 | $\hat Y_t = \mu_0+ \epsilon_t - \omega_1 \epsilon_{t-1} - \omega_2 \epsilon_{t-2}$      | MA(2): Second-order regression model         |
+| ARIMA (1, 0, 1)            | 1 0 1 | $\hat Y_t = \Phi_0 + \Phi_1 Y_{t-1}+ \epsilon_t - \omega_1 \epsilon_{t-1}$              | ARMA model                                   |
+| ARIMA (1, 1, 1)            | 1 1 1 | $\Delta Y_t = \Phi_1 Y_{t-1} + \epsilon_t - \omega_1 \epsilon_{t-1}$                    | ARIMA model                                  |
+| ARIMA (1, 1, 2)            | 1 1 2 | $\hat Y_t = Y_{t-1} + \Phi_1 (Y_{t-1} - Y_{t-2} )- \Theta_1 e_{t-1} - \Theta_1 e_{t-1}$ | Damped-trend linear Exponential smoothing    |
+| ARIMA (0, 2, 1) OR (0,2,2) | 0 2 1 | $\hat Y_t = 2 Y_{t-1} - Y_{t-2} - \Theta_1 e_{t-1} - \Theta_2 e_{t-2}$                  | Linear exponential smoothing                 |
 
 Once we start combining components in this way to form more complicated
 models, it is much easier to work with the backshift notation. For
@@ -152,12 +178,12 @@ and time, even compared with the original implementation in R.
 
 | dataset | metric | auto_arima_nixtla | auto_arima_pmdarima \[1\] | auto_arima_r | prophet |
 |:--------|:--------|---------------:|-----------------:|------------:|--------:|
-| Daily | MASE | **3.26** | 3.35 | 4.46 | 14.26 |
-| Daily | time | **1.41** | 27.61 | 1.81 | 514.33 |
-| Hourly | MASE | **0.92** | — | 1.02 | 1.78 |
-| Hourly | time | **12.92** | — | 23.95 | 17.27 |
-| Weekly | MASE | **2.34** | 2.47 | 2.58 | 7.29 |
-| Weekly | time | 0.42 | 2.92 | **0.22** | 19.82 |
+| Daily   | MASE   |          **3.26** |                      3.35 |         4.46 |   14.26 |
+| Daily   | time   |          **1.41** |                     27.61 |         1.81 |  514.33 |
+| Hourly  | MASE   |          **0.92** |                         — |         1.02 |    1.78 |
+| Hourly  | time   |         **12.92** |                         — |        23.95 |   17.27 |
+| Weekly  | MASE   |          **2.34** |                      2.47 |         2.58 |    7.29 |
+| Weekly  | time   |              0.42 |                      2.92 |     **0.22** |   19.82 |
 
 \[1\] The model `auto_arima` from `pmdarima` had a problem with Hourly
 data. An issue was opened.
@@ -175,10 +201,9 @@ The following table summarizes the data details.
 > **Tip**
 >
 > Statsforecast will be needed. To install, see
-> [instructions](../getting-started/installation.html).
+> [instructions](../getting-started/0_Installation../getting-started/0_Installation).
 
 Next, we import plotting libraries and configure the plotting style.
-
 
 ```python
 import numpy as np
@@ -220,7 +245,6 @@ rcParams['figure.figsize'] = (18,7)
 
 ### Loading Data
 
-
 ```python
 df = pd.read_csv("https://raw.githubusercontent.com/Naren8520/Serie-de-tiempo-con-Machine-Learning/main/Data/candy_production.csv")
 df.head()
@@ -246,7 +270,6 @@ three columns: unique_id, ds and y:
 
 -   The `y` (numeric) represents the measurement we wish to forecast.
 
-
 ```python
 df["unique_id"]="1"
 df.columns=["ds", "y", "unique_id"]
@@ -261,7 +284,6 @@ df.head()
 | 3   | 1972-04-01 | 64.5645 | 1         |
 | 4   | 1972-05-01 | 65.0100 | 1         |
 
-
 ```python
 print(df.dtypes)
 ```
@@ -275,7 +297,6 @@ dtype: object
 
 We need to convert `ds` from the `object` type to datetime.
 
-
 ```python
 df["ds"] = pd.to_datetime(df["ds"])
 ```
@@ -286,17 +307,15 @@ Plot a series using the plot method from the StatsForecast class. This
 method prints a random series from the dataset and is useful for basic
 EDA.
 
-
 ```python
 from statsforecast import StatsForecast
 
 StatsForecast.plot(df)
 ```
 
-![](/statsforecast/docs/models/AutoARIMA_files/figure-markdown_strict/cell-8-output-1.png)
+![](AutoARIMA_files/figure-markdown_strict/cell-9-output-1.png)
 
 ### Autocorrelation plots
-
 
 ```python
 fig, axs = plt.subplots(nrows=1, ncols=2)
@@ -310,7 +329,7 @@ axs[1].set_title('Partial Autocorrelation')
 plt.show();
 ```
 
-![](/statsforecast/docs/models/AutoARIMA_files/figure-markdown_strict/cell-9-output-1.png)
+![](AutoARIMA_files/figure-markdown_strict/cell-10-output-1.png)
 
 ### Decomposition of the time series
 
@@ -365,14 +384,13 @@ multiplicative time series can be represented as.
 
 $$y(t) = Level * Trend * seasonality * Noise$$
 
-
 ```python
-from statsmodels.tsa.seasonal import seasonal_decompose 
+from statsmodels.tsa.seasonal import seasonal_decompose
 a = seasonal_decompose(df["y"], model = "add", period=12)
 a.plot();
 ```
 
-![](/statsforecast/docs/models/AutoARIMA_files/figure-markdown_strict/cell-10-output-1.png)
+![](AutoARIMA_files/figure-markdown_strict/cell-11-output-1.png)
 
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
@@ -382,9 +400,8 @@ Let’s divide our data into sets 1. Data to train our `AutoArima` model
 For the test data we will use the last 12 months to test and evaluate
 the performance of our model.
 
-
 ```python
-Y_train_df = df[df.ds<='2016-08-01'] 
+Y_train_df = df[df.ds\<='2016-08-01']
 Y_test_df = df[df.ds>'2016-08-01']
 ```
 
@@ -399,19 +416,17 @@ Y_train_df.shape, Y_test_df.shape
 
 Now let’s plot the training data and the test data.
 
-
 ```python
 sns.lineplot(Y_train_df,x="ds", y="y", label="Train")
 sns.lineplot(Y_test_df, x="ds", y="y", label="Test")
 plt.show()
 ```
 
-![](/statsforecast/docs/models/AutoARIMA_files/figure-markdown_strict/cell-13-output-1.png)
+![](AutoARIMA_files/figure-markdown_strict/cell-14-output-1.png)
 
 # Implementation of AutoArima with StatsForecast <a class="anchor" id="implementation"></a>
 
 ### Load libraries
-
 
 ```python
 from statsforecast import StatsForecast
@@ -426,9 +441,8 @@ tricky. This article on [Seasonal
 periods](https://robjhyndman.com/hyndsight/seasonal-periods/)) by the
 master, Rob Hyndmann, can be useful.season_length
 
-
 ```python
-season_length = 12 # Monthly data 
+season_length = 12 # Monthly data
 horizon = len(Y_test_df) # number of predictions
 
 models = [AutoARIMA(season_length=season_length)]
@@ -451,13 +465,11 @@ import them.
 Any settings are passed into the constructor. Then you call its fit
 method and pass in the historical data frame.
 
-
 ```python
 sf = StatsForecast(models=models, freq='MS')
 ```
 
 ### Fit the Model
-
 
 ```python
 sf.fit(df=Y_train_df)
@@ -467,10 +479,8 @@ sf.fit(df=Y_train_df)
 StatsForecast(models=[AutoARIMA])
 ```
 
-Once we have entered our model, we can use the
-[`arima_string`](https://Nixtla.github.io/statsforecast/src/arima.html#arima_string)
-function to see the parameters that the model has found.
-
+Once we have entered our model, we can use the `arima_string` function
+to see the parameters that the model has found.
 
 ```python
 arima_string(sf.fitted_[0,0].model_)
@@ -490,7 +500,6 @@ $D=1$, that is, it has a seasonal differential, and $q=3$ that contains
 To know the values of the terms of our model, we can use the following
 statement to know all the result of the model made.
 
-
 ```python
 result=sf.fitted_[0,0].model_
 print(result.keys())
@@ -509,7 +518,6 @@ to extract each element from the dictionary we are going to use the
 `.get()` function to extract the element and then we are going to save
 it in a `pd.DataFrame()`.
 
-
 ```python
 residual=pd.DataFrame(result.get("residuals"), columns=["residual Model"])
 residual
@@ -524,7 +532,6 @@ residual
 | 533 | 1.615486       |
 | 534 | -0.394285      |
 | 535 | -6.733548      |
-
 
 ```python
 fig, axs = plt.subplots(nrows=2, ncols=2)
@@ -548,7 +555,7 @@ axs[1,1].set_title("Autocorrelation");
 plt.show();
 ```
 
-![](/statsforecast/docs/models/AutoARIMA_files/figure-markdown_strict/cell-21-output-1.png)
+![](AutoARIMA_files/figure-markdown_strict/cell-22-output-1.png)
 
 To generate forecasts we only have to use the predict method specifying
 the forecast horizon (h). In addition, to calculate prediction intervals
@@ -560,9 +567,8 @@ In this case we will only calculate the 90% forecast interval
 ### Forecast Method
 
 If you want to gain speed in productive settings where you have multiple
-series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
-method instead of `.fit` and `.predict`.
+series or models we recommend using the `StatsForecast.forecast` method
+instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
 values and is highly scalable in distributed environments.
@@ -583,11 +589,7 @@ The forecast object here is a new data frame that includes a column with
 the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min. (If you want to speed things up to a couple of seconds,
-remove the AutoModels like
-[`ARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#arima)
-and
-[`Theta`](https://Nixtla.github.io/statsforecast/src/core/models.html#theta))
-
+remove the AutoModels like `ARIMA` and `Theta`)
 
 ```python
 Y_hat_df = sf.forecast(df=Y_train_df, h=horizon, fitted=True)
@@ -601,7 +603,6 @@ Y_hat_df.head()
 | 2   | 1         | 2016-11-01 | 125.401639 |
 | 3   | 1         | 2016-12-01 | 123.854826 |
 | 4   | 1         | 2017-01-01 | 110.439451 |
-
 
 ```python
 values=sf.forecast_fitted_values()
@@ -620,7 +621,6 @@ values
 
 Adding 95% confidence interval with the forecast method
 
-
 ```python
 sf.forecast(df=Y_train_df, h=12, level=[95])
 ```
@@ -635,7 +635,6 @@ sf.forecast(df=Y_train_df, h=12, level=[95])
 | 10  | 1         | 2017-07-01 | 99.630306  | 87.032356       | 112.228256      |
 | 11  | 1         | 2017-08-01 | 105.426708 | 92.639159       | 118.214258      |
 
-
 ```python
 Y_hat_df = Y_test_df.merge(Y_hat_df, how='left', on=['unique_id', 'ds'])
 
@@ -649,7 +648,7 @@ ax.legend(prop={'size': 15})
 ax.grid()
 ```
 
-![](/statsforecast/docs/models/AutoARIMA_files/figure-markdown_strict/cell-25-output-1.png)
+![](AutoARIMA_files/figure-markdown_strict/cell-26-output-1.png)
 
 ### Predict method with confidence interval
 
@@ -673,7 +672,6 @@ uncertainty intervals.
 
 This step should take less than 1 second.
 
-
 ```python
 sf.predict(h=12)
 ```
@@ -688,53 +686,50 @@ sf.predict(h=12)
 | 10  | 1         | 2017-07-01 | 99.630306  |
 | 11  | 1         | 2017-08-01 | 105.426708 |
 
-
 ```python
-forecast_df = sf.predict(h=12, level = [80, 95]) 
+forecast_df = sf.predict(h=12, level = [80, 95])
 forecast_df
 ```
 
-|  | unique_id | ds | AutoARIMA | AutoARIMA-lo-95 | AutoARIMA-lo-80 | AutoARIMA-hi-80 | AutoARIMA-hi-95 |
-|----|----|----|----|----|----|----|----|
-| 0 | 1 | 2016-09-01 | 111.235874 | 104.140621 | 106.596537 | 115.875211 | 118.331128 |
-| 1 | 1 | 2016-10-01 | 124.948376 | 116.244661 | 119.257323 | 130.639429 | 133.652090 |
-| 2 | 1 | 2016-11-01 | 125.401639 | 115.882093 | 119.177142 | 131.626136 | 134.921185 |
-| ... | ... | ... | ... | ... | ... | ... | ... |
-| 9 | 1 | 2017-06-01 | 98.304446 | 85.884572 | 90.183527 | 106.425365 | 110.724320 |
-| 10 | 1 | 2017-07-01 | 99.630306 | 87.032356 | 91.392949 | 107.867663 | 112.228256 |
-| 11 | 1 | 2017-08-01 | 105.426708 | 92.639159 | 97.065379 | 113.788038 | 118.214258 |
+|     | unique_id | ds         | AutoARIMA  | AutoARIMA-lo-95 | AutoARIMA-lo-80 | AutoARIMA-hi-80 | AutoARIMA-hi-95 |
+|-----|-----------|------------|------------|-----------------|-----------------|-----------------|-----------------|
+| 0   | 1         | 2016-09-01 | 111.235874 | 104.140621      | 106.596537      | 115.875211      | 118.331128      |
+| 1   | 1         | 2016-10-01 | 124.948376 | 116.244661      | 119.257323      | 130.639429      | 133.652090      |
+| 2   | 1         | 2016-11-01 | 125.401639 | 115.882093      | 119.177142      | 131.626136      | 134.921185      |
+| ... | ...       | ...        | ...        | ...             | ...             | ...             | ...             |
+| 9   | 1         | 2017-06-01 | 98.304446  | 85.884572       | 90.183527       | 106.425365      | 110.724320      |
+| 10  | 1         | 2017-07-01 | 99.630306  | 87.032356       | 91.392949       | 107.867663      | 112.228256      |
+| 11  | 1         | 2017-08-01 | 105.426708 | 92.639159       | 97.065379       | 113.788038      | 118.214258      |
 
 We can join the forecast result with the historical data using the
 pandas function `pd.concat()`, and then be able to use this result for
 graphing.
-
 
 ```python
 df_plot=pd.concat([df, forecast_df]).set_index('ds').tail(220)
 df_plot
 ```
 
-|  | y | unique_id | AutoARIMA | AutoARIMA-lo-95 | AutoARIMA-lo-80 | AutoARIMA-hi-80 | AutoARIMA-hi-95 |
-|----|----|----|----|----|----|----|----|
-| ds |  |  |  |  |  |  |  |
-| 2000-05-01 | 108.7202 | 1 | NaN | NaN | NaN | NaN | NaN |
-| 2000-06-01 | 114.2071 | 1 | NaN | NaN | NaN | NaN | NaN |
-| 2000-07-01 | 111.8737 | 1 | NaN | NaN | NaN | NaN | NaN |
-| ... | ... | ... | ... | ... | ... | ... | ... |
-| 2017-06-01 | NaN | 1 | 98.304446 | 85.884572 | 90.183527 | 106.425365 | 110.724320 |
-| 2017-07-01 | NaN | 1 | 99.630306 | 87.032356 | 91.392949 | 107.867663 | 112.228256 |
-| 2017-08-01 | NaN | 1 | 105.426708 | 92.639159 | 97.065379 | 113.788038 | 118.214258 |
+|            | y        | unique_id | AutoARIMA  | AutoARIMA-lo-95 | AutoARIMA-lo-80 | AutoARIMA-hi-80 | AutoARIMA-hi-95 |
+|------------|----------|-----------|------------|-----------------|-----------------|-----------------|-----------------|
+| ds         |          |           |            |                 |                 |                 |                 |
+| 2000-05-01 | 108.7202 | 1         | NaN        | NaN             | NaN             | NaN             | NaN             |
+| 2000-06-01 | 114.2071 | 1         | NaN        | NaN             | NaN             | NaN             | NaN             |
+| 2000-07-01 | 111.8737 | 1         | NaN        | NaN             | NaN             | NaN             | NaN             |
+| ...        | ...      | ...       | ...        | ...             | ...             | ...             | ...             |
+| 2017-06-01 | NaN      | 1         | 98.304446  | 85.884572       | 90.183527       | 106.425365      | 110.724320      |
+| 2017-07-01 | NaN      | 1         | 99.630306  | 87.032356       | 91.392949       | 107.867663      | 112.228256      |
+| 2017-08-01 | NaN      | 1         | 105.426708 | 92.639159       | 97.065379       | 113.788038      | 118.214258      |
 
 Now let’s visualize the result of our forecast and the historical data
 of our time series, also let’s draw the confidence interval that we have
 obtained when making the prediction with 95% confidence.
 
-
 ```python
 sf.plot(df, forecast_df, level=[95], max_insample_length=12 * 5)
 ```
 
-![](/statsforecast/docs/models/AutoARIMA_files/figure-markdown_strict/cell-29-output-1.png)
+![](AutoARIMA_files/figure-markdown_strict/cell-30-output-1.png)
 
 ## Cross-validation <a class="anchor" id="cross_validate"></a>
 
@@ -782,7 +777,6 @@ following arguments.
     other words: what number of forecasting processes in the past do you
     want to evaluate.
 
-
 ```python
 crossvalidation_df = sf.cross_validation(df=Y_train_df,
                                          h=12,
@@ -798,7 +792,6 @@ following columns:
 -   `cutoff:` the last datestamp or temporal index for the n_windows.
 -   `y:` true value
 -   `"model":` columns with the model’s name and fitted value.
-
 
 ```python
 crossvalidation_df.head()
@@ -817,7 +810,6 @@ crossvalidation_df.head()
 Now we are going to evaluate our model with the results of the
 predictions, we will use different types of metrics MAE, MAPE, MASE,
 RMSE, SMAPE to evaluate the accuracy.
-
 
 ```python
 from functools import partial
@@ -845,7 +837,7 @@ evaluate(
 
 ## References <a class="anchor" id="references"></a>
 
-1.  [Nixtla-Arima](https://nixtla.github.io/statsforecast/src/core/models.html#arima-family)
+1.  [Nixtla AutoARIMA API](../../models#class-autoarima)
 2.  [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting
     Principles and Practice (3rd
     ed)”](https://otexts.com/fpp3/tscv.html).

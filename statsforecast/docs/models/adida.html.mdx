@@ -1,9 +1,38 @@
 ---
-description: Step-by-step guide on using the `ADIDA Model` with `Statsforecast`.
-output-file: adida.html
 title: ADIDA Model
 ---
 
+
+```python
+# This cell will not be rendered but is to hide warnings and limit the rows shown
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger('statsforecast').setLevel(logging.ERROR)
+
+import pandas as pd
+pd.set_option('display.max_rows', 6)
+```
+
+
+> Step-by-step guide on using the `ADIDA Model` with `Statsforecast`.
+
+In this walkthrough, we will become familiar with the main
+`StatsForecast` class and some relevant methods such as
+`StatsForecast.plot`, `StatsForecast.forecast` and
+`StatsForecast.cross_validation`.
+
+The text in this article is largely taken from: 1. [Changquan Huang •
+Alla Petukhina. Springer series (2022). Applied Time Series Analysis and
+Forecasting with
+Python.](https://link.springer.com/book/10.1007/978-3-031-13584-2) 2.
+Ivan Svetunkov. [Forecasting and Analytics with the Augmented Dynamic
+Adaptive Model (ADAM)](https://openforecast.org/adam/) 3. [James D.
+Hamilton. Time Series Analysis Princeton University Press, Princeton,
+New Jersey, 1st Edition,
+1994.](https://press.princeton.edu/books/hardcover/9780691042893/time-series-analysis)
 
 ## Table of Contents
 
@@ -206,10 +235,9 @@ question.
 > **Tip**
 >
 > Statsforecast will be needed. To install, see
-> [instructions](../getting-started/installation.html).
+> [instructions](../getting-started/0_Installation).
 
 Next, we import plotting libraries and configure the plotting style.
-
 
 ```python
 import matplotlib.pyplot as plt
@@ -271,7 +299,6 @@ three columns: unique_id, ds and y:
 
 -   The `y` (numeric) represents the measurement we wish to forecast.
 
-
 ```python
 df["unique_id"]="1"
 df.columns=["ds", "y", "unique_id"]
@@ -286,7 +313,6 @@ df.head()
 | 3   | 2008-01-21 | 64.0 | 1         |
 | 4   | 2008-01-28 | 38.0 | 1         |
 
-
 ```python
 print(df.dtypes)
 ```
@@ -300,7 +326,6 @@ dtype: object
 
 We need to convert the `object` types to datetime and numeric.
 
-
 ```python
 df["ds"] = pd.to_datetime(df["ds"])
 df["y"] = df["y"].astype(float).astype("int64")
@@ -312,17 +337,15 @@ Plot a series using the plot method from the StatsForecast class. This
 method prints a random series from the dataset and is useful for basic
 EDA.
 
-
 ```python
 from statsforecast import StatsForecast
 
 StatsForecast.plot(df)
 ```
 
-![](/statsforecast/docs/models/ADIDA_files/figure-markdown_strict/cell-7-output-1.png)
+![](ADIDA_files/figure-markdown_strict/cell-8-output-1.png)
 
 ### Autocorrelation plots
-
 
 ```python
 fig, axs = plt.subplots(nrows=1, ncols=2)
@@ -336,7 +359,7 @@ axs[1].set_title('Partial Autocorrelation')
 plt.show();
 ```
 
-![](/statsforecast/docs/models/ADIDA_files/figure-markdown_strict/cell-8-output-1.png)
+![](ADIDA_files/figure-markdown_strict/cell-9-output-1.png)
 
 ### Decomposition of the time series
 
@@ -391,7 +414,6 @@ multiplicative time series can be represented as.
 
 $$y(t) = Level * Trend * seasonality * Noise$$
 
-
 ```python
 from statsmodels.tsa.seasonal import seasonal_decompose
 from plotly.subplots import make_subplots
@@ -429,7 +451,7 @@ plot_seasonal_decompose(
     title="Seasonal Decomposition")
 ```
 
-![](/statsforecast/docs/models/ADIDA_files/figure-markdown_strict/cell-10-output-2.png)
+![](ADIDA_files/figure-markdown_strict/cell-11-output-2.png)
 
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
@@ -439,9 +461,8 @@ Data to test our model
 For the test data we will use the last 25 week to test and evaluate the
 performance of our model.
 
-
 ```python
-train = df[df.ds<='2022-07-04'] 
+train = df[df.ds\<='2022-07-04']
 test = df[df.ds>'2022-07-04']
 ```
 
@@ -456,7 +477,6 @@ train.shape, test.shape
 
 Now let’s plot the training data and the test data.
 
-
 ```python
 sns.lineplot(train,x="ds", y="y", label="Train", linestyle="--",linewidth=2)
 sns.lineplot(test, x="ds", y="y", label="Test", linewidth=2, color="yellow")
@@ -464,13 +484,13 @@ plt.title("Falciparum Malaria");
 plt.show()
 ```
 
-![](/statsforecast/docs/models/ADIDA_files/figure-markdown_strict/cell-13-output-1.png)
+![](ADIDA_files/figure-markdown_strict/cell-14-output-1.png)
 
 ## Implementation of `ADIDA Model` with StatsForecast <a class="anchor" id="implementation"></a>
 
 To also know more about the parameters of the functions of the
 `ADIDA Model`, they are listed below. For more information, visit the
-[documentation](https://nixtla.github.io/statsforecast/src/core/models.html#adida).
+[documentation](../../src/core/models.html#adida)
 
 ``` text
 alias : str
@@ -482,7 +502,6 @@ prediction_intervals : Optional[ConformalIntervals]
 ```
 
 ### Load libraries
-
 
 ```python
 from statsforecast import StatsForecast
@@ -496,18 +515,16 @@ tricky. This article on [Seasonal
 periods](https://robjhyndman.com/hyndsight/seasonal-periods/) by the
 master, Rob Hyndmann, can be useful for `season_length`.
 
-
 ```python
-season_length = 52 # Hourly data 
+season_length = 52 # Hourly data
 horizon = len(test) # number of predictions
 
 # We call the model that we are going to use
 models = [ADIDA()]
 ```
 
-We fit the models by instantiating a new
-[`StatsForecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast)
-object with the following parameters:
+We fit the models by instantiating a new `StatsForecast` object with the
+following parameters:
 
 models: a list of models. Select the models you want from models and
 import them.
@@ -524,17 +541,15 @@ import them.
 Any settings are passed into the constructor. Then you call its fit
 method and pass in the historical data frame.
 
-
 ```python
 sf = StatsForecast(models=models,
-                   freq='7d', 
+                   freq='7d',
                    n_jobs=-1)
 ```
 
 ### Fit the Model
 
 Here, we call the `fit()` method to fit the model.
-
 
 ```python
 sf.fit(df=train)
@@ -546,7 +561,6 @@ StatsForecast(models=[ADIDA])
 
 Let’s see the results of our `ADIDA Model`. We can observe it with the
 following instruction:
-
 
 ```python
 result=sf.fitted_[0,0].model_
@@ -560,9 +574,8 @@ result
 ### Forecast Method
 
 If you want to gain speed in productive settings where you have multiple
-series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
-method instead of `.fit` and `.predict`.
+series or models we recommend using the `StatsForecast.forecast` method
+instead of `.fit` and `.predict`.
 
 The main difference is that the `forecast()` method does not store the
 fitted values and is highly scalable in distributed environments.
@@ -577,7 +590,6 @@ The forecast object here is a new data frame that includes a column with
 the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min.
-
 
 ```python
 Y_hat = sf.forecast(df=train, h=horizon)
@@ -594,12 +606,11 @@ Y_hat
 | 23  | 1         | 2022-12-19 | 336.747375 |
 | 24  | 1         | 2022-12-26 | 336.747375 |
 
-
 ```python
 sf.plot(train, Y_hat.merge(test))
 ```
 
-![](/statsforecast/docs/models/ADIDA_files/figure-markdown_strict/cell-20-output-1.png)
+![](ADIDA_files/figure-markdown_strict/cell-21-output-1.png)
 
 ### Predict method with confidence interval
 
@@ -617,9 +628,8 @@ uncertainty intervals.
 
 This step should take less than 1 second.
 
-
 ```python
-forecast_df = sf.predict(h=horizon) 
+forecast_df = sf.predict(h=horizon)
 forecast_df.head()
 ```
 
@@ -682,7 +692,6 @@ following arguments.
     other words: what number of forecasting processes in the past do you
     want to evaluate.
 
-
 ```python
 crossvalidation_df = sf.cross_validation(df=df,
                                          h=horizon,
@@ -698,7 +707,6 @@ following columns:
 -   `cutoff:` the last datestamp or temporal index for the `n_windows`.
 -   `y:` true value
 -   `model:` columns with the model’s name and fitted value.
-
 
 ```python
 crossvalidation_df
@@ -719,7 +727,6 @@ crossvalidation_df
 Now we are going to evaluate our model with the results of the
 predictions, we will use different types of metrics MAE, MAPE, MASE,
 RMSE, SMAPE to evaluate the accuracy.
-
 
 ```python
 from functools import partial
@@ -755,8 +762,7 @@ evaluate(
 3.  [James D. Hamilton. Time Series Analysis Princeton University Press,
     Princeton, New Jersey, 1st Edition,
     1994.](https://press.princeton.edu/books/hardcover/9780691042893/time-series-analysis)
-4.  [Nixtla
-    Parameters](https://nixtla.github.io/statsforecast/src/core/models.html#arch-model).
+4.  [Nixtla ADIDA API](../../src/core/models.html#adida)
 5.  [Pandas available
     frequencies](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases).
 6.  [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting

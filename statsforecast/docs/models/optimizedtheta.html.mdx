@@ -1,9 +1,39 @@
 ---
-description: Step-by-step guide on using the `OptimizedTheta Model` with `Statsforecast`.
-output-file: optimizedtheta.html
 title: Optimized Theta Model
 ---
 
+
+```python
+# This cell will not be rendered but is to hide warnings and limit the rows shown
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import logging
+logging.getLogger('statsforecast').setLevel(logging.ERROR)
+
+import pandas as pd
+pd.set_option('display.max_rows', 6)
+```
+
+
+> Step-by-step guide on using the `OptimizedTheta Model` with
+> `Statsforecast`.
+
+During this walkthrough, we will become familiar with the main
+`StatsForecast` class and some relevant methods such as
+`StatsForecast.plot`, `StatsForecast.forecast` and
+`StatsForecast.cross_validation` in other.
+
+The text in this article is largely taken from: 1. [Kostas I.
+Nikolopoulos, Dimitrios D. Thomakos. Forecasting with the Theta
+Method-Theory and Applications. 2019 John Wiley & Sons
+Ltd.](https://onlinelibrary.wiley.com/doi/book/10.1002/9781119320784) 2.
+[Jose A. Fiorucci, Tiago R. Pellegrini, Francisco Louzada, Fotios
+Petropoulos, Anne B. Koehler (2016). “Models for optimising the theta
+method and their relationship to state space models”. International
+Journal of
+Forecasting](https://www.sciencedirect.com/science/article/pii/S0169207016300243).
 
 ## Table of Contents
 
@@ -92,11 +122,9 @@ decomposition approach.
 Let $X_t$ be the linear combination of two theta lines,
 
 $$
-
 \begin{equation}
 X_t=\omega \text{Z}_t (\theta_1) +(1-\omega) \text{Z}_t (\theta_2) \tag 1
 \end{equation}
-
 $$
 
 where $\omega \in [0,1]$ is the weight parameter. Assuming that
@@ -104,11 +132,9 @@ $\theta_1 <1$ and $\theta_2 \geq 1$, the weight $\omega$ can be derived
 as
 
 $$
-
 \begin{equation}
 \omega:=\omega(\theta_1, \theta_2)=\frac{\theta_2 -1}{\theta_2 -\theta_1} \tag 2
 \end{equation}
-
 $$
 
 It is straightforward to see from Eqs. (1), (2) that
@@ -147,11 +173,9 @@ $$Y_t=(1-\frac{1}{\theta}) (\text{A}_n+\text{B}_n t)+ \frac{1}{\theta} \text{Z}_
 The $h$ -step-ahead forecasts calculated at origin are given by
 
 $$
-
 \begin{equation}
 \hat Y_{n+h|n} = (1-\frac{1}{\theta}) [\text{A}_n+\text{B}_n (n+h)]+ \frac{1}{\theta} \tilde {\text{Z}}_{n+h|n} (\theta) \tag 3
 \end{equation}
-
 $$
 
 where
@@ -163,11 +187,9 @@ Eq. (3) corresponds to Step 4 of the STheta algorithm. After some
 algebra, we can write
 
 $$
-
 \begin{equation}
 \tilde {\text{Z}}_{n+1|n} (\theta)=\theta \ell{n}+(1-\theta) \{ \text{A}_n [1-(1-\alpha)^n] + \text{B}_n [n+(1-\frac{1}{\alpha}) [1-(1-\alpha)^n] ]  \}   \tag 4
 \end{equation}
-
 $$
 
 where $\ell_{t}=\alpha Y_t +(1-\alpha) \ell_{t-1}$ for $t=1, \cdots, n$
@@ -180,7 +202,7 @@ $\text{B}_n$, which can be either fixed or dynamic functions. To
 formulate the state space models, it is helpful to adopt $\mu_{t}$ as
 the one-step-ahead forecast at origin $t-1$ and $\varepsilon_{t}$ as the
 respective additive error, i.e., $\varepsilon_{t}=Y_t - \mu_{t}$ if
-$\mu_{t}= \hat Y_{t|t-1}$. We assume $\{  \varepsilon_{t} \}$ to be a
+$\mu_{t}= \hat Y_{t|t-1}$. We assume $\{ \varepsilon_{t} \}$ to be a
 Gaussian white noise process with mean zero and variance $\sigma^2$.
 
 ### More on Optimised Theta models
@@ -190,27 +212,21 @@ $t=1, \cdots, n$ so that Eqs. (3), (4) configure the state space model
 given by
 
 $$
-
 \begin{equation}
 Y_t=\mu_{t}+\varepsilon_{t} \tag 5
 \end{equation}
-
 $$
 
 $$
-
 \begin{equation}
 \mu_{t}=\ell_{t-1}+(1-\frac{1}{\theta}) \{(1-\alpha)^{t-1} \text{A}_n +[\frac{1-(1-\alpha)^t}{\alpha} \text{B}_n]  \tag 6
 \end{equation}
-
 $$
 
 $$
-
 \begin{equation}
 \ell_{t}=\alpha Y_t +(1-\alpha)\ell_{t-1} \tag 7
 \end{equation}
-
 $$
 
 with parameters $\ell_{0} \in \mathbb{R}$, $\alpha \in (0,1)$ and
@@ -250,10 +266,9 @@ STheta and the SES-d model.
 > **Tip**
 >
 > Statsforecast will be needed. To install, see
-> [instructions](../getting-started/installation.html).
+> [instructions](../getting-started/0_Installation).
 
 Next, we import plotting libraries and configure the plotting style.
-
 
 ```python
 import matplotlib.pyplot as plt
@@ -287,7 +302,6 @@ rcParams['figure.figsize'] = (18,7)
 
 ### Read Data
 
-
 ```python
 import pandas as pd
 
@@ -315,7 +329,6 @@ three columns: unique_id, ds and y:
 
 -   The `y` (numeric) represents the measurement we wish to forecast.
 
-
 ```python
 df["unique_id"]="1"
 df.columns=["ds", "y", "unique_id"]
@@ -329,7 +342,6 @@ df.head()
 | 2   | 1962-03-01 | 640 | 1         |
 | 3   | 1962-04-01 | 656 | 1         |
 | 4   | 1962-05-01 | 727 | 1         |
-
 
 ```python
 print(df.dtypes)
@@ -345,7 +357,6 @@ dtype: object
 We can see that our time variable `(ds)` is in an object format, we need
 to convert to a date format
 
-
 ```python
 df["ds"] = pd.to_datetime(df["ds"])
 ```
@@ -356,17 +367,15 @@ Plot some series using the plot method from the StatsForecast class.
 This method prints a random series from the dataset and is useful for
 basic EDA.
 
-
 ```python
 from statsforecast import StatsForecast
 
 StatsForecast.plot(df)
 ```
 
-![](/statsforecast/docs/models/OptimizedTheta_files/figure-markdown_strict/cell-7-output-1.png)
+![](OptimizedTheta_files/figure-markdown_strict/cell-8-output-1.png)
 
 ### Autocorrelation plots
-
 
 ```python
 fig, axs = plt.subplots(nrows=1, ncols=2)
@@ -380,7 +389,7 @@ axs[1].set_title('Partial Autocorrelation')
 plt.show();
 ```
 
-![](/statsforecast/docs/models/OptimizedTheta_files/figure-markdown_strict/cell-8-output-1.png)
+![](OptimizedTheta_files/figure-markdown_strict/cell-9-output-1.png)
 
 ### Decomposition of the time series
 
@@ -437,25 +446,23 @@ $$y(t) = Level * Trend * seasonality * Noise$$
 
 ### Additive
 
-
 ```python
-from statsmodels.tsa.seasonal import seasonal_decompose 
+from statsmodels.tsa.seasonal import seasonal_decompose
 a = seasonal_decompose(df["y"], model = "additive", period=12)
 a.plot();
 ```
 
-![](/statsforecast/docs/models/OptimizedTheta_files/figure-markdown_strict/cell-9-output-1.png)
+![](OptimizedTheta_files/figure-markdown_strict/cell-10-output-1.png)
 
 ### Multiplicative
 
-
 ```python
-from statsmodels.tsa.seasonal import seasonal_decompose 
+from statsmodels.tsa.seasonal import seasonal_decompose
 a = seasonal_decompose(df["y"], model = "Multiplicative", period=12)
 a.plot();
 ```
 
-![](/statsforecast/docs/models/OptimizedTheta_files/figure-markdown_strict/cell-10-output-1.png)
+![](OptimizedTheta_files/figure-markdown_strict/cell-11-output-1.png)
 
 ## Split the data into training and testing<a class="anchor" id="splitting"></a>
 
@@ -465,9 +472,8 @@ Let’s divide our data into sets 1. Data to train our
 For the test data we will use the last 12 months to test and evaluate
 the performance of our model.
 
-
 ```python
-train = df[df.ds<='1974-12-01'] 
+train = df[df.ds\<='1974-12-01']
 test = df[df.ds>'1974-12-01']
 ```
 
@@ -484,7 +490,6 @@ train.shape, test.shape
 
 ### Load libraries
 
-
 ```python
 from statsforecast import StatsForecast
 from statsforecast.models import OptimizedTheta
@@ -497,12 +502,11 @@ tricky. This article on [Seasonal
 periods](https://robjhyndman.com/hyndsight/seasonal-periods/) by the
 master, Rob Hyndmann, can be useful for `season_length`.
 
-
 ```python
-season_length = 12 # Monthly data 
+season_length = 12 # Monthly data
 horizon = len(test) # number of predictions
 
-models = [OptimizedTheta(season_length=season_length, 
+models = [OptimizedTheta(season_length=season_length,
                 decomposition_type="additive")] # multiplicative   additive
 ```
 
@@ -524,13 +528,11 @@ import them.
 Any settings are passed into the constructor. Then you call its fit
 method and pass in the historical data frame.
 
-
 ```python
 sf = StatsForecast(models=models, freq='MS')
 ```
 
 ### Fit the Model
-
 
 ```python
 sf.fit(df=train)
@@ -542,7 +544,6 @@ StatsForecast(models=[OptimizedTheta])
 
 Let’s see the results of our `Optimized Theta Model (OTM)`. We can
 observe it with the following instruction:
-
 
 ```python
 result=sf.fitted_[0,0].model_
@@ -565,7 +566,6 @@ to extract each element from the dictionary we are going to use the
 `.get()` function to extract the element and then we are going to save
 it in a `pd.DataFrame()`.
 
-
 ```python
 residual=pd.DataFrame(result.get("residuals"), columns=["residual Model"])
 residual
@@ -580,7 +580,6 @@ residual
 | 153 | -60.233887     |
 | 154 | -92.472839     |
 | 155 | -44.143982     |
-
 
 ```python
 import scipy.stats as stats
@@ -602,14 +601,13 @@ axs[1,1].set_title("Autocorrelation");
 plt.show();
 ```
 
-![](/statsforecast/docs/models/OptimizedTheta_files/figure-markdown_strict/cell-19-output-1.png)
+![](OptimizedTheta_files/figure-markdown_strict/cell-20-output-1.png)
 
 ### Forecast Method
 
 If you want to gain speed in productive settings where you have multiple
-series or models we recommend using the
-[`StatsForecast.forecast`](https://Nixtla.github.io/statsforecast/src/core/core.html#statsforecast.forecast)
-method instead of `.fit` and `.predict`.
+series or models we recommend using the `StatsForecast.forecast` method
+instead of `.fit` and `.predict`.
 
 The main difference is that the `.forecast` doest not store the fitted
 values and is highly scalable in distributed environments.
@@ -630,11 +628,7 @@ The forecast object here is a new data frame that includes a column with
 the name of the model and the y hat values, as well as columns for the
 uncertainty intervals. Depending on your computer, this step should take
 around 1min. (If you want to speed things up to a couple of seconds,
-remove the AutoModels like
-[`ARIMA`](https://Nixtla.github.io/statsforecast/src/core/models.html#arima)
-and
-[`Theta`](https://Nixtla.github.io/statsforecast/src/core/models.html#theta))
-
+remove the AutoModels like `ARIMA` and `Theta`)
 
 ```python
 Y_hat = sf.forecast(df=train, h=horizon, fitted=True)
@@ -653,7 +647,6 @@ Y_hat
 
 Let’s visualize the fitted values
 
-
 ```python
 values=sf.forecast_fitted_values()
 values.head()
@@ -667,36 +660,33 @@ values.head()
 | 3   | 1         | 1962-04-01 | 656.0 | 614.731323     |
 | 4   | 1         | 1962-05-01 | 727.0 | 609.770752     |
 
-
 ```python
 StatsForecast.plot(values)
 ```
 
-![](/statsforecast/docs/models/OptimizedTheta_files/figure-markdown_strict/cell-22-output-1.png)
+![](OptimizedTheta_files/figure-markdown_strict/cell-23-output-1.png)
 
 Adding 95% confidence interval with the forecast method
-
 
 ```python
 sf.forecast(df=train, h=horizon, level=[95])
 ```
 
-|  | unique_id | ds | OptimizedTheta | OptimizedTheta-lo-95 | OptimizedTheta-hi-95 |
-|----|----|----|----|----|----|
-| 0 | 1 | 1975-01-01 | 839.682800 | 742.509583 | 955.414307 |
-| 1 | 1 | 1975-02-01 | 802.071838 | 643.581360 | 945.119202 |
-| 2 | 1 | 1975-03-01 | 896.117126 | 710.785095 | 1065.057495 |
-| ... | ... | ... | ... | ... | ... |
-| 9 | 1 | 1975-10-01 | 824.135498 | 555.948669 | 1084.320190 |
-| 10 | 1 | 1975-11-01 | 795.691223 | 503.147858 | 1036.519531 |
-| 11 | 1 | 1975-12-01 | 833.316345 | 530.259705 | 1106.636597 |
-
+|     | unique_id | ds         | OptimizedTheta | OptimizedTheta-lo-95 | OptimizedTheta-hi-95 |
+|-----|-----------|------------|----------------|----------------------|----------------------|
+| 0   | 1         | 1975-01-01 | 839.682800     | 742.509583           | 955.414307           |
+| 1   | 1         | 1975-02-01 | 802.071838     | 643.581360           | 945.119202           |
+| 2   | 1         | 1975-03-01 | 896.117126     | 710.785095           | 1065.057495          |
+| ... | ...       | ...        | ...            | ...                  | ...                  |
+| 9   | 1         | 1975-10-01 | 824.135498     | 555.948669           | 1084.320190          |
+| 10  | 1         | 1975-11-01 | 795.691223     | 503.147858           | 1036.519531          |
+| 11  | 1         | 1975-12-01 | 833.316345     | 530.259705           | 1106.636597          |
 
 ```python
 sf.plot(train, Y_hat)
 ```
 
-![](/statsforecast/docs/models/OptimizedTheta_files/figure-markdown_strict/cell-24-output-1.png)
+![](OptimizedTheta_files/figure-markdown_strict/cell-25-output-1.png)
 
 ### Predict method with confidence interval
 
@@ -720,7 +710,6 @@ uncertainty intervals.
 
 This step should take less than 1 second.
 
-
 ```python
 sf.predict(h=horizon)
 ```
@@ -735,28 +724,26 @@ sf.predict(h=horizon)
 | 10  | 1         | 1975-11-01 | 795.691223     |
 | 11  | 1         | 1975-12-01 | 833.316345     |
 
-
 ```python
-forecast_df = sf.predict(h=horizon, level=[80,95]) 
+forecast_df = sf.predict(h=horizon, level=[80,95])
 forecast_df
 ```
 
-|  | unique_id | ds | OptimizedTheta | OptimizedTheta-lo-80 | OptimizedTheta-hi-80 | OptimizedTheta-lo-95 | OptimizedTheta-hi-95 |
-|----|----|----|----|----|----|----|----|
-| 0 | 1 | 1975-01-01 | 839.682800 | 766.665955 | 928.326172 | 742.509583 | 955.414307 |
-| 1 | 1 | 1975-02-01 | 802.071838 | 704.290039 | 899.335815 | 643.581360 | 945.119202 |
-| 2 | 1 | 1975-03-01 | 896.117126 | 761.334778 | 1007.408447 | 710.785095 | 1065.057495 |
-| ... | ... | ... | ... | ... | ... | ... | ... |
-| 9 | 1 | 1975-10-01 | 824.135498 | 623.903992 | 996.567200 | 555.948669 | 1084.320190 |
-| 10 | 1 | 1975-11-01 | 795.691223 | 576.546570 | 975.490784 | 503.147858 | 1036.519531 |
-| 11 | 1 | 1975-12-01 | 833.316345 | 606.713623 | 1033.885742 | 530.259705 | 1106.636597 |
-
+|     | unique_id | ds         | OptimizedTheta | OptimizedTheta-lo-80 | OptimizedTheta-hi-80 | OptimizedTheta-lo-95 | OptimizedTheta-hi-95 |
+|-----|-----------|------------|----------------|----------------------|----------------------|----------------------|----------------------|
+| 0   | 1         | 1975-01-01 | 839.682800     | 766.665955           | 928.326172           | 742.509583           | 955.414307           |
+| 1   | 1         | 1975-02-01 | 802.071838     | 704.290039           | 899.335815           | 643.581360           | 945.119202           |
+| 2   | 1         | 1975-03-01 | 896.117126     | 761.334778           | 1007.408447          | 710.785095           | 1065.057495          |
+| ... | ...       | ...        | ...            | ...                  | ...                  | ...                  | ...                  |
+| 9   | 1         | 1975-10-01 | 824.135498     | 623.903992           | 996.567200           | 555.948669           | 1084.320190          |
+| 10  | 1         | 1975-11-01 | 795.691223     | 576.546570           | 975.490784           | 503.147858           | 1036.519531          |
+| 11  | 1         | 1975-12-01 | 833.316345     | 606.713623           | 1033.885742          | 530.259705           | 1106.636597          |
 
 ```python
 sf.plot(train, test.merge(forecast_df), level=[80, 95])
 ```
 
-![](/statsforecast/docs/models/OptimizedTheta_files/figure-markdown_strict/cell-27-output-1.png)
+![](OptimizedTheta_files/figure-markdown_strict/cell-28-output-1.png)
 
 ## Cross-validation <a class="anchor" id="cross_validate"></a>
 
@@ -804,7 +791,6 @@ following arguments.
     other words: what number of forecasting processes in the past do you
     want to evaluate.
 
-
 ```python
 crossvalidation_df = sf.cross_validation(df=train,
                                          h=horizon,
@@ -821,7 +807,6 @@ following columns:
 -   `cutoff:` the last datestamp or temporal index for the n_windows.
 -   `y:` true value
 -   `"model":` columns with the model’s name and fitted value.
-
 
 ```python
 crossvalidation_df
@@ -842,7 +827,6 @@ crossvalidation_df
 Now we are going to evaluate our model with the results of the
 predictions, we will use different types of metrics MAE, MAPE, MASE,
 RMSE, SMAPE to evaluate the accuracy.
-
 
 ```python
 from functools import partial
@@ -878,8 +862,7 @@ evaluate(
     theta method and their relationship to state space models”.
     International Journal of
     Forecasting](https://www.sciencedirect.com/science/article/pii/S0169207016300243).
-3.  [Nixtla
-    Parameters](https://nixtla.github.io/statsforecast/src/core/models.html#autotheta).
+3.  [Nixtla OptimizedTheta API](../../models#class-optimizedtheta)
 4.  [Pandas available
     frequencies](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases).
 5.  [Rob J. Hyndman and George Athanasopoulos (2018). “Forecasting
