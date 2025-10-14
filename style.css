@@ -117,14 +117,15 @@ html.dark a.card svg {
 
 /* Banner styling for theme support */
 #banner {
-  background-color: var(--primary-light);
-  border-color: var(--primary-dark);
+  /* background-color: var(--primary-light); # original  */
+  background-color: var(--primary-dark);
+  border-color: var(--primary-light);
   color: var(--primary-dark);
   border-bottom: 1px solid var(--primary-dark) !important;
 }
 
 #banner a {
-  color: var(--primary-dark);
+  color: var(--primary-light);
 }
 
 #banner a:hover {
@@ -132,20 +133,20 @@ html.dark a.card svg {
 }
 
 #banner p {
-  color: var(--primary-dark);
+  color: var(--primary-light);
   margin: 0;
 }
 
 /* Dark mode banner */
 html.dark #banner {
-  background-color: var(--primary-dark);
-  border-color: var(--gray);
-  color: var(--primary-light);
-  border-bottom: 1px solid var(--primary-light) !important;
+  background-color: wheat;
+  border-color: #000;
+  color: #000;
+  border-bottom: 1px solid #000 !important;
 }
 
 html.dark #banner a {
-  color: var(--primary-light);
+  color: #000;
 }
 
 html.dark #banner a:hover {
@@ -153,5 +154,5 @@ html.dark #banner a:hover {
 }
 
 html.dark #banner p {
-  color: var(--primary-light);
+  color: #000;
 }

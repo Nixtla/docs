@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
 
   "banner": {
-    "content": "Using Nixtla in production? Help us prioritize features by filling this [1-minute survey](https://form.typeform.com/to/zfHMgJ7v?utm_source=nixtlaverse&utm_medium=banner&utm_campaign=production-usage-survey).",
+    "content": "🚀  TimeGPT-2 is here, the next generation of foundation models for time series forecasting! [Read the full announcement](https://www.nixtla.io/blog/timegpt-2-announcement)",
     "dismissible": true
   },
   "colors": {
