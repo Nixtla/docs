@@ -21,6 +21,9 @@
   "integrations": {
     "gtm": {
       "tagId": "GTM-TBJ64S3X"
+    },
+    "intercom": {
+      "appId": "j7y9c2ep"
     }
   },
   "logo": {
