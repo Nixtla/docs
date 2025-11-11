@@ -368,16 +368,16 @@
         {
           "group": "Local",
           "pages": [
-            "mlforecast/forecast.html",
-            "mlforecast/auto.html",
-            "mlforecast/lgb_cv.html",
-            "mlforecast/optimization.html",
-            "mlforecast/utils.html",
-            "mlforecast/core.html",
-            "mlforecast/target_transforms.html",
-            "mlforecast/lag_transforms.html",
-            "mlforecast/feature_engineering.html",
-            "mlforecast/callbacks.html"
+            "mlforecast/forecast",
+            "mlforecast/auto",
+            "mlforecast/lgb_cv",
+            "mlforecast/optimization",
+            "mlforecast/utils",
+            "mlforecast/core",
+            "mlforecast/target_transforms",
+            "mlforecast/lag_transforms",
+            "mlforecast/feature_engineering",
+            "mlforecast/callbacks"
           ]
         },
         {
@@ -387,12 +387,12 @@
             {
               "group": "Models",
               "pages": [
-                "mlforecast/distributed.models.dask.lgb.html",
-                "mlforecast/distributed.models.dask.xgb.html",
-                "mlforecast/distributed.models.ray.lgb.html",
-                "mlforecast/distributed.models.ray.xgb.html",
-                "mlforecast/distributed.models.spark.lgb.html",
-                "mlforecast/distributed.models.spark.xgb.html"
+                "mlforecast/distributed.models.dask.lgb",
+                "mlforecast/distributed.models.dask.xgb",
+                "mlforecast/distributed.models.ray.lgb",
+                "mlforecast/distributed.models.ray.xgb",
+                "mlforecast/distributed.models.spark.lgb",
+                "mlforecast/distributed.models.spark.xgb"
               ]
             }
           ]
@@ -580,28 +580,28 @@
     {
       "group": "API Reference",
       "pages": [
-        "hierarchicalforecast/core.html",
-        "hierarchicalforecast/methods.html",
-        "hierarchicalforecast/probabilistic_methods.html",
-        "hierarchicalforecast/evaluation.html",
-        "hierarchicalforecast/utils.html"
+        "hierarchicalforecast/core",
+        "hierarchicalforecast/methods",
+        "hierarchicalforecast/probabilistic_methods",
+        "hierarchicalforecast/evaluation",
+        "hierarchicalforecast/utils"
       ]
     },
     {
       "group": "",
       "pages": [
-        "utilsforecast/index"
+        "utilsforecast/index.html"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "utilsforecast/preprocessing",
-        "utilsforecast/feature_engineering",
-        "utilsforecast/evaluation",
-        "utilsforecast/losses",
-        "utilsforecast/plotting",
-        "utilsforecast/data"
+        "utilsforecast/preprocessing.html",
+        "utilsforecast/feature_engineering.html",
+        "utilsforecast/evaluation.html",
+        "utilsforecast/losses.html",
+        "utilsforecast/plotting.html",
+        "utilsforecast/data.html"
       ]
     },
     {
