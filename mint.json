@@ -590,18 +590,18 @@
     {
       "group": "",
       "pages": [
-        "utilsforecast/index"
+        "utilsforecast/index.html"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "utilsforecast/preprocessing",
-        "utilsforecast/feature_engineering",
-        "utilsforecast/evaluation",
-        "utilsforecast/losses",
-        "utilsforecast/plotting",
-        "utilsforecast/data"
+        "utilsforecast/preprocessing.html",
+        "utilsforecast/feature_engineering.html",
+        "utilsforecast/evaluation.html",
+        "utilsforecast/losses.html",
+        "utilsforecast/plotting.html",
+        "utilsforecast/data.html"
       ]
     },
     {
