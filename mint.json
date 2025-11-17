@@ -607,21 +607,21 @@
     {
       "group": "",
       "pages": [
-        "datasetsforecast/index.html"
+        "datasetsforecast/index"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "datasetsforecast/favorita.html",
-        "datasetsforecast/hierarchical.html",
-        "datasetsforecast/long_horizon.html",
-        "datasetsforecast/long_horizon2.html",
-        "datasetsforecast/m3.html",
-        "datasetsforecast/m4.html",
-        "datasetsforecast/m5.html",
-        "datasetsforecast/phm2008.html",
-        "datasetsforecast/utils.html"
+        "datasetsforecast/favorita",
+        "datasetsforecast/hierarchical",
+        "datasetsforecast/long_horizon",
+        "datasetsforecast/long_horizon2",
+        "datasetsforecast/m3",
+        "datasetsforecast/m4",
+        "datasetsforecast/m5",
+        "datasetsforecast/phm2008",
+        "datasetsforecast/utils"
       ]
     },
     {
