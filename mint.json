@@ -508,16 +508,23 @@
             "neuralforecast/models.timexer.html",
             "neuralforecast/models.tsmixer.html",
             "neuralforecast/models.tsmixerx.html",
-            "neuralforecast/models.vanillatransformer.html",
-            "neuralforecast/models.xlstm.html"
+            "neuralforecast/models.vanillatransformer.html"
           ]
         },
-        "neuralforecast/models",
+        "neuralforecast/models.html",
         {
           "group": "Train/Evaluation",
           "pages": [
             "neuralforecast/losses.pytorch.html",
             "neuralforecast/losses.numpy.html"
+          ]
+        },
+        {
+          "group": "Common Components",
+          "pages": [
+            "neuralforecast/common.base_auto.html",
+            "neuralforecast/common.scalers.html",
+            "neuralforecast/common.modules.html"
           ]
         },
         {
