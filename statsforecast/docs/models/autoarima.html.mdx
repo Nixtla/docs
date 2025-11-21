@@ -23,16 +23,16 @@ ed)”.](https://otexts.com/fpp3/tscv.html)
 
 ## Table of Contents
 
--   [What is AutoArima with StatsForecast?](#introduction)
--   [Definition of the Arima model](#arima)
--   [Advantages of using AutoArima](#advantages)
--   [Loading libraries and data](#loading)
--   [Explore data with the plot method](#plotting)
--   [Split the data into training and testing](#splitting)
--   [Implementation of AutoARIMA with StatsForecast](#implementation)
--   [Cross-validation](#cross_validate)
--   [Model evaluation](#evaluate)
--   [References](#references)
+- [Implementation of AutoArima with StatsForecast ](#implementation-of-autoarima-with-statsforecast-)
+    - [Load libraries](#load-libraries)
+    - [Instantiating Model](#instantiating-model)
+    - [Fit the Model](#fit-the-model)
+    - [Forecast Method](#forecast-method)
+    - [Predict method with confidence interval](#predict-method-with-confidence-interval)
+  - [Cross-validation ](#cross-validation-)
+    - [Perform time series cross-validation](#perform-time-series-cross-validation)
+  - [Model Evaluation ](#model-evaluation-)
+  - [References ](#references-)
 
 ## What is AutoArima with StatsForecast? <a class="anchor" id="#introduction"></a>
 
@@ -121,7 +121,7 @@ the `AutoARIMA()` function from `statsforecast` will do it for you
 automatically.
 
 For more information
-[here](%22https://otexts.com/fpp3/non-seasonal-arima.html%22)
+[here](https://otexts.com/fpp3/non-seasonal-arima.html)
 
 ## Loading libraries and data <a class="anchor" id="loading"></a>
 

@@ -46,7 +46,7 @@ hourly dataset.
 
 We assume that you have StatsForecast already installed. If not, check
 this guide for instructions on [how to install
-StatsForecast]('https://nixtla.github.io/statsforecast/docs/getting-started/installation.html')
+StatsForecast](https://nixtla.github.io/statsforecast/docs/getting-started/installation.html)
 
 Install the necessary packages with `pip install statsforecast`
 
@@ -72,7 +72,7 @@ import pandas as pd
 
 
 ```python
-Y_df = pd.read_parquet('https://datasets-nixtla.s3.amazonaws.com/m4-hourly.parquet') # load the data 
+Y_df = pd.read_parquet('https://datasets-nixtla.s3.amazonaws.com/m4-hourly.parquet') # load the data
 Y_df.head()
 ```
 
@@ -155,8 +155,8 @@ from statsforecast.models import AutoETS
 models = [AutoETS(season_length = 24)]
 
 sf = StatsForecast(
-    models = models, 
-    freq = 1, 
+    models = models,
+    freq = 1,
     n_jobs = 1
 )
 ```
@@ -224,11 +224,11 @@ from IPython.display import display
 
 
 ```python
-cv_df.rename(columns = {'y' : 'actual'}, inplace = True) # rename actual values 
+cv_df.rename(columns = {'y' : 'actual'}, inplace = True) # rename actual values
 
 cutoff = cv_df['cutoff'].unique()
 
-for k in range(len(cutoff)): 
+for k in range(len(cutoff)):
     cv = cv_df[cv_df['cutoff'] == cutoff[k]]
     display(StatsForecast.plot(df, cv.loc[:, cv.columns != 'cutoff']))
 ```
@@ -255,7 +255,7 @@ from utilsforecast.losses import rmse
 
 The function to compute the RMSE takes two arguments:
 
-1.  The actual values.  
+1.  The actual values.
 2.  The forecasts, in this case,
     [`AutoETS`](https://Nixtla.github.io/statsforecast/src/core/models.html#autoets).
 

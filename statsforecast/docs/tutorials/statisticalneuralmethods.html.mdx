@@ -34,7 +34,7 @@ allows us to showcase the versatility and power of our methodology.
 We will train an assortment of models from various forecasting
 paradigms:
 
-*[StatsForecast]((https://github.com/Nixtla/statsforecast))*
+*[StatsForecast](https://github.com/Nixtla/statsforecast)*
 
 -   Baseline models: These models are simple yet often highly effective
     for providing an initial perspective on the forecasting problem. We
@@ -132,8 +132,8 @@ Y_df = pd.read_parquet('https://m5-benchmarks.s3.amazonaws.com/data/train/target
 # The 'timestamp' becomes 'ds' representing the time stamp of the data points
 # The 'demand' becomes 'y' representing the target variable we want to forecast
 Y_df = Y_df.rename(columns={
-    'item_id': 'unique_id', 
-    'timestamp': 'ds', 
+    'item_id': 'unique_id',
+    'timestamp': 'ds',
     'demand': 'y'
 })
 
@@ -312,7 +312,7 @@ from time import time
 # Get the current time before forecasting starts, this will be used to measure the execution time
 init = time()
 
-# Call the forecast method of the StatsForecast instance to predict the next 28 days (h=28) 
+# Call the forecast method of the StatsForecast instance to predict the next 28 days (h=28)
 # Level is set to [90], which means that it will compute the 90% prediction interval
 fcst_df = sf.forecast(df=Y_df, h=28, level=[90])
 
@@ -569,7 +569,7 @@ Use the plot function to explore models and ID’s
 
 
 ```python
-sf.plot(Y_df, fcst_df, max_insample_length=28 * 3, 
+sf.plot(Y_df, fcst_df, max_insample_length=28 * 3,
         models=['CrostonOptimized', 'AutoNHITS', 'SeasonalNaive', 'LGBMRegressor'])
 ```
 
@@ -677,10 +677,10 @@ method from the `MLForecast` class takes the following arguments.
 ```python
 init = time()
 cv_mlf_df = mlf.cross_validation(
-    data=Y_df, 
-    window_size=horizon, 
-    n_windows=3, 
-    step_size=horizon, 
+    data=Y_df,
+    window_size=horizon,
+    n_windows=3,
+    step_size=horizon,
     level=[90],
 )
 end = time()
@@ -778,9 +778,9 @@ cutoffs = cv_df['cutoff'].unique()
 ```python
 for cutoff in cutoffs:
     img = sf.plot(
-        Y_df, 
-        cv_df.query('cutoff == @cutoff').drop(columns=['y', 'cutoff']), 
-        max_insample_length=28 * 5, 
+        Y_df,
+        cv_df.query('cutoff == @cutoff').drop(columns=['y', 'cutoff']),
+        max_insample_length=28 * 5,
         unique_ids=['FOODS_3_001_CA_1'],
     )
     img.show()
@@ -804,7 +804,7 @@ agg_Y_df.insert(0, 'unique_id', 'agg_demand')
 ```python
 for cutoff in cutoffs:
     img = sf.plot(
-        agg_Y_df, 
+        agg_Y_df,
         agg_cv_df.query('cutoff == @cutoff').drop(columns=['y', 'cutoff']),
         max_insample_length=28 * 5,
     )
@@ -870,11 +870,11 @@ window (`cutoff`) using the `dask` client we created before.
 
 ```python
 evaluation_df = transform(
-    cv_df.loc[:, ~cv_df.columns.str.contains('lo|hi')], 
-    evaluate, 
+    cv_df.loc[:, ~cv_df.columns.str.contains('lo|hi')],
+    evaluate,
     engine="dask",
-    params={'metrics': [mse, mae, smape]}, 
-    schema=f"unique_id:str,cutoff:str,metric:str, {str_models}", 
+    params={'metrics': [mse, mae, smape]},
+    schema=f"unique_id:str,cutoff:str,metric:str, {str_models}",
     as_local=True,
     partition={'by': ['unique_id', 'cutoff']}
 )
@@ -996,8 +996,8 @@ plt.show()
 
 
 ```python
-sf.plot(Y_df, cv_df.drop(columns=['cutoff', 'y']), 
-        max_insample_length=28 * 6, 
+sf.plot(Y_df, cv_df.drop(columns=['cutoff', 'y']),
+        max_insample_length=28 * 6,
         models=['AutoNHITS'],
         unique_ids=eval_series_df.query('best_model == "AutoNHITS"').index[:8])
 ```
