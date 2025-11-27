@@ -539,16 +539,16 @@
     {
       "group": "",
       "pages": [
-        "hierarchicalforecast/index"
+        "hierarchicalforecast/index.html"
       ]
     },
     {
       "group": "Getting Started",
       "pages": [
-        "hierarchicalforecast/examples/Installation",
-        "hierarchicalforecast/examples/TourismSmall",
-        "hierarchicalforecast/examples/TourismSmallPolars",
-        "hierarchicalforecast/examples/Introduction"
+        "hierarchicalforecast/examples/installation.html",
+        "hierarchicalforecast/examples/tourismsmall.html",
+        "hierarchicalforecast/examples/tourismsmallpolars.html",
+        "hierarchicalforecast/examples/introduction.html"
       ]
     },
     {
@@ -557,31 +557,31 @@
         {
           "group": "Point Reconciliation",
           "pages": [
-            "hierarchicalforecast/examples/AustralianDomesticTourism",
-            "hierarchicalforecast/examples/AustralianPrisonPopulation",
-            "hierarchicalforecast/examples/NonNegativeReconciliation",
-            "hierarchicalforecast/examples/AustralianDomesticTourism-Multimodel"
+            "hierarchicalforecast/examples/australiandomestictourism.html",
+            "hierarchicalforecast/examples/australianprisonpopulation.html",
+            "hierarchicalforecast/examples/nonnegativereconciliation.html",
+            "hierarchicalforecast/examples/australiandomestictourism-multimodel.html"
           ]
         },
         {
           "group": "Probabilistic Reconciliation",
           "pages": [
-            "hierarchicalforecast/examples/AustralianDomesticTourism-Intervals",
-            "hierarchicalforecast/examples/AustralianDomesticTourism-Bootstraped-Intervals",
-            "hierarchicalforecast/examples/AustralianDomesticTourism-Permbu-Intervals",
-            "hierarchicalforecast/examples/TourismLarge-Evaluation"
+            "hierarchicalforecast/examples/australiandomestictourism-intervals.html",
+            "hierarchicalforecast/examples/australiandomestictourism-bootstraped-intervals.html",
+            "hierarchicalforecast/examples/australiandomestictourism-permbu-intervals.html",
+            "hierarchicalforecast/examples/tourismlarge-evaluation.html"
           ]
         },
         {
           "group": "Temporal Reconciliation",
           "pages": [
-            "hierarchicalforecast/examples/AustralianDomesticTourismTemporal",
-            "hierarchicalforecast/examples/AustralianDomesticTourismCrossTemporal",
-            "hierarchicalforecast/examples/M3withThief",
-            "hierarchicalforecast/examples/LocalGlobalAggregation"
+            "hierarchicalforecast/examples/australiandomestictourismtemporal.html",
+            "hierarchicalforecast/examples/australiandomestictourismcrosstemporal.html",
+            "hierarchicalforecast/examples/m3withthief.html",
+            "hierarchicalforecast/examples/localglobalaggregation.html"
           ]
         },
-        "hierarchicalforecast/examples/MLFrameworksExample"
+        "hierarchicalforecast/examples/mlframeworksexample.html"
       ]
     },
     {
