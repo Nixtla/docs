@@ -319,47 +319,47 @@
     {
       "group": "",
       "pages": [
-        "mlforecast/index"
+        "mlforecast/index.html"
       ]
     },
     {
       "group": "Getting Started",
       "pages": [
-        "mlforecast/docs/getting-started/install",
-        "mlforecast/docs/getting-started/quick_start_local",
-        "mlforecast/docs/getting-started/quick_start_distributed",
-        "mlforecast/docs/getting-started/end_to_end_walkthrough"
+        "mlforecast/docs/getting-started/install.html",
+        "mlforecast/docs/getting-started/quick_start_local.html",
+        "mlforecast/docs/getting-started/quick_start_distributed.html",
+        "mlforecast/docs/getting-started/end_to_end_walkthrough.html"
       ]
     },
     {
       "group": "How-to guides",
       "pages": [
-        "mlforecast/docs/how-to-guides/exogenous_features",
-        "mlforecast/docs/how-to-guides/lag_transforms_guide",
-        "mlforecast/docs/how-to-guides/hyperparameter_optimization",
-        "mlforecast/docs/how-to-guides/sklearn_pipelines",
-        "mlforecast/docs/how-to-guides/sample_weights",
-        "mlforecast/docs/how-to-guides/cross_validation",
-        "mlforecast/docs/how-to-guides/prediction_intervals",
-        "mlforecast/docs/how-to-guides/target_transforms_guide",
-        "mlforecast/docs/how-to-guides/analyzing_models",
-        "mlforecast/docs/how-to-guides/mlflow",
-        "mlforecast/docs/how-to-guides/transforming_exog",
-        "mlforecast/docs/how-to-guides/custom_training",
-        "mlforecast/docs/how-to-guides/training_with_numpy",
-        "mlforecast/docs/how-to-guides/one_model_per_horizon",
-        "mlforecast/docs/how-to-guides/custom_date_features",
-        "mlforecast/docs/how-to-guides/predict_callbacks",
-        "mlforecast/docs/how-to-guides/predict_subset",
-        "mlforecast/docs/how-to-guides/transfer_learning"
+        "mlforecast/docs/how-to-guides/exogenous_features.html",
+        "mlforecast/docs/how-to-guides/lag_transforms_guide.html",
+        "mlforecast/docs/how-to-guides/hyperparameter_optimization.html",
+        "mlforecast/docs/how-to-guides/sklearn_pipelines.html",
+        "mlforecast/docs/how-to-guides/sample_weights.html",
+        "mlforecast/docs/how-to-guides/cross_validation.html",
+        "mlforecast/docs/how-to-guides/prediction_intervals.html",
+        "mlforecast/docs/how-to-guides/target_transforms_guide.html",
+        "mlforecast/docs/how-to-guides/analyzing_models.html",
+        "mlforecast/docs/how-to-guides/mlflow.html",
+        "mlforecast/docs/how-to-guides/transforming_exog.html",
+        "mlforecast/docs/how-to-guides/custom_training.html",
+        "mlforecast/docs/how-to-guides/training_with_numpy.html",
+        "mlforecast/docs/how-to-guides/one_model_per_horizon.html",
+        "mlforecast/docs/how-to-guides/custom_date_features.html",
+        "mlforecast/docs/how-to-guides/predict_callbacks.html",
+        "mlforecast/docs/how-to-guides/predict_subset.html",
+        "mlforecast/docs/how-to-guides/transfer_learning.html"
       ]
     },
     {
       "group": "Tutorials",
       "pages": [
-        "mlforecast/docs/tutorials/electricity_load_forecasting",
-        "mlforecast/docs/tutorials/electricity_peak_forecasting",
-        "mlforecast/docs/tutorials/prediction_intervals_in_forecasting_models"
+        "mlforecast/docs/tutorials/electricity_load_forecasting.html",
+        "mlforecast/docs/tutorials/electricity_peak_forecasting.html",
+        "mlforecast/docs/tutorials/prediction_intervals_in_forecasting_models.html"
       ]
     },
     {
