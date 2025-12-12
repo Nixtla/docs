@@ -576,7 +576,7 @@
         "icon": "wrench",
         "groups": [
           {
-            "group": "",
+            "group": " ",
             "pages": [
               "utilsforecast/index.html"
             ]
