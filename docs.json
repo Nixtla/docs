@@ -163,7 +163,7 @@
         "icon": "bolt",
         "groups": [
           {
-            "group": "",
+            "group": " ",
             "pages": [
               "statsforecast/index.html"
             ]
