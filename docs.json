@@ -599,7 +599,7 @@
         "icon": "chart-simple",
         "groups": [
           {
-            "group": "",
+            "group": " ",
             "pages": [
               "datasetsforecast/index.html"
             ]
