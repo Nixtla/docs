@@ -279,7 +279,7 @@
         "icon": "robot",
         "groups": [
           {
-            "group": "",
+            "group": " ",
             "pages": [
               "mlforecast/index.html"
             ]
