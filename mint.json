@@ -318,48 +318,47 @@
     {
       "group": "",
       "pages": [
-        "mlforecast/index.html"
+        "mlforecast/index"
       ]
     },
     {
       "group": "Getting Started",
       "pages": [
-        "mlforecast/docs/getting-started/install.html",
-        "mlforecast/docs/getting-started/quick_start_local.html",
-        "mlforecast/docs/getting-started/quick_start_distributed.html",
-        "mlforecast/docs/getting-started/end_to_end_walkthrough.html"
+        "mlforecast/docs/getting-started/install",
+        "mlforecast/docs/getting-started/quick_start_local",
+        "mlforecast/docs/getting-started/quick_start_distributed",
+        "mlforecast/docs/getting-started/end_to_end_walkthrough"
       ]
     },
     {
       "group": "How-to guides",
       "pages": [
-        "mlforecast/docs/how-to-guides/exogenous_features.html",
-        "mlforecast/docs/how-to-guides/lag_transforms_guide.html",
-        "mlforecast/docs/how-to-guides/hyperparameter_optimization.html",
-        "mlforecast/docs/how-to-guides/sklearn_pipelines.html",
-        "mlforecast/docs/how-to-guides/sample_weights.html",
-        "mlforecast/docs/how-to-guides/cross_validation.html",
-        "mlforecast/docs/how-to-guides/prediction_intervals.html",
-        "mlforecast/docs/how-to-guides/target_transforms_guide.html",
-        "mlforecast/docs/how-to-guides/analyzing_models.html",
-        "mlforecast/docs/how-to-guides/mlflow.html",
-        "mlforecast/docs/how-to-guides/transforming_exog.html",
-        "mlforecast/docs/how-to-guides/custom_training.html",
-        "mlforecast/docs/how-to-guides/training_with_numpy.html",
-        "mlforecast/docs/how-to-guides/one_model_per_horizon.html",
-        "mlforecast/docs/how-to-guides/custom_date_features.html",
-        "mlforecast/docs/how-to-guides/predict_callbacks.html",
-        "mlforecast/docs/how-to-guides/predict_subset.html",
-        "mlforecast/docs/how-to-guides/transfer_learning.html"
+        "mlforecast/docs/how-to-guides/exogenous_features",
+        "mlforecast/docs/how-to-guides/lag_transforms_guide",
+        "mlforecast/docs/how-to-guides/hyperparameter_optimization",
+        "mlforecast/docs/how-to-guides/sklearn_pipelines",
+        "mlforecast/docs/how-to-guides/sample_weights",
+        "mlforecast/docs/how-to-guides/cross_validation",
+        "mlforecast/docs/how-to-guides/prediction_intervals",
+        "mlforecast/docs/how-to-guides/target_transforms_guide",
+        "mlforecast/docs/how-to-guides/analyzing_models",
+        "mlforecast/docs/how-to-guides/mlflow",
+        "mlforecast/docs/how-to-guides/transforming_exog",
+        "mlforecast/docs/how-to-guides/custom_training",
+        "mlforecast/docs/how-to-guides/training_with_numpy",
+        "mlforecast/docs/how-to-guides/one_model_per_horizon",
+        "mlforecast/docs/how-to-guides/custom_date_features",
+        "mlforecast/docs/how-to-guides/predict_callbacks",
+        "mlforecast/docs/how-to-guides/predict_subset",
+        "mlforecast/docs/how-to-guides/transfer_learning"
       ]
     },
     {
       "group": "Tutorials",
       "pages": [
-        "mlforecast/docs/tutorials/m4.html",
-        "mlforecast/docs/tutorials/electricity_load_forecasting.html",
-        "mlforecast/docs/tutorials/electricity_peak_forecasting.html",
-        "mlforecast/docs/tutorials/prediction_intervals_in_forecasting_models.html"
+        "mlforecast/docs/tutorials/electricity_load_forecasting",
+        "mlforecast/docs/tutorials/electricity_peak_forecasting",
+        "mlforecast/docs/tutorials/prediction_intervals_in_forecasting_models"
       ]
     },
     {
@@ -368,16 +367,16 @@
         {
           "group": "Local",
           "pages": [
-            "mlforecast/forecast.html",
-            "mlforecast/auto.html",
-            "mlforecast/lgb_cv.html",
-            "mlforecast/optimization.html",
-            "mlforecast/utils.html",
-            "mlforecast/core.html",
-            "mlforecast/target_transforms.html",
-            "mlforecast/lag_transforms.html",
-            "mlforecast/feature_engineering.html",
-            "mlforecast/callbacks.html"
+            "mlforecast/forecast",
+            "mlforecast/auto",
+            "mlforecast/lgb_cv",
+            "mlforecast/optimization",
+            "mlforecast/utils",
+            "mlforecast/core",
+            "mlforecast/target_transforms",
+            "mlforecast/lag_transforms",
+            "mlforecast/feature_engineering",
+            "mlforecast/callbacks"
           ]
         },
         {
@@ -387,12 +386,12 @@
             {
               "group": "Models",
               "pages": [
-                "mlforecast/distributed.models.dask.lgb.html",
-                "mlforecast/distributed.models.dask.xgb.html",
-                "mlforecast/distributed.models.ray.lgb.html",
-                "mlforecast/distributed.models.ray.xgb.html",
-                "mlforecast/distributed.models.spark.lgb.html",
-                "mlforecast/distributed.models.spark.xgb.html"
+                "mlforecast/distributed.models.dask.lgb",
+                "mlforecast/distributed.models.dask.xgb",
+                "mlforecast/distributed.models.ray.lgb",
+                "mlforecast/distributed.models.ray.xgb",
+                "mlforecast/distributed.models.spark.lgb",
+                "mlforecast/distributed.models.spark.xgb"
               ]
             }
           ]
