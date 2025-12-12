@@ -512,7 +512,7 @@
         "icon": "crown",
         "groups": [
           {
-            "group": "",
+            "group": " ",
             "pages": [
               "hierarchicalforecast/index.html"
             ]
