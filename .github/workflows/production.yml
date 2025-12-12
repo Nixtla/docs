@@ -85,7 +85,7 @@ jobs:
           cp -R utilsforecast docs/
           cp -R datasetsforecast docs/
           cp -R coreforecast docs/
-          python3 merge_docs.py
+          cd docs && python3 merge_docs.py
 
       - name: Commit and push changes
         run: |
