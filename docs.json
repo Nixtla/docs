@@ -190,7 +190,8 @@
               "statsforecast/docs/tutorials/mlflow.html",
               "statsforecast/docs/tutorials/multipleseasonalities.html",
               "statsforecast/docs/tutorials/statisticalneuralmethods.html",
-              "statsforecast/docs/tutorials/uncertaintyintervals.html"
+              "statsforecast/docs/tutorials/uncertaintyintervals.html",
+              "statsforecast/docs/getting-started/installation.html"
             ]
           },
           {
