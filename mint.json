@@ -208,112 +208,112 @@
     {
       "group": "",
       "pages": [
-        "statsforecast/index"
+        "statsforecast/index.html"
       ]
     },
     {
       "group": "Getting Started",
       "pages": [
-        "statsforecast/docs/getting-started/0_Installation",
-        "statsforecast/docs/getting-started/1_Getting_Started_short",
-        "statsforecast/docs/getting-started/2_Getting_Started_complete",
-        "statsforecast/docs/getting-started/3_Getting_Started_complete_polars"
+        "statsforecast/docs/getting-started/installation.html",
+        "statsforecast/docs/getting-started/getting_started_short.html",
+        "statsforecast/docs/getting-started/getting_started_complete.html",
+        "statsforecast/docs/getting-started/getting_started_complete_polars.html"
       ]
     },
     {
       "group": "Tutorials",
       "pages": [
-        "statsforecast/docs/tutorials/AnomalyDetection",
-        "statsforecast/docs/tutorials/ConformalPrediction",
-        "statsforecast/docs/tutorials/CrossValidation",
-        "statsforecast/docs/tutorials/ElectricityLoadForecasting",
-        "statsforecast/docs/tutorials/ElectricityPeakForecasting",
-        "statsforecast/docs/tutorials/GARCH_tutorial",
-        "statsforecast/docs/tutorials/IntermittentData",
-        "statsforecast/docs/tutorials/MLFlow",
-        "statsforecast/docs/tutorials/MultipleSeasonalities",
-        "statsforecast/docs/tutorials/StatisticalNeuralMethods",
-        "statsforecast/docs/tutorials/UncertaintyIntervals"
+        "statsforecast/docs/tutorials/anomalydetection.html",
+        "statsforecast/docs/tutorials/conformalprediction.html",
+        "statsforecast/docs/tutorials/crossvalidation.html",
+        "statsforecast/docs/tutorials/electricityloadforecasting.html",
+        "statsforecast/docs/tutorials/electricitypeakforecasting.html",
+        "statsforecast/docs/tutorials/garch_tutorial.html",
+        "statsforecast/docs/tutorials/intermittentdata.html",
+        "statsforecast/docs/tutorials/mlflow.html",
+        "statsforecast/docs/tutorials/multipleseasonalities.html",
+        "statsforecast/docs/tutorials/statisticalneuralmethods.html",
+        "statsforecast/docs/tutorials/uncertaintyintervals.html"
       ]
     },
     {
       "group": "How to Guides",
       "pages": [
-        "statsforecast/docs/how-to-guides/00_Automatic_Forecasting",
-        "statsforecast/docs/how-to-guides/Exogenous",
-        "statsforecast/docs/how-to-guides/generating_features",
-        "statsforecast/docs/how-to-guides/sklearn_models",
-        "statsforecast/docs/how-to-guides/migrating_R",
-        "statsforecast/docs/how-to-guides/numba_cache"
+        "statsforecast/docs/how-to-guides/automatic_forecasting.html",
+        "statsforecast/docs/how-to-guides/exogenous.html",
+        "statsforecast/docs/how-to-guides/generating_features.html",
+        "statsforecast/docs/how-to-guides/sklearn_models.html",
+        "statsforecast/docs/how-to-guides/migrating_r.html",
+        "statsforecast/docs/how-to-guides/numba_cache.html"
       ]
     },
     {
       "group": "Distributed",
       "pages": [
-        "statsforecast/docs/distributed/dask",
-        "statsforecast/docs/distributed/ray",
-        "statsforecast/docs/distributed/spark"
+        "statsforecast/docs/distributed/dask.html",
+        "statsforecast/docs/distributed/ray.html",
+        "statsforecast/docs/distributed/spark.html"
       ]
     },
     {
       "group": "Experiments",
       "pages": [
-        "statsforecast/docs/experiments/AmazonStatsForecast",
-        "statsforecast/docs/experiments/AutoArima_vs_Prophet",
-        "statsforecast/docs/experiments/ETS_ray_m5",
-        "statsforecast/docs/experiments/Prophet_spark_m5"
+        "statsforecast/docs/experiments/amazonstatsforecast.html",
+        "statsforecast/docs/experiments/autoarima_vs_prophet.html",
+        "statsforecast/docs/experiments/ets_ray_m5.html",
+        "statsforecast/docs/experiments/prophet_spark_m5.html"
       ]
     },
     {
       "group": "Model References",
       "pages": [
-        "statsforecast/docs/models/ADIDA",
-        "statsforecast/docs/models/ARCH",
-        "statsforecast/docs/models/ARIMA",
-        "statsforecast/docs/models/AutoARIMA",
-        "statsforecast/docs/models/AutoCES",
-        "statsforecast/docs/models/AutoETS",
-        "statsforecast/docs/models/AutoRegressive",
-        "statsforecast/docs/models/AutoTheta",
-        "statsforecast/docs/models/CrostonClassic",
-        "statsforecast/docs/models/CrostonOptimized",
-        "statsforecast/docs/models/CrostonSBA",
-        "statsforecast/docs/models/DynamicOptimizedTheta",
-        "statsforecast/docs/models/DynamicStandardTheta",
-        "statsforecast/docs/models/GARCH",
-        "statsforecast/docs/models/Holt",
-        "statsforecast/docs/models/HoltWinters",
-        "statsforecast/docs/models/IMAPA",
-        "statsforecast/docs/models/MFLES",
-        "statsforecast/docs/models/MultipleSeasonalTrend",
-        "statsforecast/docs/models/OptimizedTheta",
-        "statsforecast/docs/models/SeasonalExponentialSmoothing",
-        "statsforecast/docs/models/SeasonalExponentialSmoothingOptimized",
-        "statsforecast/docs/models/SimpleExponentialOptimized",
-        "statsforecast/docs/models/SimpleExponentialSmoothing",
-        "statsforecast/docs/models/StandardTheta",
-        "statsforecast/docs/models/TSB"
+        "statsforecast/docs/models/adida.html",
+        "statsforecast/docs/models/arch.html",
+        "statsforecast/docs/models/arima.html",
+        "statsforecast/docs/models/autoarima.html",
+        "statsforecast/docs/models/autoces.html",
+        "statsforecast/docs/models/autoets.html",
+        "statsforecast/docs/models/autoregressive.html",
+        "statsforecast/docs/models/autotheta.html",
+        "statsforecast/docs/models/crostonclassic.html",
+        "statsforecast/docs/models/crostonoptimized.html",
+        "statsforecast/docs/models/crostonsba.html",
+        "statsforecast/docs/models/dynamicoptimizedtheta.html",
+        "statsforecast/docs/models/dynamicstandardtheta.html",
+        "statsforecast/docs/models/garch.html",
+        "statsforecast/docs/models/holt.html",
+        "statsforecast/docs/models/holtwinters.html",
+        "statsforecast/docs/models/imapa.html",
+        "statsforecast/docs/models/mfles.html",
+        "statsforecast/docs/models/multipleseasonaltrend.html",
+        "statsforecast/docs/models/optimizedtheta.html",
+        "statsforecast/docs/models/seasonalexponentialsmoothing.html",
+        "statsforecast/docs/models/seasonalexponentialsmoothingoptimized.html",
+        "statsforecast/docs/models/simpleexponentialoptimized.html",
+        "statsforecast/docs/models/simpleexponentialsmoothing.html",
+        "statsforecast/docs/models/standardtheta.html",
+        "statsforecast/docs/models/tsb.html"
       ]
     },
     {
       "group": "API Reference",
       "pages": [
-        "statsforecast/core",
-        "statsforecast/distributed.fugue",
-        "statsforecast/models",
-        "statsforecast/src/core/models_intro",
-        "statsforecast/feature_engineering"
+        "statsforecast/src/core/core.html",
+        "statsforecast/src/core/distributed.fugue.html",
+        "statsforecast/src/core/models.html",
+        "statsforecast/src/core/models_intro.html",
+        "statsforecast/src/feature_engineering.html"
       ]
     },
     {
       "group": "Contributing",
       "pages": [
-        "statsforecast/docs/contribute/contribute",
-        "statsforecast/docs/contribute/docs",
-        "statsforecast/docs/contribute/issue-labels",
-        "statsforecast/docs/contribute/issues",
-        "statsforecast/docs/contribute/step-by-step",
-        "statsforecast/docs/contribute/techstack"
+        "statsforecast/docs/contribute/contribute.html",
+        "statsforecast/docs/contribute/docs.html",
+        "statsforecast/docs/contribute/issue-labels.html",
+        "statsforecast/docs/contribute/issues.html",
+        "statsforecast/docs/contribute/step-by-step.html",
+        "statsforecast/docs/contribute/techstack.html"
       ]
     },
     {
