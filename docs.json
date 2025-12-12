@@ -625,7 +625,7 @@
         "icon": "truck-fast",
         "groups": [
           {
-            "group": "",
+            "group": " ",
             "pages": [
               "coreforecast/index"
             ]
