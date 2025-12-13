@@ -17,6 +17,9 @@
       "twitter": "https://twitter.com/nixtlainc"
     }
   },
+  "seo":{
+    "indexing": "all"
+  },
   "integrations": {
     "gtm": {
       "tagId": "GTM-TBJ64S3X"
