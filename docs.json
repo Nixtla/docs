@@ -346,7 +346,7 @@
               {
                 "group": "Distributed",
                 "pages": [
-                  "mlforecast/distributed.forecast",
+                  "mlforecast/distributed.forecast.html",
                   {
                     "group": "Models",
                     "pages": [
