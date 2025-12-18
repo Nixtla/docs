@@ -118,7 +118,7 @@ html.dark a.card svg {
 /* Banner styling for theme support */
 #banner {
   /* background-color: var(--primary-light); # original  */
-  background-color: blue;
+  background-color: #22c55e;
   border-color: var(--primary-light);
   color: var(--primary-dark);
   border-bottom: 1px solid var(--primary-dark) !important;
@@ -132,7 +132,7 @@ html.dark a.card svg {
   opacity: 0.8;
 }
 
-#banner p span{
+#banner p span {
   color: white !important;
   margin: 0;
   font-size: medium;
@@ -141,6 +141,10 @@ html.dark a.card svg {
 #banner strong {
   color: white !important;
   font-size: medium;
+}
+
+#banner svg path {
+  color: #000 !important;
 }
 
 /* Dark mode banner */
