@@ -125,7 +125,7 @@ html.dark a.card svg {
 }
 
 #banner a {
-  color: white !important;
+  color: black !important;
 }
 
 #banner a:hover {
@@ -133,42 +133,16 @@ html.dark a.card svg {
 }
 
 #banner p span {
-  color: white !important;
+  color: black !important;
   margin: 0;
   font-size: medium;
 }
 
 #banner strong {
-  color: white !important;
+  color: black !important;
   font-size: medium;
 }
 
 #banner svg path {
   color: #000 !important;
-}
-
-/* Dark mode banner */
-html.dark #banner {
-  background-color: #03dac6;
-  border-color: #000;
-  /* color: #000; */
-}
-
-html.dark #banner a {
-  color: black !important;
-}
-
-html.dark #banner a:hover {
-  opacity: 0.8;
-}
-
-html.dark #banner p span {
-  color: black !important;
-  margin: 0;
-  font-size: medium;
-}
-
-html.dark #banner strong {
-  color: black !important;
-  font-size: medium;
 }
