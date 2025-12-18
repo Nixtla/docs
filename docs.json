@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "banner": {
-    "content": "**TimeGPT-2.1 is here!** [Read the announcement \u2192](https://www.nixtla.io/blog/timegpt-2-1-announcement?utm_campaign=timegpt_2_1_announcement&utm_source=nixtlaverse.nixtla.io&utm_medium=banner)",
+    "content": "**Nixtla AI is here!** [Read the announcement →](https://www.nixtla.io/blog/genai-announcement)",
     "dismissible": true
   },
   "colors": {
@@ -52,9 +52,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "statsforecast/index.html"
-            ]
+            "pages": ["statsforecast/index.html"]
           },
           {
             "group": "Getting Started",
@@ -168,9 +166,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "mlforecast/index.html"
-            ]
+            "pages": ["mlforecast/index.html"]
           },
           {
             "group": "Getting Started",
@@ -401,9 +397,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "hierarchicalforecast/index.html"
-            ]
+            "pages": ["hierarchicalforecast/index.html"]
           },
           {
             "group": "Getting Started",
@@ -465,9 +459,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "utilsforecast/index.html"
-            ]
+            "pages": ["utilsforecast/index.html"]
           },
           {
             "group": "API Reference",
@@ -488,9 +480,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "datasetsforecast/index.html"
-            ]
+            "pages": ["datasetsforecast/index.html"]
           },
           {
             "group": "API Reference",
@@ -514,9 +504,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "coreforecast/index"
-            ]
+            "pages": ["coreforecast/index"]
           },
           {
             "group": "API Reference",
