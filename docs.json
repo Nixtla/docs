@@ -210,7 +210,8 @@
               "mlforecast/docs/tutorials/m4.html",
               "mlforecast/docs/tutorials/electricity_load_forecasting.html",
               "mlforecast/docs/tutorials/electricity_peak_forecasting.html",
-              "mlforecast/docs/tutorials/prediction_intervals_in_forecasting_models.html"
+              "mlforecast/docs/tutorials/prediction_intervals_in_forecasting_models.html",
+              "mlforecast/docs/tutorials/incremental_forecasting.html"
             ]
           },
           {
