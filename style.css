@@ -118,53 +118,27 @@ html.dark a.card svg {
 /* Banner styling for theme support */
 #banner {
   /* background-color: var(--primary-light); # original  */
-  background-color: blue;
+  background-color: #22c55e;
   border-color: var(--primary-light);
   color: var(--primary-dark);
   border-bottom: 1px solid var(--primary-dark) !important;
-}
-
-#banner a {
-  color: white !important;
 }
 
 #banner a:hover {
   opacity: 0.8;
 }
 
-#banner p span{
-  color: white !important;
+#banner p span {
+  color: black !important;
   margin: 0;
   font-size: medium;
 }
 
 #banner strong {
-  color: white !important;
-  font-size: medium;
-}
-
-/* Dark mode banner */
-html.dark #banner {
-  background-color: #03dac6;
-  border-color: #000;
-  /* color: #000; */
-}
-
-html.dark #banner a {
-  color: black !important;
-}
-
-html.dark #banner a:hover {
-  opacity: 0.8;
-}
-
-html.dark #banner p span {
-  color: black !important;
-  margin: 0;
-  font-size: medium;
-}
-
-html.dark #banner strong {
   color: black !important;
   font-size: medium;
+}
+
+#banner svg path {
+  color: #000 !important;
 }
