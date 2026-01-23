@@ -446,7 +446,8 @@
                   "hierarchicalforecast/examples/localglobalaggregation.html"
                 ]
               },
-              "hierarchicalforecast/examples/mlframeworksexample.html"
+              "hierarchicalforecast/examples/mlframeworksexample.html",
+              "hierarchicalforecast/examples/reconciliationdiagnostics.html"
             ]
           },
           {
