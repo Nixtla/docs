@@ -434,7 +434,8 @@
                   "hierarchicalforecast/examples/australiandomestictourism-intervals.html",
                   "hierarchicalforecast/examples/australiandomestictourism-bootstraped-intervals.html",
                   "hierarchicalforecast/examples/australiandomestictourism-permbu-intervals.html",
-                  "hierarchicalforecast/examples/tourismlarge-evaluation.html"
+                  "hierarchicalforecast/examples/tourismlarge-evaluation.html",
+                  "hierarchicalforecast/examples/probabilistic-reconciliation-comparison.html"
                 ]
               },
               {
