@@ -449,7 +449,9 @@
                 ]
               },
               "hierarchicalforecast/examples/mlframeworksexample.html",
-              "hierarchicalforecast/examples/reconciliationdiagnostics.html"
+              "hierarchicalforecast/examples/exogenousvariables.html",
+              "hierarchicalforecast/examples/reconciliationdiagnostics.html",
+              "hierarchicalforecast/examples/hierarchicalforecastingatscale.html"
             ]
           },
           {

@@ -60,6 +60,13 @@ Y_df['ds'] = pd.PeriodIndex(Y_df['ds'], freq='Q').to_timestamp()
 Y_df.head()
 ```
 
+|     | Country   | Region   | State           | Purpose  | ds         | y          |
+|-----|-----------|----------|-----------------|----------|------------|------------|
+| 0   | Australia | Adelaide | South Australia | Business | 1998-01-01 | 135.077690 |
+| 1   | Australia | Adelaide | South Australia | Business | 1998-04-01 | 109.987316 |
+| 2   | Australia | Adelaide | South Australia | Business | 1998-07-01 | 166.034687 |
+| 3   | Australia | Adelaide | South Australia | Business | 1998-10-01 | 127.160464 |
+| 4   | Australia | Adelaide | South Australia | Business | 1999-01-01 | 137.448533 |
 
 ```python
 np.random.seed(42)
@@ -79,6 +86,14 @@ Y_df['marketing_spend'] = Y_df.apply(
 
 Y_df.head()
 ```
+
+|     | Country   | Region   | State           | Purpose  | ds         | y          | cpi        | marketing_spend |
+|-----|-----------|----------|-----------------|----------|------------|------------|------------|-----------------|
+| 0   | Australia | Adelaide | South Australia | Business | 1998-01-01 | 135.077690 | 100.649014 | 190.7           |
+| 1   | Australia | Adelaide | South Australia | Business | 1998-04-01 | 109.987316 | 101.107535 | 187.8           |
+| 2   | Australia | Adelaide | South Australia | Business | 1998-07-01 | 166.034687 | 101.801842 | 183.5           |
+| 3   | Australia | Adelaide | South Australia | Business | 1998-10-01 | 127.160464 | 102.758750 | 188.7           |
+| 4   | Australia | Adelaide | South Australia | Business | 1999-01-01 | 137.448533 | 103.188504 | 190.3           |
 
 ## 2. Aggregate with Exogenous Variables
 
@@ -124,17 +139,39 @@ target (`y`) and the aggregated exogenous variables (`cpi_mean`,
 Y_agg[Y_agg['unique_id'] == 'Australia'].head()
 ```
 
+|     | unique_id | ds         | y            | cpi_mean   | marketing_spend_sum |
+|-----|-----------|------------|--------------|------------|---------------------|
+| 0   | Australia | 1998-01-01 | 23182.197269 | 100.649014 | 36528.4             |
+| 1   | Australia | 1998-04-01 | 20323.380067 | 101.107535 | 36438.2             |
+| 2   | Australia | 1998-07-01 | 19826.640511 | 101.801842 | 36613.1             |
+| 3   | Australia | 1998-10-01 | 20830.129891 | 102.758750 | 36648.8             |
+| 4   | Australia | 1999-01-01 | 22087.353380 | 103.188504 | 37338.3             |
 
 ```python
 # State level: Victoria
 Y_agg[Y_agg['unique_id'] == 'Australia/Victoria'].head()
 ```
 
+|     | unique_id          | ds         | y           | cpi_mean   | marketing_spend_sum |
+|-----|--------------------|------------|-------------|------------|---------------------|
+| 560 | Australia/Victoria | 1998-01-01 | 6010.424491 | 100.649014 | 13711.9             |
+| 561 | Australia/Victoria | 1998-04-01 | 4795.246755 | 101.107535 | 13640.1             |
+| 562 | Australia/Victoria | 1998-07-01 | 4316.845170 | 101.801842 | 13742.9             |
+| 563 | Australia/Victoria | 1998-10-01 | 4674.829118 | 102.758750 | 13768.8             |
+| 564 | Australia/Victoria | 1999-01-01 | 5304.334195 | 103.188504 | 14047.9             |
 
 ```python
 # Bottom level: a specific Region/Purpose combination
 Y_agg[Y_agg['unique_id'] == 'Australia/Victoria/Melbourne/Holiday'].head()
 ```
+
+|       | unique_id                            | ds         | y          | cpi_mean   | marketing_spend_sum |
+|-------|--------------------------------------|------------|------------|------------|---------------------|
+| 29920 | Australia/Victoria/Melbourne/Holiday | 1998-01-01 | 427.827800 | 100.649014 | 160.2               |
+| 29921 | Australia/Victoria/Melbourne/Holiday | 1998-04-01 | 424.191925 | 101.107535 | 171.2               |
+| 29922 | Australia/Victoria/Melbourne/Holiday | 1998-07-01 | 449.551508 | 101.801842 | 168.8               |
+| 29923 | Australia/Victoria/Melbourne/Holiday | 1998-10-01 | 450.699582 | 102.758750 | 172.7               |
+| 29924 | Australia/Victoria/Melbourne/Holiday | 1999-01-01 | 412.358542 | 103.188504 | 175.8               |
 
 Notice that: - `cpi_mean` is the same at every level (since CPI is
 identical across bottom series within each quarter). -
@@ -159,6 +196,14 @@ Y_multi[Y_multi['unique_id'] == 'Australia/Victoria'][
     ['unique_id', 'ds', 'y', 'marketing_spend_sum', 'marketing_spend_mean', 'marketing_spend_std']
 ].head()
 ```
+
+|     | unique_id          | ds         | y           | marketing_spend_sum | marketing_spend_mean | marketing_spend_std |
+|-----|--------------------|------------|-------------|---------------------|----------------------|---------------------|
+| 560 | Australia/Victoria | 1998-01-01 | 6010.424491 | 13711.9             | 163.236905           | 4.878618            |
+| 561 | Australia/Victoria | 1998-04-01 | 4795.246755 | 13640.1             | 162.382143           | 5.116737            |
+| 562 | Australia/Victoria | 1998-07-01 | 4316.845170 | 13742.9             | 163.605952           | 4.361285            |
+| 563 | Australia/Victoria | 1998-10-01 | 4674.829118 | 13768.8             | 163.914286           | 5.038578            |
+| 564 | Australia/Victoria | 1999-01-01 | 5304.334195 | 14047.9             | 167.236905           | 5.759074            |
 
 ## 3. Train/Test Split
 
@@ -185,6 +230,10 @@ Y_train_no_exog = Y_agg_no_exog.drop(Y_test_no_exog.index)
 print(f'Train: {Y_train_df.shape[0]:,} rows, Test: {Y_test_df.shape[0]:,} rows')
 ```
 
+``` text
+Train: 30,600 rows, Test: 3,400 rows
+```
+
 ## 4. Base Forecasts
 
 We use `AutoARIMA` from `StatsForecast`, which supports exogenous
@@ -200,6 +249,10 @@ from statsforecast.models import AutoARIMA
 from statsforecast.core import StatsForecast
 ```
 
+``` text
+/home/osprangers/Repositories/hierarchicalforecast/.venv/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+```
 
 ```python
 # With exogenous variables
@@ -210,6 +263,13 @@ Y_fitted_exog = fcst_exog.forecast_fitted_values()
 Y_hat_exog.head()
 ```
 
+|     | unique_id | ds         | AutoARIMA    |
+|-----|-----------|------------|--------------|
+| 0   | Australia | 2016-01-01 | 26166.873073 |
+| 1   | Australia | 2016-04-01 | 24907.791984 |
+| 2   | Australia | 2016-07-01 | 24537.521142 |
+| 3   | Australia | 2016-10-01 | 25631.143759 |
+| 4   | Australia | 2017-01-01 | 26987.070921 |
 
 ```python
 # Without exogenous variables
@@ -219,6 +279,14 @@ Y_fitted_no_exog = fcst_no_exog.forecast_fitted_values()
 
 Y_hat_no_exog.head()
 ```
+
+|     | unique_id | ds         | AutoARIMA    |
+|-----|-----------|------------|--------------|
+| 0   | Australia | 2016-01-01 | 26212.553553 |
+| 1   | Australia | 2016-04-01 | 25033.667125 |
+| 2   | Australia | 2016-07-01 | 24507.027198 |
+| 3   | Australia | 2016-10-01 | 25598.928613 |
+| 4   | Australia | 2017-01-01 | 26982.576796 |
 
 ## 5. Reconcile Forecasts
 
@@ -248,6 +316,13 @@ Y_rec_exog = hrec_exog.reconcile(
 Y_rec_exog.head()
 ```
 
+|     | unique_id | ds         | AutoARIMA    | AutoARIMA/BottomUp | AutoARIMA/MinTrace_method-mint_shrink |
+|-----|-----------|------------|--------------|--------------------|---------------------------------------|
+| 0   | Australia | 2016-01-01 | 26166.873073 | 24461.292072       | 25436.706581                          |
+| 1   | Australia | 2016-04-01 | 24907.791984 | 22795.931817       | 24076.317511                          |
+| 2   | Australia | 2016-07-01 | 24537.521142 | 22151.772435       | 23272.424691                          |
+| 3   | Australia | 2016-10-01 | 25631.143759 | 22936.268850       | 24404.217321                          |
+| 4   | Australia | 2017-01-01 | 26987.070921 | 24292.353932       | 25663.420421                          |
 
 ```python
 # Without exogenous
@@ -258,6 +333,14 @@ Y_rec_no_exog = hrec_no_exog.reconcile(
 
 Y_rec_no_exog.head()
 ```
+
+|     | unique_id | ds         | AutoARIMA    | AutoARIMA/BottomUp | AutoARIMA/MinTrace_method-mint_shrink |
+|-----|-----------|------------|--------------|--------------------|---------------------------------------|
+| 0   | Australia | 2016-01-01 | 26212.553553 | 24495.919988       | 25322.734082                          |
+| 1   | Australia | 2016-04-01 | 25033.667125 | 22660.036262       | 23873.068038                          |
+| 2   | Australia | 2016-07-01 | 24507.027198 | 22307.887506       | 23396.655072                          |
+| 3   | Australia | 2016-10-01 | 25598.928613 | 22853.294863       | 24303.043112                          |
+| 4   | Australia | 2017-01-01 | 26982.576796 | 24264.065071       | 25520.638165                          |
 
 ## 6. Evaluation
 
@@ -324,11 +407,29 @@ comparison[numeric_cols] = comparison[numeric_cols].map('{:.2f}'.format).astype(
 comparison.query('metric == "rmse"')
 ```
 
+|     | level   | metric | Base (no exog) | Base (w/ exog) | BottomUp (no exog) | BottomUp (w/ exog) | MinTrace (no exog) | MinTrace (w/ exog) |
+|-----|---------|--------|----------------|----------------|--------------------|--------------------|--------------------|--------------------|
+| 0   | Total   | rmse   | 773.97         | 731.03         | 3247.04            | 3218.18            | 2029.46            | 1946.96            |
+| 2   | Purpose | rmse   | 471.46         | 516.06         | 871.70             | 859.13             | 571.76             | 545.22             |
+| 4   | State   | rmse   | 257.90         | 251.32         | 434.51             | 431.99             | 308.33             | 298.49             |
+| 6   | Regions | rmse   | 56.53          | 55.53          | 58.19              | 57.79              | 46.43              | 46.08              |
+| 8   | Bottom  | rmse   | 20.39          | 20.44          | 20.39              | 20.44              | 18.13              | 18.22              |
+| 10  | Overall | rmse   | 38.72          | 38.78          | 53.00              | 52.71              | 40.26              | 39.58              |
+
 ### MASE
 
 ```python
 comparison.query('metric == "mase"')
 ```
+
+|     | level   | metric | Base (no exog) | Base (w/ exog) | BottomUp (no exog) | BottomUp (w/ exog) | MinTrace (no exog) | MinTrace (w/ exog) |
+|-----|---------|--------|----------------|----------------|--------------------|--------------------|--------------------|--------------------|
+| 1   | Total   | mase   | 0.76           | 0.73           | 3.39               | 3.36               | 2.01               | 1.91               |
+| 3   | Purpose | mase   | 1.14           | 1.41           | 2.48               | 2.49               | 1.45               | 1.48               |
+| 5   | State   | mase   | 1.46           | 1.26           | 1.97               | 1.93               | 1.42               | 1.31               |
+| 7   | Regions | mase   | 1.21           | 1.20           | 1.25               | 1.24               | 1.02               | 1.00               |
+| 9   | Bottom  | mase   | 1.02           | 1.02           | 1.02               | 1.02               | 0.94               | 0.95               |
+| 11  | Overall | mase   | 1.06           | 1.06           | 1.10               | 1.10               | 0.97               | 0.97               |
 
 ### References
 

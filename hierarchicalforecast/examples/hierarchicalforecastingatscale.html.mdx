@@ -144,6 +144,11 @@ with CodeTimer('is_balanced=True', verbose=True):
     )
 ```
 
+``` text
+Code block 'is_balanced=False (default)' took:  0.05757 seconds
+Code block 'is_balanced=True' took: 0.03369 seconds
+```
+
 ### Tip 3: Use Sparse Reconciliation Methods
 
 For large hierarchies, the dense summing matrix **S** (shape:
@@ -195,6 +200,11 @@ with CodeTimer('Sparse methods', verbose=True):
     Y_rec_sparse = hrec_sparse.reconcile(
         Y_hat_df=Y_hat_df, S_df=S_df, tags=tags, is_balanced=True,
     )
+```
+
+``` text
+Code block 'Dense methods' took:    0.04747 seconds
+Code block 'Sparse methods' took:   0.03975 seconds
 ```
 
 ### Tip 4: Choose the Right Reconciliation Method
@@ -326,6 +336,17 @@ for method_name, elapsed in hrec.execution_times.items():
     print(f'{method_name}: {elapsed:.4f}s')
 ```
 
+``` text
+AutoARIMA/BottomUp: 0.0008s
+Naive/BottomUp: 0.0005s
+AutoARIMA/MinTrace_method-ols: 0.0012s
+Naive/MinTrace_method-ols: 0.0010s
+AutoARIMA/MinTrace_method-wls_var: 0.0011s
+Naive/MinTrace_method-wls_var: 0.0009s
+AutoARIMA/MinTrace_method-mint_shrink: 0.0186s
+Naive/MinTrace_method-mint_shrink: 0.0122s
+```
+
 **`CodeTimer` context manager**: Use this to time any block of code in
 your pipeline:
 
@@ -336,6 +357,10 @@ with CodeTimer('Full reconciliation pipeline', verbose=True):
     Y_rec_df = hrec.reconcile(
         Y_hat_df=Y_hat_df, S_df=S_df, tags=tags, is_balanced=True,
     )
+```
+
+``` text
+Code block 'Full reconciliation pipeline' took: 0.04133 seconds
 ```
 
 ## 5. Summary Checklist
