@@ -39,6 +39,14 @@ a {
   border: 1px solid transparent;
 }
 
+a.nav-anchor {
+  border: none;
+}
+
+a.nav-anchor.text-primary {
+  border: 1px solid currentColor;
+}
+
 a.font-semibold {
   background: var(--primary-light);
   border: 1px solid var(--primary-dark);
