@@ -375,8 +375,7 @@
               {
                 "group": "Train/Evaluation",
                 "pages": [
-                  "neuralforecast/losses.pytorch.html",
-                  "neuralforecast/losses.numpy.html"
+                  "neuralforecast/losses.pytorch.html"
                 ]
               },
               {
