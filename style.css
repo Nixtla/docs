@@ -707,8 +707,10 @@ html.dark details.accordion summary:hover {
   margin-bottom: -80px !important;
 }
 
+.chat-assistant-floating-input::before,
 .chat-assistant-floating-input div::before,
 .chat-assistant-floating-input > div::before,
+[class*="chat-assistant"]::before,
 [class*="chat-assistant"] div::before {
   display: none !important;
   height: 0 !important;
