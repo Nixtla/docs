@@ -42,6 +42,9 @@
   --accent: #bfd1ff;
   --radius: 0rem;
 
+  /* Active Nav Item */
+  --active-nav-item: #d9d9d9;
+
   /* Card */
   --card-bg: rgba(252, 252, 252, 0.5);
   --card-bg-hover: rgba(245, 245, 245, 0.9);
@@ -71,6 +74,10 @@ html.dark {
   --secondary-foreground: #222121;
   --border: rgba(212, 212, 216, 0.6);
   --accent: #9187e8;
+  --radius: 0rem;
+
+  /* Active Nav Item */
+  --active-nav-item: rgba(222, 221, 221, 0.1);
 
   /* Card */
   --card-bg: rgba(255, 255, 255, 0.03);
@@ -291,7 +298,7 @@ html.dark #navigation-items a.nav-anchor:hover svg {
 #navigation-items a.nav-anchor:hover,
 #navigation-items a.nav-anchor[class*="text-shadow"] {
   opacity: 1;
-  background-color: var(--secondary) !important;
+  background-color: var(--active-nav-item) !important;
   text-decoration: none !important;
   color: var(--primary) !important;
 }
@@ -317,7 +324,7 @@ html.dark #navigation-items a.nav-anchor[class*="text-shadow"] svg {
 
 /* Active navigation item */
 #sidebar-group a[class*="bg-primary"] {
-  background-color: var(--secondary) !important;
+  background-color: var(--active-nav-item) !important;
   color: var(--primary) !important;
 }
 
@@ -341,6 +348,28 @@ ul li a {
 
 ul li a.link {
   text-decoration: underline !important;
+}
+
+a.link {
+  text-decoration: underline !important;
+  border: none !important;
+}
+
+/* ─── Code ───────────────────────────────────────────────────────────────── */
+
+:not(pre) > code {
+  --code-bg: #ececec;
+  background-color: var(--code-bg) !important;
+  color: var(--primary) !important;
+}
+
+html.dark :not(pre) > code {
+  --code-bg: rgba(222, 221, 221, 0.1);
+}
+
+pre code {
+  background-color: unset !important;
+  color: unset !important;
 }
 
 /* ─── Table of contents ──────────────────────────────────────────────────── */
@@ -494,9 +523,8 @@ html.dark details.accordion summary:hover {
 /* ─── Tables ─────────────────────────────────────────────────────────────── */
 
 .mdx-content table {
-  display: block;
+  display: table;
   width: 100%;
-  max-width: 100%;
   overflow-x: auto;
   font-size: 0.875rem;
 }
