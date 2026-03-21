@@ -104,6 +104,7 @@
             "pages": [
               "statsforecast/docs/experiments/amazonstatsforecast.html",
               "statsforecast/docs/experiments/autoarima_vs_prophet.html",
+              "statsforecast/docs/experiments/autoarimaprophet_adapter.html",
               "statsforecast/docs/experiments/ets_ray_m5.html",
               "statsforecast/docs/experiments/prophet_spark_m5.html"
             ]
