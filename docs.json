@@ -78,7 +78,8 @@
               "statsforecast/docs/tutorials/mlflow.html",
               "statsforecast/docs/tutorials/multipleseasonalities.html",
               "statsforecast/docs/tutorials/statisticalneuralmethods.html",
-              "statsforecast/docs/tutorials/uncertaintyintervals.html"
+              "statsforecast/docs/tutorials/uncertaintyintervals.html",
+              "statsforecast/docs/tutorials/simulation.html"
             ]
           },
           {
@@ -87,8 +88,7 @@
               "statsforecast/docs/how-to-guides/automatic_forecasting.html",
               "statsforecast/docs/how-to-guides/exogenous.html",
               "statsforecast/docs/how-to-guides/generating_features.html",
-              "statsforecast/docs/how-to-guides/sklearn_models.html",
-              "statsforecast/docs/how-to-guides/numba_cache.html"
+              "statsforecast/docs/how-to-guides/sklearn_models.html"
             ]
           },
           {
@@ -104,6 +104,7 @@
             "pages": [
               "statsforecast/docs/experiments/amazonstatsforecast.html",
               "statsforecast/docs/experiments/autoarima_vs_prophet.html",
+              "statsforecast/docs/experiments/autoarimaprophet_adapter.html",
               "statsforecast/docs/experiments/ets_ray_m5.html",
               "statsforecast/docs/experiments/prophet_spark_m5.html"
             ]
