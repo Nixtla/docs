@@ -299,7 +299,8 @@
                 "pages": [
                   "neuralforecast/docs/tutorials/uncertainty_quantification.html",
                   "neuralforecast/docs/tutorials/longhorizon_probabilistic.html",
-                  "neuralforecast/docs/tutorials/conformal_prediction.html"
+                  "neuralforecast/docs/tutorials/conformal_prediction.html",
+                  "neuralforecast/docs/tutorials/simulation.html"
                 ]
               },
               {
@@ -376,8 +377,7 @@
               {
                 "group": "Train/Evaluation",
                 "pages": [
-                  "neuralforecast/losses.pytorch.html",
-                  "neuralforecast/losses.numpy.html"
+                  "neuralforecast/losses.pytorch.html"
                 ]
               },
               {
