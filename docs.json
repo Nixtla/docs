@@ -291,7 +291,8 @@
                   "neuralforecast/docs/tutorials/longhorizon_nhits.html",
                   "neuralforecast/docs/tutorials/longhorizon_transformers.html",
                   "neuralforecast/docs/tutorials/forecasting_tft.html",
-                  "neuralforecast/docs/tutorials/multivariate_tsmixer.html"
+                  "neuralforecast/docs/tutorials/multivariate_tsmixer.html",
+                  "neuralforecast/docs/tutorials/weighting_timesteps.html"
                 ]
               },
               {
