@@ -3,6 +3,26 @@
 local kQuartoRawHtml = "quartoRawHtml"
 local rawHtmlVars = pandoc.List()
 
+local function shouldPrefixRelativePath(path)
+  if path == nil or path == "" then
+    return false
+  end
+
+  if path:match("^%./") or path:match("^%.%./") then
+    return false
+  end
+
+  if path:match("^[?#]") or path:match("^/") then
+    return false
+  end
+
+  if path:match("^[a-zA-Z][a-zA-Z0-9+.-]*:") then
+    return false
+  end
+
+  return true
+end
+
 function Pandoc(doc)
   -- insert exports at the top if we have them
   if #rawHtmlVars > 0 then
@@ -24,6 +44,9 @@ end
 -- img tag which won't hit the asset pipeline
 function Image(el)
   el.attr = pandoc.Attr()
+  if shouldPrefixRelativePath(el.src) then
+    el.src = "./" .. el.src
+  end
   return el
 end
 
