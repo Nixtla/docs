@@ -19,13 +19,6 @@ jobs:
           path: docs
           ref: docs-preview
 
-      - name: Clone nixtla
-        uses: actions/checkout@v4
-        with:
-          repository: Nixtla/nixtla
-          path: nixtla
-          ref: docs-preview
-
       - name: Clone statsforecast
         uses: actions/checkout@v4
         with:
@@ -77,7 +70,6 @@ jobs:
 
       - name: Copy documentation and merge configs
         run: |
-          cp -R nixtla docs/
           cp -R statsforecast docs/
           cp -R mlforecast docs/
           cp -R neuralforecast docs/
