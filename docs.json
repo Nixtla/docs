@@ -479,6 +479,12 @@
             ]
           },
           {
+            "group": "Tutorials",
+            "pages": [
+              "utilsforecast/docs/tutorials/multi_objective_model_selection.html"
+            ]
+          },
+          {
             "group": "API Reference",
             "pages": [
               "utilsforecast/preprocessing.html",
