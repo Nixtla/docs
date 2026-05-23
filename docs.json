@@ -187,6 +187,7 @@
             "pages": [
               "mlforecast/docs/how-to-guides/exogenous_features.html",
               "mlforecast/docs/how-to-guides/lag_transforms_guide.html",
+              "mlforecast/docs/how-to-guides/pooled_lag_transforms.html",
               "mlforecast/docs/how-to-guides/hyperparameter_optimization.html",
               "mlforecast/docs/how-to-guides/sklearn_pipelines.html",
               "mlforecast/docs/how-to-guides/sample_weights.html",
