@@ -360,6 +360,7 @@
                   "neuralforecast/models.rmok.html",
                   "neuralforecast/models.rnn.html",
                   "neuralforecast/models.softs.html",
+                  "neuralforecast/models.softssharp.html",
                   "neuralforecast/models.stemgnn.html",
                   "neuralforecast/models.tcn.html",
                   "neuralforecast/models.tft.html",
