@@ -2,21 +2,21 @@
 
 @font-face {
   font-family: "NeueMontreal";
-  src: url("./fonts/PPNeueMontreal-Book.woff2") format("woff2");
+  src: url("/fonts/PPNeueMontreal-Book.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 
 @font-face {
   font-family: "NeueMontreal";
-  src: url("./fonts/ppneuemontreal-medium.otf") format("opentype");
+  src: url("/fonts/ppneuemontreal-medium.otf") format("opentype");
   font-weight: 500;
   font-display: swap;
 }
 
 @font-face {
   font-family: "Supply";
-  src: url("./fonts/PPSupplyMono-Ultralight.woff2") format("woff2");
+  src: url("/fonts/PPSupplyMono-Ultralight.woff2") format("woff2");
   font-weight: 200;
   font-display: swap;
 }
@@ -24,8 +24,8 @@
 @font-face {
   font-family: "Supply";
   src:
-    url("./fonts/PPSupplyMono-Regular.woff2") format("woff2"),
-    url("./fonts/Supply-Regular.otf") format("opentype");
+    url("/fonts/PPSupplyMono-Regular.woff2") format("woff2"),
+    url("/fonts/Supply-Regular.otf") format("opentype");
   font-weight: 400;
   font-display: swap;
 }
@@ -148,10 +148,11 @@ p {
 
 .eyebrow-sm,
 #sidebar-title,
-#table-of-contents button {
+#table-of-contents button,
+#table-of-contents button span {
   font-family: "Supply", monospace !important;
   font-weight: 400 !important;
-  font-size: 12px;
+  font-size: 12px !important;
   text-transform: uppercase;
   font-stretch: expanded;
   line-height: 92%;
@@ -160,7 +161,8 @@ p {
 @media (max-width: 767px) {
   .eyebrow-sm,
   #sidebar-title,
-  #table-of-contents button {
+  #table-of-contents button,
+  #table-of-contents button span {
     line-height: 122%;
   }
 }
