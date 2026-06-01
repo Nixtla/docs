@@ -373,8 +373,7 @@
                   "neuralforecast/models.tsmixer.html",
                   "neuralforecast/models.tsmixerx.html",
                   "neuralforecast/models.vanillatransformer.html",
-                  "neuralforecast/models.xlinear.html",
-                  "neuralforecast/models.xlstm.html"
+                  "neuralforecast/models.xlinear.html"
                 ]
               },
               "neuralforecast/models.html",
