@@ -147,11 +147,11 @@ p {
 }
 
 .eyebrow-sm,
-#sidebar-title,
-#table-of-contents button {
+#table-of-contents button,
+#table-of-contents button span {
   font-family: "Supply", monospace !important;
   font-weight: 400 !important;
-  font-size: 12px;
+  font-size: 12px !important;
   text-transform: uppercase;
   font-stretch: expanded;
   line-height: 92%;
@@ -159,8 +159,8 @@ p {
 
 @media (max-width: 767px) {
   .eyebrow-sm,
-  #sidebar-title,
-  #table-of-contents button {
+  #table-of-contents button,
+  #table-of-contents button span {
     line-height: 122%;
   }
 }
@@ -318,26 +318,32 @@ html.dark #navigation-items a.nav-anchor[class*="text-shadow"] svg {
 
 /* ─── Sidebar ────────────────────────────────────────────────────────────── */
 
-#sidebar-title {
+/* Section group titles ("Getting Started", "Tutorials", …) — Neue Montreal */
+.sidebar-title {
+  font-family: "NeueMontreal", sans-serif !important;
   padding: 8px 0px !important;
 }
 
-/* Active navigation item */
-#sidebar-group a[class*="bg-primary"] {
+.sidebar-title span {
+  font-family: "NeueMontreal", sans-serif !important;
+}
+
+/* Active navigation item (current page link, marked by aria-current) */
+#sidebar a[aria-current="page"] {
   background-color: var(--active-nav-item) !important;
   color: var(--primary) !important;
 }
 
-#sidebar-group a[class*="bg-primary"] svg {
+#sidebar a[aria-current="page"] svg {
   background-color: var(--primary) !important;
 }
 
-html.dark #sidebar-group a[class*="bg-primary"] {
+html.dark #sidebar a[aria-current="page"] {
   background-color: rgba(222, 221, 221, 0.1) !important;
   color: var(--primary) !important;
 }
 
-html.dark #sidebar-group a[class*="bg-primary"] svg {
+html.dark #sidebar a[aria-current="page"] svg {
   background-color: var(--primary) !important;
 }
 
