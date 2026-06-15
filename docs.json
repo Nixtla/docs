@@ -213,6 +213,7 @@
               "mlforecast/docs/tutorials/electricity_load_forecasting.html",
               "mlforecast/docs/tutorials/electricity_peak_forecasting.html",
               "mlforecast/docs/tutorials/prediction_intervals_in_forecasting_models.html",
+              "mlforecast/docs/tutorials/transfer_conformal_prediction.html",
               "mlforecast/docs/tutorials/incremental_forecasting.html"
             ]
           },
@@ -227,6 +228,7 @@
                   "mlforecast/lgb_cv.html",
                   "mlforecast/optimization.html",
                   "mlforecast/utils.html",
+                  "mlforecast/conformal_prediction.html",
                   "mlforecast/core.html",
                   "mlforecast/target_transforms.html",
                   "mlforecast/lag_transforms.html",
