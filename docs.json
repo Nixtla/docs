@@ -276,6 +276,7 @@
               "neuralforecast/docs/capabilities/overview.html",
               "neuralforecast/docs/capabilities/objectives.html",
               "neuralforecast/docs/capabilities/exogenous_variables.html",
+              "neuralforecast/docs/capabilities/categorical_features.html",
               "neuralforecast/docs/capabilities/cross_validation.html",
               "neuralforecast/docs/capabilities/hyperparameter_tuning.html",
               "neuralforecast/docs/capabilities/predictInsample.html",
