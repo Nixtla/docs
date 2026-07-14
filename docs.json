@@ -120,6 +120,7 @@
               "statsforecast/docs/models/autoets.html",
               "statsforecast/docs/models/autoregressive.html",
               "statsforecast/docs/models/autotheta.html",
+              "statsforecast/docs/models/conformalseasonalpool.html",
               "statsforecast/docs/models/crostonclassic.html",
               "statsforecast/docs/models/crostonoptimized.html",
               "statsforecast/docs/models/crostonsba.html",
