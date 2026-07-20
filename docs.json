@@ -2,7 +2,11 @@
   "$schema": "https://mintlify.com/docs.json",
   "banner": {
     "content": "[Announcement](https://www.nixtla.io/blog/genai-announcement): Nixtla Enterprise now offers top foundation models, MCP, and agentic capabilities: [join the waitlist](https://www.nixtla.io?waitlistSheet=true)",
-    "dismissible": true
+    "dismissible": true,
+    "color": {
+      "light": "#bfd1ff",
+      "dark": "#9187e8"
+    }
   },
   "colors": {
     "primary": "#161616",
@@ -52,9 +56,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "statsforecast/index.html"
-            ]
+            "pages": ["statsforecast/index.html"]
           },
           {
             "group": "Getting Started",
@@ -170,9 +172,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "mlforecast/index.html"
-            ]
+            "pages": ["mlforecast/index.html"]
           },
           {
             "group": "Getting Started",
@@ -385,9 +385,7 @@
               "neuralforecast/models.html",
               {
                 "group": "Train/Evaluation",
-                "pages": [
-                  "neuralforecast/losses.pytorch.html"
-                ]
+                "pages": ["neuralforecast/losses.pytorch.html"]
               },
               {
                 "group": "Common Components",
@@ -414,9 +412,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "hierarchicalforecast/index.html"
-            ]
+            "pages": ["hierarchicalforecast/index.html"]
           },
           {
             "group": "Getting Started",
@@ -482,9 +478,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "utilsforecast/index.html"
-            ]
+            "pages": ["utilsforecast/index.html"]
           },
           {
             "group": "Tutorials",
@@ -512,9 +506,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "datasetsforecast/index.html"
-            ]
+            "pages": ["datasetsforecast/index.html"]
           },
           {
             "group": "API Reference",
@@ -538,9 +530,7 @@
         "groups": [
           {
             "group": " ",
-            "pages": [
-              "coreforecast/index"
-            ]
+            "pages": ["coreforecast/index"]
           },
           {
             "group": "API Reference",
