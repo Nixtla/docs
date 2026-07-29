@@ -67,7 +67,14 @@ jobs:
           repository: Nixtla/coreforecast
           path: coreforecast
           ref: docs
-      
+
+      - name: Clone synforecast
+        uses: actions/checkout@v4
+        with:
+          repository: Nixtla/synforecast
+          path: synforecast
+          ref: docs
+
       - name: Copy documentation and merge configs
         run: |
           cp -R statsforecast docs/
@@ -77,6 +84,7 @@ jobs:
           cp -R utilsforecast docs/
           cp -R datasetsforecast docs/
           cp -R coreforecast docs/
+          cp -R synforecast docs/
           cd docs && python3 merge_docs.py
 
       - name: Commit and push changes
