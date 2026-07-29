@@ -533,6 +533,11 @@
         ]
       },
       {
+        "anchor": "SynForecast",
+        "icon": "flask",
+        "groups": []
+      },
+      {
         "anchor": "CoreForecast",
         "icon": "truck-fast",
         "groups": [
