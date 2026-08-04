@@ -56,7 +56,9 @@
         "groups": [
           {
             "group": " ",
-            "pages": ["statsforecast/index.html"]
+            "pages": [
+              "statsforecast/index.html"
+            ]
           },
           {
             "group": "Getting Started",
@@ -172,7 +174,9 @@
         "groups": [
           {
             "group": " ",
-            "pages": ["mlforecast/index.html"]
+            "pages": [
+              "mlforecast/index.html"
+            ]
           },
           {
             "group": "Getting Started",
@@ -385,7 +389,9 @@
               "neuralforecast/models.html",
               {
                 "group": "Train/Evaluation",
-                "pages": ["neuralforecast/losses.pytorch.html"]
+                "pages": [
+                  "neuralforecast/losses.pytorch.html"
+                ]
               },
               {
                 "group": "Common Components",
@@ -412,7 +418,9 @@
         "groups": [
           {
             "group": " ",
-            "pages": ["hierarchicalforecast/index.html"]
+            "pages": [
+              "hierarchicalforecast/index.html"
+            ]
           },
           {
             "group": "Getting Started",
@@ -478,7 +486,9 @@
         "groups": [
           {
             "group": " ",
-            "pages": ["utilsforecast/index.html"]
+            "pages": [
+              "utilsforecast/index.html"
+            ]
           },
           {
             "group": "Tutorials",
@@ -506,7 +516,9 @@
         "groups": [
           {
             "group": " ",
-            "pages": ["datasetsforecast/index.html"]
+            "pages": [
+              "datasetsforecast/index.html"
+            ]
           },
           {
             "group": "API Reference",
@@ -530,7 +542,9 @@
         "groups": [
           {
             "group": " ",
-            "pages": ["coreforecast/index"]
+            "pages": [
+              "coreforecast/index"
+            ]
           },
           {
             "group": "API Reference",
