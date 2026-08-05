@@ -533,6 +533,11 @@
         ]
       },
       {
+        "anchor": "SynForecast",
+        "icon": "dna",
+        "groups": []
+      },
+      {
         "anchor": "CoreForecast",
         "icon": "truck-fast",
         "groups": [
