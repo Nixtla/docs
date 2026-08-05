@@ -84,6 +84,7 @@ jobs:
           cp -R utilsforecast docs/
           cp -R datasetsforecast docs/
           cp -R coreforecast docs/
+          rm -rf synforecast/.git
           cp -R synforecast docs/
           cd docs && python3 merge_docs.py
 
