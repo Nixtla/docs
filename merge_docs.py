@@ -24,7 +24,8 @@ def merge_navigation(main_nav, sub_nav, prefix):
         'hierarchicalforecast': 'HierarchicalForecast',
         'utilsforecast': 'UtilsForecast',
         'datasetsforecast': 'DatasetsForecast',
-        'coreforecast': 'CoreForecast'
+        'coreforecast': 'CoreForecast',
+        'synforecast': 'SynForecast'
     }
     
     anchor_name = anchor_name_map.get(prefix)
@@ -59,7 +60,8 @@ def merge_navigation(main_nav, sub_nav, prefix):
 
 
 repos = ['nixtla', 'statsforecast', 'mlforecast', 'neuralforecast',
-         'hierarchicalforecast', 'utilsforecast', 'datasetsforecast', 'coreforecast']
+         'hierarchicalforecast', 'utilsforecast', 'datasetsforecast', 'coreforecast',
+         'synforecast']
 
 main_config = json.loads(Path(fname).read_text())
 
