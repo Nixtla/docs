@@ -94,6 +94,11 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git checkout docs
+          # Evict any stale gitlink for synforecast from the index; git add
+          # will not descend into a path the index tracks as a submodule.
+          # Once the path is tracked as regular files, this unstages them
+          # and the git add below restages them, leaving the tree unchanged.
+          git rm -r -q --cached --ignore-unmatch -- synforecast
           git add .
           git diff-index --quiet --cached HEAD -- || git commit -m "Update documentation"
           git push origin docs --force
