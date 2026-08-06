@@ -537,6 +537,147 @@
         ]
       },
       {
+        "anchor": "SynForecast",
+        "icon": "dna",
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "synforecast/index.html"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "synforecast/docs/getting-started/installation.html",
+              "synforecast/docs/getting-started/quickstart.html"
+            ]
+          },
+          {
+            "group": "Capabilities",
+            "pages": [
+              {
+                "group": "Building panels",
+                "pages": [
+                  "synforecast/docs/capabilities/balanced_pool.html",
+                  "synforecast/docs/capabilities/dataset.html",
+                  "synforecast/docs/capabilities/multivariatize.html"
+                ]
+              },
+              {
+                "group": "Patterns and covariates",
+                "pages": [
+                  "synforecast/docs/capabilities/changepoints.html",
+                  "synforecast/docs/capabilities/anomalies.html",
+                  "synforecast/docs/capabilities/missingness.html",
+                  "synforecast/docs/capabilities/multivariate_missingness.html",
+                  "synforecast/docs/capabilities/exogenous.html"
+                ]
+              },
+              {
+                "group": "Augmentation",
+                "pages": [
+                  "synforecast/docs/capabilities/augmentation.html",
+                  "synforecast/docs/capabilities/augmentation_real_data.html"
+                ]
+              },
+              {
+                "group": "Evaluation",
+                "pages": [
+                  "synforecast/docs/capabilities/when_synthetic_helps.html",
+                  "synforecast/docs/capabilities/robustness_testing.html"
+                ]
+              },
+              "synforecast/docs/capabilities/custom_generator.html"
+            ]
+          },
+          {
+            "group": "Generators",
+            "pages": [
+              {
+                "group": "Statistical",
+                "pages": [
+                  "synforecast/docs/generators/statistical/random_walk.html",
+                  "synforecast/docs/generators/statistical/seasonal.html",
+                  "synforecast/docs/generators/statistical/sarima.html",
+                  "synforecast/docs/generators/statistical/ets.html",
+                  "synforecast/docs/generators/statistical/inar.html"
+                ]
+              },
+              {
+                "group": "Stochastic",
+                "pages": [
+                  "synforecast/docs/generators/stochastic/garch.html",
+                  "synforecast/docs/generators/stochastic/ornstein_uhlenbeck.html",
+                  "synforecast/docs/generators/stochastic/geometric_brownian_motion.html",
+                  "synforecast/docs/generators/stochastic/jump_diffusion.html",
+                  "synforecast/docs/generators/stochastic/poisson_process.html",
+                  "synforecast/docs/generators/stochastic/cyclic.html",
+                  "synforecast/docs/generators/stochastic/fractional_brownian_motion.html",
+                  "synforecast/docs/generators/stochastic/hawkes_process.html",
+                  "synforecast/docs/generators/stochastic/stochastic_volatility.html",
+                  "synforecast/docs/generators/stochastic/regime_switching.html",
+                  "synforecast/docs/generators/stochastic/chaotic_system.html",
+                  "synforecast/docs/generators/stochastic/bounded_process.html",
+                  "synforecast/docs/generators/stochastic/levy_process.html"
+                ]
+              },
+              {
+                "group": "Multivariate",
+                "pages": [
+                  "synforecast/docs/generators/multivariate/copula.html",
+                  "synforecast/docs/generators/multivariate/var.html",
+                  "synforecast/docs/generators/multivariate/gaussian_process.html"
+                ]
+              },
+              {
+                "group": "Domain-Specific",
+                "pages": [
+                  "synforecast/docs/generators/domain/intermittent_demand.html",
+                  "synforecast/docs/generators/domain/iot_sensor.html",
+                  "synforecast/docs/generators/domain/energy_load.html",
+                  "synforecast/docs/generators/domain/state_space.html",
+                  "synforecast/docs/generators/domain/daily_active_users.html",
+                  "synforecast/docs/generators/domain/vital_signs.html",
+                  "synforecast/docs/generators/domain/clickstream.html"
+                ]
+              },
+              {
+                "group": "Pretraining",
+                "pages": [
+                  "synforecast/docs/generators/pretraining/tsi.html",
+                  "synforecast/docs/generators/pretraining/tcm.html",
+                  "synforecast/docs/generators/pretraining/kernel_synth.html"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Nixtlaverse",
+            "pages": [
+              "synforecast/docs/integrations/nixtlaverse.html",
+              "synforecast/docs/integrations/neuralforecast.html",
+              "synforecast/docs/integrations/mlforecast.html",
+              "synforecast/docs/integrations/statsforecast.html"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "synforecast/composition.html",
+              "synforecast/core.html",
+              "synforecast/exogenous.html",
+              "synforecast/dataset.html",
+              "synforecast/generators_statistical.html",
+              "synforecast/generators_stochastic.html",
+              "synforecast/generators_multivariate.html",
+              "synforecast/generators_domain.html",
+              "synforecast/generators_pretraining.html"
+            ]
+          }
+        ]
+      },
+      {
         "anchor": "CoreForecast",
         "icon": "truck-fast",
         "groups": [
