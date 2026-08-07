@@ -80,6 +80,7 @@ jobs:
           cp -R statsforecast docs/
           cp -R mlforecast docs/
           cp -R neuralforecast docs/
+          rm -rf docs/hierarchicalforecast
           cp -R hierarchicalforecast docs/
           cp -R utilsforecast docs/
           cp -R datasetsforecast docs/
