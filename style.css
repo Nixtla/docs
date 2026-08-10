@@ -838,12 +838,14 @@ html.dark a.font-semibold svg {
   margin-bottom: 0 !important;
   border: none !important;
   border-bottom: none !important;
+  border-left: 2px solid transparent !important;
   text-decoration: none !important;
   color: var(--primary) !important;
   opacity: 0.7;
   transition:
     opacity var(--duration-base) var(--ease-standard),
-    background-color var(--duration-base) var(--ease-standard);
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
 }
 
 #navigation-items a.nav-anchor div,
@@ -864,6 +866,20 @@ html.dark a.font-semibold svg {
   background-color: var(--nav-tint) !important;
   text-decoration: none !important;
   color: var(--primary) !important;
+}
+
+/* Active state — top-level product switcher items (TimeGPT, StatsForecast,
+   SynForecast, ...). Mintlify marks the current one with aria-current
+   (no reliable bg-primary class here, unlike the sidebar-group links below),
+   so key off the attribute rather than a Tailwind utility class. */
+#navigation-items a.nav-anchor[aria-current="location"] {
+  opacity: 1;
+  background-color: var(--nav-tint) !important;
+  border-left-color: var(--primary) !important;
+}
+
+#navigation-items a.nav-anchor[aria-current="location"] svg {
+  background-color: var(--primary) !important;
 }
 
 /* ===============================  SIDEBAR  ================================ */
@@ -2093,7 +2109,7 @@ details.expandable .primitive-param-field {
 
 #pagination {
   font-family: var(--font-sans) !important;
-  font-size: 30px !important;
+  font-size: 28px !important;
   font-weight: var(--font-weight-regular) !important;
   line-height: 100% !important;
   color: var(--primary) !important;
