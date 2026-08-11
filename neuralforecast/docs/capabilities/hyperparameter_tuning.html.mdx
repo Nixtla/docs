@@ -1,5 +1,6 @@
 ---
-title: Hyperparameter Optimization | NeuralForecast
+title: Tune NeuralForecast models with Ray Tune or Optuna
+description: Configure Auto models in NeuralForecast to search hyperparameters with Ray Tune or Optuna, including parallel trials and multi-GPU setups.
 ---
 
 Deep-learning models are the state-of-the-art in time series
@@ -359,10 +360,18 @@ To instantiate an `Auto` model you need to define:
 
 > **Tip**
 >
-> You can configure different options for Optuna using `optuna_options`.
-> Specifically you can pass: - `study_kwargs` for
-> `optuna.Study.optimize` - `create_study_kwargs` for
-> `optuna.create_study`
+> You can configure additional Optuna behavior with `optuna_options`, an
+> `OptunaOptions` container that accepts two fields:
+>
+> -   `study_kwargs`: forwarded to `optuna.Study.optimize`. Use it to set
+>     runtime options such as `n_jobs` (number of trials to run in
+>     parallel), `timeout`, or `gc_after_trial`.
+> -   `create_study_kwargs`: forwarded to `optuna.create_study`. Use it
+>     to configure the study itself, for example `storage`,
+>     `study_name`, `direction`, or a `pruner`.
+>
+> The number of trials is controlled by `num_samples`. Do not override
+> `n_trials` inside `study_kwargs`.
 
 ```python
 model = AutoNHITS(
@@ -374,6 +383,46 @@ model = AutoNHITS(
     num_samples=10,
 )
 ```
+
+To run trials in parallel with Optuna (for example, when using a
+persistent study storage backend such as SQLite or PostgreSQL), pass
+`n_jobs` through `study_kwargs`:
+
+```python
+from neuralforecast.common._base_auto import OptunaOptions
+
+optuna_opts = OptunaOptions(
+    study_kwargs={'n_jobs': 4},
+    create_study_kwargs={
+        'storage': 'sqlite:///nhits_study.db',
+        'study_name': 'nhits',
+        'load_if_exists': True,
+    },
+)
+
+model = AutoNHITS(
+    h=12,
+    loss=MAE(),
+    config=config_nhits,
+    search_alg=optuna.samplers.TPESampler(seed=0),
+    backend='optuna',
+    num_samples=20,
+    optuna_options=optuna_opts,
+)
+```
+
+> **Note**
+>
+> `optuna_options.study_kwargs['n_jobs']` controls how many Optuna
+> trials run concurrently in the same Python process. Each trial trains
+> one model with the `trainer_kwargs` you configured (for example,
+> `devices`, `accelerator`). If you want to distribute training of a
+> single trial across multiple GPUs, use PyTorch Lightning's
+> `trainer_kwargs` (`devices`, `strategy`). If you want to explore more
+> configurations in parallel on a machine with several GPUs, run one GPU
+> per trial (`trainer_kwargs={'devices': 1}`) and increase `n_jobs`.
+> Running both settings above 1 at the same time oversubscribes the
+> hardware.
 
 > **Important**
 >
