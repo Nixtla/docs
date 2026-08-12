@@ -682,6 +682,11 @@
         ]
       },
       {
+        "anchor": "ConformalForecast",
+        "icon": "bullseye",
+        "groups": []
+      },
+      {
         "anchor": "CoreForecast",
         "icon": "truck-fast",
         "groups": [
