@@ -1,8 +1,8 @@
 ---
 description: >-
-  xLSTM: An extension of the LSTM model.
+  xLSTM extends the LSTM architecture with exponential gating and new sLSTM and mLSTM memory cells for parallelizable sequence modeling and forecasting.
 output-file: models.xlstm.html
-title: xLSTM
+title: xLSTM extended long short-term memory model
 ---
 
 xLSTM is an RNN-based model for sequence modeling that extends the classical Long Short-Term Memory architecture with exponential gating and novel memory structures. The architecture introduces two new memory cell variants: sLSTM, which uses a scalar memory with a scalar update rule and a new cross-cell memory mixing mechanism, and mLSTM, which replaces the scalar cell state with a matrix memory updated via a covariance (outer product) rule, enabling full parallelizability. These cell variants are integrated into residual blocks to form xLSTM blocks, which are then stacked into full xLSTM architectures.
