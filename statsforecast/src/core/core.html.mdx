@@ -1,8 +1,7 @@
 ---
-description: >-
-  Methods for Fit, Predict, Forecast (fast), Cross Validation and plotting
+description: StatsForecast core API reference for fit, predict, forecast, cross_validation, and plotting across many time series with parallel n_jobs.
 output-file: core.html
-title: Core Methods
+title: StatsForecast core methods and API reference
 ---
 
 The core methods of `StatsForecast` provide a comprehensive interface for fitting, predicting, forecasting, and evaluating statistical forecasting models on large sets of time series.
@@ -33,6 +32,12 @@ Scikit-learn interface store the fitted models.
 
 The `StatsForecast` class offers parallelization utilities with Dask, Spark, and Ray back-ends.
 See distributed computing example [here](https://github.com/Nixtla/statsforecast/tree/main/experiments/ray).
+
+Parallelism across series is controlled by the constructor argument `n_jobs`, not by the individual `fit`, `predict`, `forecast`, or `cross_validation` methods. Pass `n_jobs=-1` when instantiating `StatsForecast` to use all available cores:
+
+```python
+sf = StatsForecast(models=[AutoARIMA()], freq='D', n_jobs=-1)
+```
 
 #### `StatsForecast.fit`
 
