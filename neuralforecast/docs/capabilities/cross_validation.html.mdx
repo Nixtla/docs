@@ -115,6 +115,16 @@ plot_series(Y_df)
 
 ## 3. Using cross-validation
 
+> **Series length requirement**
+>
+> Every series must have at least `input_size + h` observations before
+> the first cutoff. Series that fall short at a given cutoff produce
+> fewer than `h` predictions for that window, which shows up as some
+> `unique_id`/`ds` combinations having only 1, 2, ... rows instead of the
+> full horizon. Either filter out series that are too short, extend the
+> history, or pass `start_padding_enabled=True` to the model so short
+> series are left-padded with zeros up to `input_size`.
+
 ### 3.1 Using `n_windows`
 
 To use the `cross_validation` method, we can either: - Set the sizes of

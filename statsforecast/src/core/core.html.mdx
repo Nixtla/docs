@@ -34,6 +34,12 @@ Scikit-learn interface store the fitted models.
 The `StatsForecast` class offers parallelization utilities with Dask, Spark, and Ray back-ends.
 See distributed computing example [here](https://github.com/Nixtla/statsforecast/tree/main/experiments/ray).
 
+Parallelism across series is controlled by the constructor argument `n_jobs`, not by the individual `fit`, `predict`, `forecast`, or `cross_validation` methods. Pass `n_jobs=-1` when instantiating `StatsForecast` to use all available cores:
+
+```python
+sf = StatsForecast(models=[AutoARIMA()], freq='D', n_jobs=-1)
+```
+
 #### `StatsForecast.fit`
 
 ```python

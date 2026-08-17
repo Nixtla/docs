@@ -130,9 +130,9 @@ Name | Type | Description | Default
 `n_blocks` | <code>[List](#List)\[[int](#int)\]</code> | Number of blocks for each stack. Note that len(n_blocks) = len(stack_types). | <code>[1, 1, 1]</code>
 `mlp_units` | <code>[List](#List)\[[List](#List)\[[int](#int)\]\]</code> | Structure of hidden layers for each stack type. Each internal list should contain the number of units of each hidden layer. Note that len(n_hidden) = len(stack_types). | <code>3 * \[[512, 512]\]</code>
 `n_pool_kernel_size` | <code>[List](#List)\[[int](#int)\]</code> | list with the size of the windows to take a max/avg over. Note that len(stack_types)=len(n_freq_downsample)=len(n_pool_kernel_size). | <code>[2, 2, 1]</code>
-`n_freq_downsample` | <code>[List](#List)\[[int](#int)\]</code> | list with the stack's coefficients (inverse expressivity ratios). Note that len(stack_types)=len(n_freq_downsample)=len(n_pool_kernel_size). | <code>[4, 2, 1]</code>
+`n_freq_downsample` | <code>[List](#List)\[[int](#int)\]</code> | list with the stack's coefficients (inverse expressivity ratios). Each stack predicts `ceil(h / n_freq_downsample[i])` knots that are then interpolated to `h` points, so values close to or larger than `h` produce very few knots and a blocky/staircase forecast. Keep every value `<= h`, and use smaller values (down to `1`) when you need the stack to model higher-frequency components. Note that len(stack_types)=len(n_freq_downsample)=len(n_pool_kernel_size). | <code>[4, 2, 1]</code>
 `pooling_mode` | <code>[str](#str)</code> | input pooling module from ['MaxPool1d', 'AvgPool1d']. | <code>'MaxPool1d'</code>
-`interpolation_mode` | <code>[str](#str)</code> | interpolation basis from ['linear', 'nearest', 'cubic']. | <code>'linear'</code>
+`interpolation_mode` | <code>[str](#str)</code> | interpolation basis from ['linear', 'nearest', 'cubic']. `'nearest'` produces piecewise-constant (staircase) forecasts; use `'linear'` or `'cubic'` for smooth outputs. | <code>'linear'</code>
 `dropout_prob_theta` | <code>[float](#float)</code> | Float between (0, 1). Dropout for NHITS basis. | <code>0.0</code>
 `activation` | <code>[str](#str)</code> | activation from ['ReLU', 'Softplus', 'Tanh', 'SELU', 'LeakyReLU', 'PReLU', 'Sigmoid']. | <code>'ReLU'</code>
 `learning_rate` | <code>[float](#float)</code> | Learning rate between (0, 1). | <code>0.001</code>
