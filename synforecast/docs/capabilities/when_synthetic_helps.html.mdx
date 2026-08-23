@@ -128,20 +128,20 @@ measure:
 > **Four use cases**
 >
 > -   **Coverage and diversity.**
->     [`generate_series`](../getting-started/quickstart) and the
->     [balanced pool](balanced_pool) span behaviors — volatility
+>     [`generate_series`](/synforecast/docs/getting-started/quickstart.html) and the
+>     [balanced pool](/synforecast/docs/capabilities/balanced_pool.html) span behaviors — volatility
 >     clustering, long memory, intermittency, chaos — that no single
 >     real dataset contains. Useful for stress-testing a pipeline and
 >     for pretraining breadth.
-> -   **Robustness testing.** Inject [anomalies](anomalies),
->     [changepoints](changepoints), and [missingness](missingness) with
+> -   **Robustness testing.** Inject [anomalies](/synforecast/docs/capabilities/anomalies.html),
+>     [changepoints](/synforecast/docs/capabilities/changepoints.html), and [missingness](/synforecast/docs/capabilities/missingness.html) with
 >     known ground truth to measure how a model degrades.
 > -   **Privacy.** Share a reproducible, statistically-similar panel
 >     without exposing proprietary series.
 > -   **Pretraining at scale.** The diversity-targeted generators —
->     [TSI](../generators/pretraining/tsi),
->     [TCM](../generators/pretraining/tcm), and
->     [KernelSynth](../generators/pretraining/kernel_synth) — exist to
+>     [TSI](/synforecast/docs/generators/pretraining/tsi.html),
+>     [TCM](/synforecast/docs/generators/pretraining/tcm.html), and
+>     [KernelSynth](/synforecast/docs/generators/pretraining/kernel_synth.html) — exist to
 >     pretrain models that transfer to unseen series. The section below
 >     measures this: a synthetic-pretrained model used zero-shot beats
 >     training from scratch when the real history is short.
@@ -174,7 +174,7 @@ plt.show()
 The augmentation result above concerns a model that already has enough
 real data. Pretraining tests the opposite case: a model with too little
 real history to learn from. We pretrain a small NHITS on a synthetic
-corpus from [`pretraining_pool()`](balanced_pool), then forecast M3
+corpus from [`pretraining_pool()`](/synforecast/docs/capabilities/balanced_pool.html), then forecast M3
 Monthly series while varying how much history each series keeps, from 48
 months up to the full record. The corpus is generated independently and
 never sees M3.
