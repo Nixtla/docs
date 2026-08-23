@@ -12,7 +12,7 @@ controlled generators, injected real-world patterns, and mixed datasets.
 > -   **Testing** a forecasting pipeline on data whose true process you
 >     know, before trusting it on real series.
 > -   **Augmenting** a small panel so a global model has more to learn
->     from — see [SynAugment](../capabilities/augmentation).
+>     from — see [SynAugment](/synforecast/docs/capabilities/augmentation.html).
 > -   **Pretraining** foundation models on a diverse corpus no single
 >     real dataset provides.
 > -   **Sharing** a reproducible example without exposing proprietary
@@ -192,10 +192,10 @@ plot_panel(
 > **Each pattern has its own guide**
 >
 > The knobs above are the quick version. Fine-grained control lives in
-> the capability guides: [anomalies](../capabilities/anomalies),
-> [changepoints](../capabilities/changepoints), and
-> [missingness](../capabilities/missingness). To attach exogenous
-> regressors, see [exogenous](../capabilities/exogenous).
+> the capability guides: [anomalies](/synforecast/docs/capabilities/anomalies.html),
+> [changepoints](/synforecast/docs/capabilities/changepoints.html), and
+> [missingness](/synforecast/docs/capabilities/missingness.html). To attach exogenous
+> regressors, see [exogenous](/synforecast/docs/capabilities/exogenous.html).
 
 ## 4. Combine generators into one dataset
 
@@ -240,16 +240,16 @@ plot_panel(mixed, "SynSet: random-walk + weekly-seasonal series in one panel")
 
 -   **Generators** — 31 generator classes from SARIMA, ETS, and GARCH to
     Gaussian processes and the
-    [KernelSynth](../generators/pretraining/kernel_synth) pretraining
+    [KernelSynth](/synforecast/docs/generators/pretraining/kernel_synth.html) pretraining
     recipe. Start with [random
-    walk](../generators/statistical/random_walk) or
-    [seasonal](../generators/statistical/seasonal).
--   **[Augmentation](../capabilities/augmentation)** — expand a small
+    walk](/synforecast/docs/generators/statistical/random_walk.html) or
+    [seasonal](/synforecast/docs/generators/statistical/seasonal.html).
+-   **[Augmentation](/synforecast/docs/capabilities/augmentation.html)** — expand a small
     real panel with `SynAugment` or TSMixup.
--   **[Balanced pool](../capabilities/balanced_pool)** — what
+-   **[Balanced pool](/synforecast/docs/capabilities/balanced_pool.html)** — what
     `generate_series` draws from by default, and how to tailor it.
 -   **Integrations** — end-to-end workflows with
-    [statsforecast](../integrations/statsforecast),
-    [mlforecast](../integrations/mlforecast), and
-    [neuralforecast](../integrations/neuralforecast).
+    [statsforecast](/synforecast/docs/integrations/statsforecast.html),
+    [mlforecast](/synforecast/docs/integrations/mlforecast.html), and
+    [neuralforecast](/synforecast/docs/integrations/neuralforecast.html).
 
