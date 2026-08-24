@@ -293,6 +293,14 @@ from statsforecast.models import SimpleExponentialSmoothingOptimized
 
 ### Instantiating Model
 
+`SimpleExponentialSmoothingOptimized` fits `alpha` independently for each
+`unique_id` in your DataFrame by minimizing squared error, so every series
+gets its own smoothing parameter. There are no arguments to constrain the
+`alpha` search range. If you want to compare a small set of fixed alphas
+across all series, use
+[`SimpleExponentialSmoothing`](/statsforecast/docs/models/simpleexponentialsmoothing.html)
+with multiple instances instead.
+
 ```python
 horizon = len(test) # number of predictions
 

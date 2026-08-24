@@ -147,8 +147,17 @@ Seed set to 1
 Fit the model by instantiating a `NeuralForecast` object and using the
 `fit` method. The `local_scaler_type` parameter is used to specify the
 type of scaling to be used. In this case, we will use `standard`, which
-scales the data to have zero mean and unit variance.Other supported
-scalers are `minmax`, `robust`, `robust-iqr`, `minmax`, and `boxcox`.
+scales the data to have zero mean and unit variance. Other supported
+scalers are `minmax`, `robust`, `robust-iqr`, `minmax1`, and `boxcox`.
+
+Both robust scalers center each series by its median. They differ in
+how they measure spread:
+
+-   `robust` divides by the **median absolute deviation (MAD)**.
+-   `robust-iqr` divides by the **inter-quartile range (IQR)**.
+
+Both are outlier-resistant. See [`LocalRobustScaler`](/coreforecast/scalers)
+in `coreforecast` for the underlying implementation.
 
 ```python
 nf = NeuralForecast(models=[model], freq='h', local_scaler_type='standard')

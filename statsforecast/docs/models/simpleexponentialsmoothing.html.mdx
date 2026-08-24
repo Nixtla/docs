@@ -344,6 +344,16 @@ from statsforecast.models import SimpleExponentialSmoothing
 
 ### Instantiating Model
 
+The `alpha` you pass to `SimpleExponentialSmoothing` is a fixed value that
+`StatsForecast` applies uniformly to **every** series in your DataFrame. It is
+not tuned per `unique_id`. If you need a smoothing parameter that adapts to
+each series, use
+[`SimpleExponentialSmoothingOptimized`](/statsforecast/docs/models/simpleexponentialoptimized.html),
+which optimizes `alpha` independently for each series by minimizing squared
+error. To compare several fixed alphas at once, pass multiple
+`SimpleExponentialSmoothing` instances with different `alias` values, as shown
+below.
+
 We are going to build different models, for different values of alpha.
 
 ```python
