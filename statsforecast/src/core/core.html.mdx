@@ -39,6 +39,32 @@ Parallelism across series is controlled by the constructor argument `n_jobs`, no
 sf = StatsForecast(models=[AutoARIMA()], freq='D', n_jobs=-1)
 ```
 
+##### Accessing fitted models per series
+
+After `StatsForecast.fit`, the fitted model objects are stored in `sf.fitted_`
+as a 2-D NumPy array of shape `(n_series, n_models)`:
+
+-   The first axis is indexed by series in the order the `unique_id`
+    values first appear in the input DataFrame.
+-   The second axis follows the order of the `models` list passed to
+    the `StatsForecast` constructor.
+
+Each entry exposes the underlying model in a `.model_` attribute, which
+holds fit-specific state such as `residuals`. To iterate over every series
+alongside its `unique_id`:
+
+```python
+unique_ids = df['unique_id'].unique()  # preserves input order
+
+for i, uid in enumerate(unique_ids):
+    residuals = sf.fitted_[i, 0].model_['residuals']
+    print(uid, residuals)
+```
+
+To retrieve in-sample predictions as a DataFrame keyed by `unique_id`
+instead, pass `fitted=True` to `forecast` or `cross_validation` and call
+`sf.forecast_fitted_values()` or `sf.cross_validation_fitted_values()`.
+
 #### `StatsForecast.fit`
 
 ```python
