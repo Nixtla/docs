@@ -1,5 +1,6 @@
 ---
 title: Trajectory Simulation
+description: Generate simulated future trajectories with the StatsForecast simulate method, choose error distributions, and speed up large AutoARIMA simulations.
 ---
 
 > This tutorial demonstrates how to generate sample trajectories
@@ -366,6 +367,51 @@ Distribution   Mean Std Dev    Min     Max 5th percentile 95th percentile
     t (df=3) 667.69  164.39 314.33 1043.34         430.01          907.51
    Bootstrap 669.94  165.51 324.97 1059.47         429.79          913.07
 ```
+
+## Handling Large Simulations
+
+The output of `simulate` contains one row per series, per path, per
+horizon step, so its size grows as `n_series * n_paths * h`. When this
+product exceeds 100,000 points, StatsForecast emits a warning:
+
+``` text
+Generating 4,800,000 simulation points. Large simulations may consume significant memory and time.
+```
+
+If a simulation is slow or consumes too much memory, consider the
+following.
+
+**Fitting dominates the runtime for `AutoARIMA`.** Each call to
+`StatsForecast.simulate` fits the models before generating paths. For
+`AutoARIMA`, this includes the full model order search for every
+series, which is often more expensive than the path generation itself.
+There are two ways to avoid paying this cost repeatedly:
+
+-   Fit once and simulate many times using the model-level API. When
+    `y` is not passed to the model’s `simulate` method, it reuses the
+    already fitted model instead of fitting a new one:
+
+    ```python
+    model = AutoARIMA(season_length=24)
+    model.fit(y=df['y'].values)
+
+    # Reuses the fitted model; no new order search is performed
+    paths = model.simulate(h=48, n_paths=100, seed=42)  # shape (n_paths, h)
+    ```
+
+-   Skip the order search entirely by using the
+    [ARIMA](../../src/core/models.html) model with a fixed order
+    instead of `AutoARIMA`.
+
+**Parallelism is across series, not paths.** Setting `n_jobs=-1` in
+`StatsForecast` distributes the work across series. It speeds up
+simulations over many series, but it does not help when simulating many
+paths for a single series.
+
+**Reduce the number of points.** Lowering `n_paths` or `h`, or
+simulating a subset of series at a time, reduces memory usage and
+runtime proportionally. Passing a `seed` keeps results reproducible
+across runs, including when `n_jobs > 1`.
 
 ## References
 
