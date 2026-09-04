@@ -66,10 +66,12 @@ Use `scale="none"` only when the panel already shares a meaningful
 common scale. The output length and timestamps follow the reference
 series, including when its neighbours have different lengths.
 
-DBA needs at least two usable series. Its DTW work grows quadratically
-within the selected band, so reduce `window_fraction`, `n_neighbors`, or
-`n_iterations` for long panels. Pairwise distances are cached within a
-call.
+DBA needs at least two usable series. DTW time and memory grow with
+series length times band width, so reduce `window_fraction`,
+`n_neighbors`, or `n_iterations` for long panels. Pairwise panel
+distances are computed once per call, in parallel, in native Rust.
+Series without a finite observation are skipped with a logged warning;
+`mbb` also skips series shorter than four observations.
 
 ## Output contract
 

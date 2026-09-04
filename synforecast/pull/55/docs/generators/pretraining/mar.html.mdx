@@ -12,10 +12,12 @@ $$
 y_t = c_k + \sum_{i=1}^{p_k} \phi_{k,i} y_{t-i} + \sigma_k \varepsilon_t.
 $$
 
-This follows the breadth-oriented MAR idea used by GRATIS. SynForecast
-samples stationary coefficients through partial autocorrelations and
-adds bounded retries, optional seasonal AR factors, and explicit output
-standardization.
+The mixture autoregressive model is due to [Wong and Li
+(2000)](https://doi.org/10.1111/1467-9868.00222); the breadth-oriented
+sampling recipe follows [GRATIS](https://arxiv.org/abs/1903.02787).
+SynForecast samples stationary coefficients through partial
+autocorrelations and adds bounded retries, optional seasonal AR factors,
+and explicit output standardization.
 
 ## Generate a diverse MAR pool
 
@@ -53,8 +55,11 @@ distribution.
 ## Supply a fixed MAR model
 
 Fixed mode is enabled by supplying all four fixed fields together. Every
-AR component must be stationary; weights are normalized during
-validation.
+AR component must be stationary and the mixture must be second-order
+stationary (Wong and Li 2000); weights are normalized during validation.
+`seasonal_period` has no effect in fixed mode. A fixed model whose
+simulation fails the finite, bounded, non-constant output guards raises
+a `ValueError` instead of silently returning noise.
 
 ```python
 fixed = MARGenerator(
@@ -105,10 +110,11 @@ two complete periods at `min_length`.
 
 > **Note**
 >
-> The default search evaluates roughly the product of `n_generations`,
-> `population_size`, and `n_draws_per_candidate` simulated paths.
-> Infeasible targets return the best candidate found within that fixed
-> budget.
+> The search evaluates at most the product of `n_generations`,
+> `population_size`, and `n_draws_per_candidate` simulated paths,
+> stopping early once the best L2 feature distance is at or below
+> `tolerance` (default `0.05`). Infeasible targets return the best
+> candidate found within that fixed budget.
 
 ## When to use MAR
 

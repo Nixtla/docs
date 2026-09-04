@@ -97,18 +97,27 @@ SynAugment(id_col='unique_id', time_col='ds', target_col='y', seed=None, engine=
 
 Augment time series datasets with synthetic series.
 
-Analyzes input time series, auto-selects appropriate generators based on
-statistical properties, fits parameters, and generates statistically
-similar synthetic series.
+Four strategies share the same column contract and seeding:
 
-The augmentation process:
+- :meth:`augment` fits a parametric generator per series and simulates
+  from it (IDs ``"{original_id}_aug_{i}"``).
+- :meth:`mixup` forms convex combinations of z-normalized series
+  (IDs ``"mixup_{i}"``).
+- :meth:`mbb` bootstraps decomposition remainders in moving blocks
+  (IDs ``"{original_id}_mbb_{i}"``).
+- :meth:`dba` averages nearest neighbours with DTW barycenters
+  (IDs ``"{original_id}_dba_{i}"``).
+
+The fit-and-simulate process behind :meth:`augment`:
 1. For each unique series in the input DataFrame, analyze its statistical properties
 2. Auto-select the most appropriate generator (or use user override)
 3. Fit generator parameters to match the series' statistical fingerprint
 4. Generate n_augment synthetic series that preserve these properties
 5. Return combined DataFrame with original and synthetic series
 
-Synthetic series IDs follow the pattern `"{original_id}_aug_{i}"`
+Series that are entirely missing (or, for :meth:`mbb`, shorter than four
+observations) are skipped with a logged warning by :meth:`mixup`,
+:meth:`mbb`, and :meth:`dba`.
 
 **Parameters:**
 
@@ -348,8 +357,9 @@ distort the remainder variability.
 Classical decomposition and moving-block sampling execute in native
 Rust. Seed determinism is stable within this native path.
 
-NaNs are interpolated before decomposition. Every input series must
-contain a finite observation and at least four observations. Additional
+NaNs are interpolated before decomposition. Series without a finite
+observation or with fewer than four observations are skipped with a
+logged warning; at least one series must be usable. Additional
 input columns are copied unchanged from each source series. The
 effective block length, including an explicitly supplied
 ``block_size``, is capped per source series at
@@ -372,8 +382,8 @@ https://doi.org/10.1109/ICDM.2017.106) and Bandara et al. (2021,
 https://arxiv.org/abs/2008.02663). Neighbor weighting, per-copy weight
 randomization, banded DTW, and z-normalized alignment are SynForecast's
 own design rather than a reproduction of the reference code. Pairwise
-panel distances are cached, while the band limits the otherwise
-quadratic alignment cost.
+panel distances are computed once per call in parallel native code,
+while the band limits the otherwise quadratic alignment cost.
 
 This panel-aware method caches every usable source series once and
 deliberately bypasses ``_match_autocorrelation``. With the default
