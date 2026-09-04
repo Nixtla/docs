@@ -1,0 +1,391 @@
+---
+title: Dataset
+description: Dataset composition and augmentation
+---
+
+### `SynSet`
+
+```python
+SynSet(generators)
+```
+
+Generate synthetic time series datasets from multiple generators.
+
+Combine multiple generators into one long-format panel; each generator
+contributes its own type of time series pattern.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`generators` | <code>[list](#list)[[BaseGenerator](#synforecast.base.BaseGenerator)]</code> | List of instantiated generator objects to use for creating time series. | *required*
+
+**Examples:**
+
+```pycon
+>>> from synforecast import SynSet
+>>> from synforecast.generators import RandomWalkGenerator, SeasonalGenerator
+>>>
+>>> # Create generators
+>>> rw_gen = RandomWalkGenerator(
+...     min_length=100,
+...     max_length=150,
+...     freq="h",
+...     seed=42,
+... )
+>>> seasonal_gen = SeasonalGenerator(
+...     min_length=100,
+...     max_length=150,
+...     freq="h",
+...     seed=43,
+... )
+>>>
+>>> # Create dataset
+>>> dataset = SynSet([rw_gen, seasonal_gen])
+>>> df = dataset.generate(n_series_per_generator=5)
+```
+
+Initialize the SynSet with a list of generators.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`generators` | <code>[list](#list)[[BaseGenerator](#synforecast.base.BaseGenerator)]</code> | List of instantiated generator objects. | *required*
+
+**Raises:**
+
+Type | Description
+---- | -----------
+<code>[ValueError](#ValueError)</code> | If generators list is empty or contains non-BaseGenerator objects. If generators have inconsistent column names (id_col, time_col, target_col).
+
+#### `SynSet.generate`
+
+```python
+generate(n_series_per_generator, n_jobs=-1)
+```
+
+Generate synthetic time series data from all generators.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`n_series_per_generator` | <code>[int](#int)</code> | Number of time series to generate from each generator. | *required*
+`n_jobs` | <code>[int](#int)</code> | Number of parallel workers. -1 (default) uses ``RAYON_NUM_THREADS`` if set, otherwise all logical cores. Results are seed-deterministic and do not depend on n_jobs. | <code>-1</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | DataFrame containing all generated time series from all generators, in long format with columns [id_col, time_col, target_col].
+
+<details class="notes" open markdown="1">
+<summary>Notes</summary>
+
+Series IDs are unique across all generators. With 2 generators and
+3 series per generator, IDs run from 0 to 5.
+
+</details>
+
+
+### `SynAugment`
+
+```python
+SynAugment(id_col='unique_id', time_col='ds', target_col='y', seed=None, engine=None, on_error='raise')
+```
+
+Augment time series datasets with synthetic series.
+
+Analyzes input time series, auto-selects appropriate generators based on
+statistical properties, fits parameters, and generates statistically
+similar synthetic series.
+
+The augmentation process:
+1. For each unique series in the input DataFrame, analyze its statistical properties
+2. Auto-select the most appropriate generator (or use user override)
+3. Fit generator parameters to match the series' statistical fingerprint
+4. Generate n_augment synthetic series that preserve these properties
+5. Return combined DataFrame with original and synthetic series
+
+Synthetic series IDs follow the pattern `"{original_id}_aug_{i}"`
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`id_col` | <code>[str](#str)</code> | Name of the ID column (default: 'unique_id') | <code>'unique_id'</code>
+`time_col` | <code>[str](#str)</code> | Name of the timestamp column (default: 'ds') | <code>'ds'</code>
+`target_col` | <code>[str](#str)</code> | Name of the value column (default: 'y') | <code>'y'</code>
+`seed` | <code>[int](#int) \| None</code> | Random seed for reproducibility | <code>None</code>
+`engine` | <code>[str](#str) \| None</code> | Output dataframe library. None (default) matches the input DataFrame's library. | <code>None</code>
+
+<details class="example" open markdown="1">
+<summary>Example</summary>
+
+>>> from synforecast import SynAugment
+>>> import polars as pl
+>>>
+>>> # Create sample data
+>>> df = pl.DataFrame(
+...     &#123;
+...         "unique_id": ["series_0"] * 100,
+...         "ds": pl.date_range(
+...             pl.date(2020, 1, 1), pl.date(2020, 4, 9), eager=True
+...         ),
+...         "y": [i + np.random.randn() for i in range(100)],
+...     &#125;
+... )
+>>>
+>>> # Augment the dataset
+>>> augmenter = SynAugment(seed=42)
+>>> augmented_df = augmenter.augment(df, n_augment=3)
+>>> augmented_df["unique_id"].n_unique()
+4
+
+</details>
+
+Initialize the SynAugment instance.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`id_col` | <code>[str](#str)</code> | Name of the ID column | <code>'unique_id'</code>
+`time_col` | <code>[str](#str)</code> | Name of the timestamp column | <code>'ds'</code>
+`target_col` | <code>[str](#str)</code> | Name of the value column | <code>'y'</code>
+`seed` | <code>[int](#int) \| None</code> | Random seed for reproducibility | <code>None</code>
+`engine` | <code>[str](#str) \| None</code> | Output dataframe library (e.g. 'pandas', 'polars'). None (default) matches the input DataFrame's library. | <code>None</code>
+`on_error` | <code>[Literal](#typing.Literal)['raise', 'ar1']</code> | What to do when a fitted generator fails for a series. 'raise' (default) propagates the error; 'ar1' substitutes an AR(1) series matching the source's mean, std, and lag-1 autocorrelation, and reports all substitutions in a single warning at the end of `augment`. | <code>'raise'</code>
+
+#### `SynAugment.analyze`
+
+```python
+analyze(df)
+```
+
+Analyze all series in DataFrame and return properties.
+
+For each unique series, detects statistical properties and recommends
+the most appropriate generator.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | DataFrame with time series data (must have id_col, time_col, target_col) | *required*
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[dict](#dict)[[str](#str), [dict](#dict)]</code> | Mapping of each `unique_id` to its analysis results. Every entry holds `recommended_generator` (the chosen generator name), `properties` (all detected statistical properties), and `fitted_params` (the estimated generator parameters).
+
+**Raises:**
+
+Type | Description
+---- | -----------
+<code>[ValueError](#ValueError)</code> | If DataFrame is missing required columns
+
+#### `SynAugment.augment`
+
+```python
+augment(df, n_augment=1, generator_override=None, preserve_timestamps=True)
+```
+
+Augment dataset with synthetic series.
+
+For each series in the input DataFrame, generates n_augment synthetic
+series that are statistically similar to the original.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input DataFrame with time series (must have id_col, time_col, target_col) | *required*
+`n_augment` | <code>[int](#int)</code> | Number of synthetic series to generate per original series | <code>1</code>
+`generator_override` | <code>[dict](#dict)[[str](#str), [str](#str)] \| None</code> | Optional dict mapping unique_id to generator name. Overrides automatic generator selection for specified series. Example: &#123;"series_0": "SARIMAGenerator"&#125; | <code>None</code>
+`preserve_timestamps` | <code>[bool](#bool)</code> | If True, synthetic series use the same timestamps as the original series | <code>True</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Combined DataFrame with original and synthetic series. Synthetic series IDs follow the pattern `"{original_id}_aug_{i}"`
+
+**Raises:**
+
+Type | Description
+---- | -----------
+<code>[ValueError](#ValueError)</code> | If DataFrame is missing required columns, n_augment &lt; 1, or generator_override names an unsupported generator
+<code>[RuntimeError](#RuntimeError)</code> | If a fitted generator fails for a series and the instance was created with on_error='raise' (the default)
+
+<details class="example" open markdown="1">
+<summary>Example</summary>
+
+>>> augmenter = SynAugment(seed=42)
+>>> # Basic augmentation
+>>> augmented_df = augmenter.augment(df, n_augment=3)  # doctest: +SKIP
+>>>
+>>> # With generator override
+>>> augmented_df = augmenter.augment(  # doctest: +SKIP
+...     df, n_augment=2, generator_override=&#123;"series_0": "SARIMAGenerator"&#125;
+... )
+
+</details>
+
+#### `SynAugment.augment_single_series`
+
+```python
+augment_single_series(series_id, values, timestamps, n_augment=1, generator_name=None)
+```
+
+Augment a single series (lower-level API).
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`series_id` | <code>[str](#str)</code> | ID of the original series | *required*
+`values` | <code>[ndarray](#numpy.ndarray)</code> | Array of time series values | *required*
+`timestamps` | <code>[ndarray](#numpy.ndarray)</code> | Array of timestamps | *required*
+`n_augment` | <code>[int](#int)</code> | Number of synthetic series to generate | <code>1</code>
+`generator_name` | <code>[str](#str) \| None</code> | Optional generator name; if None, auto-detect | <code>None</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[list](#list)[[tuple](#tuple)[[str](#str), [ndarray](#numpy.ndarray), [ndarray](#numpy.ndarray)]]</code> | List of tuples: (new_id, synthetic_values, timestamps)
+
+#### `SynAugment.mixup`
+
+```python
+mixup(df, n_series=None, max_mix=3, alpha=1.5, scaling='mean', include_original=True)
+```
+
+Augment a dataset with TSMixup convex combinations of real series.
+
+Implements TSMixup, the augmentation used to pretrain the Chronos
+forecasting models (Ansari et al. 2024, "Chronos: Learning the Language
+of Time Series", https://arxiv.org/abs/2403.07815, Apache-2.0). Each
+synthetic series is built by drawing ``1..max_mix`` source series,
+taking a random window of their shared (minimum) length, scaling each
+window, and combining them with convex weights sampled from a
+``Dirichlet(alpha)`` distribution. Unlike :meth:`augment`, a mixup
+series is not tied to a single source: it blends the dynamics of
+several, which broadens a small panel without fitting any generator.
+
+Because the mixed series live in scaled space (different sources have
+different magnitudes), the output retains the chosen scaling rather
+than any single source's level. Use ``scaling="none"`` to mix raw
+values when all series already share a scale.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input DataFrame with time series (must have id_col, time_col, target_col). | *required*
+`n_series` | <code>[int](#int) \| None</code> | Number of synthetic series to create. Defaults to the number of input series. | <code>None</code>
+`max_mix` | <code>[int](#int)</code> | Maximum number of source series combined per synthetic series; the count is drawn uniformly from ``1..max_mix`` and capped at the number of available series (default: 3). | <code>3</code>
+`alpha` | <code>[float](#float)</code> | Concentration of the symmetric Dirichlet weight distribution. Values &lt; 1 concentrate weight on few sources; larger values spread it more evenly (default: 1.5). | <code>1.5</code>
+`scaling` | <code>[Literal](#typing.Literal)['mean', 'std', 'none']</code> | Per-window scaling before mixing: 'mean' (divide by mean absolute value, Chronos default), 'std' (z-normalize), or 'none' (default: 'mean'). | <code>'mean'</code>
+`include_original` | <code>[bool](#bool)</code> | Prepend the original series to the output (default: True). | <code>True</code>
+
+<details class="notes" open markdown="1">
+<summary>Notes</summary>
+
+NaNs in source series are linearly interpolated before mixing,
+including nearest-value filling at the ends. Entirely missing
+series are excluded. When ``include_original=True``, the original
+rows and their missing values are retained unchanged.
+
+</details>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | DataFrame with the original series (optional) and synthetic mixup series. Mixup IDs follow the pattern ``"mixup_{i}"``.
+
+**Raises:**
+
+Type | Description
+---- | -----------
+<code>[ValueError](#ValueError)</code> | If the DataFrame is missing required columns, if arguments are out of range, or if it holds no usable series.
+
+<details class="example" open markdown="1">
+<summary>Example</summary>
+
+>>> augmenter = SynAugment(seed=42)
+>>> mixed_df = augmenter.mixup(df, n_series=50)  # doctest: +SKIP
+
+</details>
+
+#### `SynAugment.mbb`
+
+```python
+mbb(df, n_augment=1, seasonal_period=None, block_size=None, include_original=True)
+```
+
+Bootstrap decomposition remainders with moving blocks.
+
+This non-parametric augmenter follows the moving-block-bootstrap idea
+used for forecasting by Bergmeir, Hyndman, and Benitez (2016,
+https://doi.org/10.1016/j.ijforecast.2015.07.002) and the augmentation
+recipe discussed by Bandara et al. (2021,
+https://arxiv.org/abs/2008.02663). SynForecast uses a classical
+moving-average decomposition rather than Box-Cox plus STL; its
+defaults, block-size choice, and stability guards are its own design
+rather than a reproduction of the reference code.
+
+This method deliberately bypasses the ``_match_autocorrelation``
+rescaling used by :meth:`augment`. Recombining a source's own trend and
+seasonal components with bootstrapped remainder blocks already anchors
+the result to that source; re-pinning mean and standard deviation would
+distort the remainder variability.
+
+Classical decomposition and moving-block sampling execute in native
+Rust. Seed determinism is stable within this native path.
+
+NaNs are interpolated before decomposition. Every input series must
+contain a finite observation and at least four observations. Additional
+input columns are copied unchanged from each source series. The
+effective block length, including an explicitly supplied
+``block_size``, is capped per source series at
+``max(2, len(series) // 3)``. This keeps multiple remainder blocks in
+play for short inputs; request a smaller value when the exact block
+length matters.
+
+#### `SynAugment.dba`
+
+```python
+dba(df, n_augment=1, n_neighbors=3, n_iterations=5, window_fraction=0.1, scale='reference', include_original=True)
+```
+
+Augment a panel with randomized nearest-neighbor DTW barycenters.
+
+DBA comes from Petitjean, Ketterlin, and Gancarski (2011,
+https://doi.org/10.1016/j.patcog.2010.09.013); nearest-neighbor weighted
+augmentation follows Forestier et al. (2017,
+https://doi.org/10.1109/ICDM.2017.106) and Bandara et al. (2021,
+https://arxiv.org/abs/2008.02663). Neighbor weighting, per-copy weight
+randomization, banded DTW, and z-normalized alignment are SynForecast's
+own design rather than a reproduction of the reference code. Pairwise
+panel distances are cached, while the band limits the otherwise
+quadratic alignment cost.
+
+This panel-aware method caches every usable source series once and
+deliberately bypasses ``_match_autocorrelation``. With the default
+``scale="reference"``, inputs are z-normalized for alignment and the
+barycenter is mapped to the reference mean and standard deviation. That
+is explicit reference anchoring, not the :meth:`augment` pinning path.
+``scale="none"`` averages raw values for panels already sharing scale.
+Plain DBA is deterministic, so each requested copy randomizes the
+reference and neighbor weights to create distinct augmentations.
+Additional input columns are copied unchanged from the reference
+series; DBA only barycenters the target column.
+
+Banded DTW and barycenter updates execute in native Rust. Seed
+determinism is stable within this native path.
+

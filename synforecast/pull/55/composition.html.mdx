@@ -1,0 +1,260 @@
+---
+title: Generation and Composition
+description: Convenience APIs, generator pools, and multivariate composition
+---
+
+### `generate_series`
+
+```python
+generate_series(n_series, freq='D', min_length=50, max_length=500, generators=None, engine='pandas', seed=0, with_generator_col=False)
+```
+
+Generate a synthetic panel of time series.
+
+Series are drawn from a balanced pool of generators covering diverse
+temporal behaviors (or from `generators` when provided) and returned in
+long format, mirroring `utilsforecast.data.generate_series`.
+
+Series are spread evenly across the generator list from the front, so
+when ``n_series`` is smaller than the pool only the first ``n_series``
+generators contribute. The default pool is ordered round-robin across
+its behavioral niches, so a small panel still spans distinct behaviors:
+the first 15 generators cover all 15 niches.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`n_series` | <code>[int](#int)</code> | Number of series to generate. | *required*
+`freq` | <code>[str](#str) \| [int](#int)</code> | Frequency of the data, as a pandas offset alias (e.g. 'D', 'h', '5min', 'MS') or an integer for an integer time index. Defaults to 'D'. | <code>'D'</code>
+`min_length` | <code>[int](#int)</code> | Minimum length of each series. Defaults to 50. | <code>50</code>
+`max_length` | <code>[int](#int)</code> | Maximum length of each series. Defaults to 500. | <code>500</code>
+`generators` | <code>[list](#list)[[BaseGenerator](#synforecast.base.BaseGenerator)]</code> | Generators to draw from. Defaults to `synforecast.balanced_pool`. Ignores min_length / max_length / freq / engine / seed when provided. | <code>None</code>
+`engine` | <code>[str](#str)</code> | Output dataframe library. Defaults to 'pandas'. | <code>'pandas'</code>
+`seed` | <code>[int](#int)</code> | Random seed. Defaults to 0. | <code>0</code>
+`with_generator_col` | <code>[bool](#bool)</code> | When True, add a `generator` column with the alias of the generator that produced each series. Defaults to False. | <code>False</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[IntoDataFrame](#narwhals.stable.v2.typing.IntoDataFrame)</code> | DataFrame in long format with columns [`unique_id`, `ds`, `y`], plus `generator` when `with_generator_col` is True.
+
+
+### `balanced_pool`
+
+```python
+balanced_pool(min_length=200, max_length=200, freq='D', seed=42, **base_kwargs)
+```
+
+Create a balanced pool of generators covering diverse temporal behaviors.
+
+Returns 42 pre-configured generator instances across 15 behavioral niches,
+with allocation proportional to each generator's behavioral range. This
+avoids the implicit bias toward financial processes that occurs when using
+all generators equally.
+
+The list is ordered round-robin across the niches (one variant of every
+niche, then second variants, and so on), so any prefix spans as many
+distinct behaviors as possible: the first 15 entries cover all 15 niches.
+Consumers that use only the first k generators — such as
+``generate_series`` with ``n_series < 42`` — therefore still get a
+behaviorally diverse panel.
+
+<details class="behavioral-niches-covered" open markdown="1">
+<summary>Behavioral niches covered</summary>
+
+- ARMA + seasonality (SARIMA, 5 variants)
+- Exponential smoothing (ETS, 4 variants)
+- Long-range memory (Fractional Brownian Motion, 3 Hurst regimes)
+- Structural breaks (Regime Switching, 2 variants)
+- Volatility clustering (GARCH, 2 persistence levels)
+- Irregular cycles (Cyclic, 2 regularity levels)
+- Sparse/intermittent (Intermittent Demand, 3 patterns)
+- Multi-seasonal (Energy Load, 2 load types)
+- Sensor artifacts (IoT Sensor, 3 health states)
+- Physiological (Vital Signs, 3 patient types)
+- Smooth/rough functions (Gaussian Process, 4 kernels)
+- Deterministic chaos (Chaotic System, 3 systems)
+- Count time series (INAR, 2 innovation types)
+- Bounded/proportion data (Bounded Process, 2 models)
+- Heavy-tailed processes (Levy Process, 2 stability levels)
+
+</details>
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`min_length` | <code>[int](#int)</code> | Minimum time series length for all generators. | <code>200</code>
+`max_length` | <code>[int](#int)</code> | Maximum time series length for all generators. | <code>200</code>
+`freq` | <code>[str](#str) \| [int](#int)</code> | Frequency for all generators, as a pandas offset alias or integer. | <code>'D'</code>
+`seed` | <code>[int](#int) \| None</code> | Base random seed. Each generator gets seed + i for reproducibility. Set to None for random seeds. | <code>42</code>
+`**base_kwargs` | <code>[Any](#typing.Any)</code> | Additional keyword arguments passed to all generators (e.g., engine, id_col, time_col, target_col). | <code>&#123;&#125;</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[list](#list)[[BaseGenerator](#synforecast.base.BaseGenerator)]</code> | List of 42 BaseGenerator instances ready for use with SynSet.
+
+**Examples:**
+
+```pycon
+>>> from synforecast import SynSet, balanced_pool
+>>> dataset = SynSet(balanced_pool(min_length=100, max_length=100, freq="D"))
+>>> df = dataset.generate(n_series_per_generator=1)
+```
+
+
+### `pretraining_pool`
+
+```python
+pretraining_pool(min_length=256, max_length=1024, freq='D', seed=42, include_balanced=True, n_meta_variants=3, **base_kwargs)
+```
+
+Create a breadth-maximizing pool for foundation-model pretraining.
+
+This is the pretraining-oriented counterpart to :func:`balanced_pool`. It
+adds the diversity-targeted *meta-generators* that ``balanced_pool``
+deliberately excludes — ``TSIGenerator`` (randomized trend/seasonal/
+irregular composition), ``TCMGenerator`` (random temporal causal graphs),
+``KernelSynthGenerator`` (samples from randomly composed GP kernels), and
+``MARGenerator`` (GRATIS-style mixtures of autoregressive components).
+Each resamples a fresh configuration per series, so a handful of instances
+spans a very wide distribution. By default it also includes the full
+``balanced_pool`` so the corpus carries interpretable single-mechanism
+behaviors alongside the meta-generators.
+
+Unlike ``balanced_pool``, the default length range is wide
+(256-1024 steps), matching the longer contexts typical of pretraining.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`min_length` | <code>[int](#int)</code> | Minimum series length for all generators. | <code>256</code>
+`max_length` | <code>[int](#int)</code> | Maximum series length for all generators. | <code>1024</code>
+`freq` | <code>[str](#str) \| [int](#int)</code> | Frequency for all generators, as a pandas offset alias or integer. | <code>'D'</code>
+`seed` | <code>[int](#int) \| None</code> | Base random seed. Each generator gets a distinct offset. Set to None for random seeds. | <code>42</code>
+`include_balanced` | <code>[bool](#bool)</code> | When True (default), prepend the full :func:`balanced_pool`; when False, return only the meta-generators (a purely procedural pretraining corpus). | <code>True</code>
+`n_meta_variants` | <code>[int](#int)</code> | Number of independently-seeded instances of each meta-generator (default 3). More instances give the meta-generators a larger share when series are spread evenly across the pool, as in :func:`generate_series`. | <code>3</code>
+`**base_kwargs` | <code>[Any](#typing.Any)</code> | Additional keyword arguments passed to all generators (e.g., engine, id_col, time_col, target_col). | <code>&#123;&#125;</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[list](#list)[[BaseGenerator](#synforecast.base.BaseGenerator)]</code> | List of BaseGenerator instances ready for use with SynSet.
+
+**Examples:**
+
+```pycon
+>>> from synforecast import SynSet, pretraining_pool
+>>> pool = pretraining_pool(min_length=512, max_length=512, freq="h")
+>>> df = SynSet(pool).generate(n_series_per_generator=1)
+```
+
+```pycon
+>>> # Purely procedural corpus (meta-generators only)
+>>> meta = pretraining_pool(include_balanced=False)
+```
+
+
+### `Multivariatizer`
+
+Bases: <code>[BaseModel](#pydantic.BaseModel)</code>
+
+Wrap a univariate :class:`BaseGenerator` to produce correlated channels.
+
+``generate(n_series)`` draws ``n_series`` independent series of one
+shared length from the wrapped generator, standardizes them, applies the
+configured couplings, then restores each channel's original level and
+scale. The output is the same long-format frame the wrapped generator
+produces (its ``id_col``/``time_col``/``target_col`` and ``engine``).
+
+Couplings (both may compose; ``mixing`` is applied first):
+
+- ``"mixing"`` (cotemporaneous): channels become instantaneous linear
+  combinations ``Z @ L.T`` of the standardized bases, where ``L`` is the
+  Cholesky factor of a random well-conditioned correlation target
+  ``C = (1 - s) I + s Q``. ``Q`` is the correlation matrix of a random
+  Gaussian Gram matrix and ``s`` (the mixing strength, drawn from
+  ``mixing_strength_range``) directly sets the magnitude of the induced
+  cross-correlations; ``s < 1`` keeps ``C`` positive definite, so ``L``
+  is well conditioned.
+- ``"leadlag"`` (sequential): each non-root channel becomes, with
+  probability 0.5 (at least one always does), a lagged, sign-flipped,
+  noise-perturbed copy of an earlier channel:
+  ``z_j = sign * roll(z_src, lag) + sigma * eps`` with ``lag`` from
+  ``lag_range`` (clamped below the series length, circular wrap so all
+  channels share the same timestamps) and ``sigma`` from
+  ``noise_scale_range``. Per-channel scaling comes from the level/scale
+  restore.
+
+Guards: every drawn base series must be finite with ``|x| < 1e8`` and
+``std > 1e-8``; violating draws are redrawn up to 5 times, then replaced
+by unit Gaussian noise.
+
+Seeding: the multivariatizer's own ``seed`` fully determines the output.
+The wrapped generator is copied and reseeded from the multivariatizer's
+rng on every ``generate`` call, so the base generator's own seed and rng
+state never influence the result and the original object is not mutated.
+
+The last sampled coupling recipe (mixing strength/matrix, lead-lag
+pairs with their lags) is exposed as ``last_recipe`` for introspection.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`base` | <code>[BaseGenerator](#synforecast.base.BaseGenerator)</code> | Wrapped univariate generator; supplies the length range, frequency, column names, and dataframe engine. | *required*
+`couplings` | <code>[list](#list)[[str](#str)]</code> | Couplings to apply, subset of ['mixing', 'leadlag'] (default: both). | *required*
+`mixing_strength_range` | <code>[tuple](#tuple)[[float](#float), [float](#float)]</code> | Range for the mixing strength s in [0, 1); s scales the induced cotemporaneous cross-correlations (default: (0.2, 0.9)). | *required*
+`lag_range` | <code>[tuple](#tuple)[[int](#int), [int](#int)]</code> | Inclusive range for lead-lag offsets in time steps (default: (1, 24)). | *required*
+`noise_scale_range` | <code>[tuple](#tuple)[[float](#float), [float](#float)]</code> | Range for the lead-lag perturbation noise std, relative to the unit-variance standardized channels (default: (0.02, 0.2)). | *required*
+`seed` | <code>[int](#int) \| None</code> | Random seed for reproducibility (default: None). | *required*
+
+<details class="example" open markdown="1">
+<summary>Example</summary>
+
+>>> from synforecast.generators import TSIGenerator
+>>> base = TSIGenerator(min_length=256, max_length=512, freq="h")
+>>> mv = Multivariatizer(base=base, seed=42)
+>>> df = mv.generate(n_series=4)
+
+</details>
+
+#### `Multivariatizer.generate`
+
+```python
+generate(n_series, start_id=0)
+```
+
+Generate n_series cross-dependent channels from the wrapped base.
+
+All channels share one length drawn from the base generator's
+[min_length, max_length]; each channel is one ``unique_id`` in the
+long-format output.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`n_series` | <code>[int](#int)</code> | Number of coupled channels to generate. | *required*
+`start_id` | <code>[int](#int)</code> | Starting ID for series numbering (default: 0). | <code>0</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[IntoDataFrameT](#narwhals.stable.v2.typing.IntoDataFrameT)</code> | DataFrame in long format with the wrapped generator's [id_col, time_col, target_col] columns and dataframe engine.
+
+#### `Multivariatizer.last_recipe`
+
+```python
+last_recipe: dict | None
+```
+
+The coupling recipe sampled by the most recent generate() call.
+
