@@ -101,7 +101,8 @@ Four strategies share the same column contract and seeding:
 
 - :meth:`augment` fits a parametric generator per series and simulates
   from it (IDs ``"{original_id}_aug_{i}"``).
-- :meth:`mixup` forms convex combinations of z-normalized series
+- :meth:`mixup` forms convex combinations of scaled series (mean absolute
+  scaling by default; z-normalization is optional)
   (IDs ``"mixup_{i}"``).
 - :meth:`mbb` bootstraps decomposition remainders in moving blocks
   (IDs ``"{original_id}_mbb_{i}"``).
@@ -367,6 +368,34 @@ effective block length, including an explicitly supplied
 play for short inputs; request a smaller value when the exact block
 length matters.
 
+An explicit period requires at least two cycles per source. Shorter
+sources use nonseasonal decomposition and are listed in a logged warning.
+Infinite values reject the call with the offending series ID; NaNs
+follow the interpolation/skip policy above.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input frame containing the configured ID, time and target columns. | *required*
+`n_augment` | <code>[int](#int)</code> | Copies per usable source, from 1 to 1000 (default: 1). | <code>1</code>
+`seasonal_period` | <code>[int](#int) \| None</code> | Period >= 2, or None to detect it per source. | <code>None</code>
+`block_size` | <code>[int](#int) \| None</code> | Block length >= 2, or None for the period/length-based default. Explicit lengths are also capped as described above. | <code>None</code>
+`include_original` | <code>[bool](#bool)</code> | Include unchanged original rows (default: True). | <code>True</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows,
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | using the configured output engine or the input engine.
+
+**Raises:**
+
+Type | Description
+---- | -----------
+<code>[ValueError](#ValueError)</code> | For invalid arguments, missing required columns, infinite target values, or no usable source series.
+
 #### `SynAugment.dba`
 
 ```python
@@ -400,4 +429,35 @@ series; DBA only barycenters the target column.
 
 Banded DTW and barycenter updates execute in native Rust. Seed
 determinism is stable within this native path.
+
+NaNs are interpolated; entirely missing sources are skipped with a
+warning. Infinite values reject the call with the offending series ID.
+Reference scaling preserves zero scale for constant sources, producing
+constant copies. Sources with standard deviation below 1e-8 are listed
+in a warning because their copies may add little or no variation.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input frame containing the configured ID, time and target columns. | *required*
+`n_augment` | <code>[int](#int)</code> | Copies per usable reference, from 1 to 1000 (default: 1). | <code>1</code>
+`n_neighbors` | <code>[int](#int)</code> | Positive maximum neighbor count (default: 3), capped at the number of other usable sources. | <code>3</code>
+`n_iterations` | <code>[int](#int)</code> | Positive number of barycenter updates (default: 5). | <code>5</code>
+`window_fraction` | <code>[float](#float)</code> | DTW band fraction in (0, 1] (default: 0.1). | <code>0.1</code>
+`scale` | <code>[Literal](#typing.Literal)['reference', 'none']</code> | "reference" to restore reference scale (default), or "none" to average raw values. | <code>'reference'</code>
+`include_original` | <code>[bool](#bool)</code> | Include unchanged original rows (default: True). | <code>True</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows,
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | using the configured output engine or the input engine.
+
+**Raises:**
+
+Type | Description
+---- | -----------
+<code>[ValueError](#ValueError)</code> | For invalid arguments, missing required columns, infinite target values, or fewer than two usable source series.
 

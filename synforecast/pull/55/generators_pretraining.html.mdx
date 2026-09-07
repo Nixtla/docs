@@ -341,7 +341,12 @@ AR factor for a random subset of components. Fixed mode supplies all four
 of ``weights``, ``ar_coefficients``, ``intercepts``, and ``noise_scales``
 and is used by feature targeting. Every fixed component must be
 stationary, and the mixture must be second-order stationary (Wong and Li
-2000); the mixture check is skipped for AR orders above 32. A fixed model
+2000). The exact mixture check handles effective AR orders through 32.
+Larger mixtures are accepted when all components are identical and stable,
+or every component's sum of absolute AR coefficients is below one.
+Other large mixtures raise an error because stationarity could not be
+verified; this conservative policy can reject valid mixtures. Trailing
+zero coefficients do not count toward effective order. A fixed model
 that fails the finite, bounded, non-constant output guards raises a
 ``ValueError`` at generation time instead of silently substituting noise.
 Moment handling is explicit: ``standardize=True`` (the default) maps every
@@ -390,4 +395,15 @@ output guards, receive infinite fitness.
 The returned generator's ``tuning_diagnostics`` records the best observed
 distance, whether tolerance was reached, generations run, and candidates
 evaluated.
+
+#### `MARGenerator.tuning_diagnostics`
+
+```python
+tuning_diagnostics: dict[str, float | int | bool] | None
+```
+
+Search distance, convergence, and budget used, or None if untuned.
+
+``best_distance`` is the selected candidate's observed training fitness,
+not a guarantee about new draws. The returned dictionary is a copy.
 
