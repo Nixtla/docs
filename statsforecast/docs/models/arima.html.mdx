@@ -112,6 +112,15 @@ ed)”.](https://otexts.com/fpp3/tscv.html)
 If a time series, has seasonal patterns, then we need to add seasonal
 terms and it becomes SARIMA, short for **Seasonal ARIMA**.
 
+> **Note**
+>
+> StatsForecast doesn’t have a separate `SARIMAX` class. The `ARIMA`
+> and `AutoARIMA` models already cover SARIMAX functionality: set
+> `season_length` for the seasonal component and include exogenous
+> variables as extra columns in `df`, passing their future values
+> through `X_df`. See the [exogenous variables
+> guide](../how-to-guides/exogenous.html) for a complete example.
+
 ## The meaning of p, d and q in ARIMA model <a class="anchor" id="concepts"></a>
 
 ### The meaning of p

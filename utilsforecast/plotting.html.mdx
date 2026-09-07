@@ -71,3 +71,25 @@ fig.savefig('imgs/plotting.png', bbox_inches='tight')
 ```
 
 ![](imgs/plotting.png)
+
+### Customize titles and axis labels
+
+`plot_series` doesn't have parameters for titles or axis labels.
+Instead, it returns a matplotlib or plotly figure (depending on
+`engine`) that you can customize with that library's API:
+
+```python
+# matplotlib (default engine)
+fig = plot_series(train_pd, forecasts_df=test_pd)
+fig.suptitle('My forecasts')
+for ax in fig.axes:
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Sales')
+
+# plotly
+fig = plot_series(train_pd, forecasts_df=test_pd, engine='plotly')
+fig.update_layout(title='My forecasts')
+```
+
+With matplotlib you can also create your own axes and pass them through
+the `ax` parameter to control the layout and styling yourself.
