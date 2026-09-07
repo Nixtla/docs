@@ -69,9 +69,15 @@ series, including when its neighbours have different lengths.
 DBA needs at least two usable series. DTW time and memory grow with
 series length times band width, so reduce `window_fraction`,
 `n_neighbors`, or `n_iterations` for long panels. Pairwise panel
-distances are computed once per call, in parallel, in native Rust.
-Series without a finite observation are skipped with a logged warning;
-`mbb` also skips series shorter than four observations.
+distances are computed once per call in bounded parallel chunks in
+native Rust. Only the requested nearest neighbors are retained, using
+O(number of series × `n_neighbors`) storage; distance computation still
+examines every pair. Series without a finite observation are skipped
+with a logged warning; `mbb` also skips series shorter than four
+observations.
+
+MBB computes its moving-average trend in linear time and reuses each
+source’s decomposition across all requested copies.
 
 ## Output contract
 

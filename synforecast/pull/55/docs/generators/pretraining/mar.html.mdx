@@ -99,6 +99,7 @@ targeted = MARGenerator.tune_to_features(
 )
 
 targeted_df = targeted.generate(n_series=100)
+print(targeted.tuning_diagnostics)
 ```
 
 Candidate fitness is averaged over deterministic lengths spanning the
@@ -114,7 +115,11 @@ two complete periods at `min_length`.
 > `population_size`, and `n_draws_per_candidate` simulated paths,
 > stopping early once the best L2 feature distance is at or below
 > `tolerance` (default `0.05`). Infeasible targets return the best
-> candidate found within that fixed budget.
+> candidate found within that fixed budget. `tuning_diagnostics` reports
+> `best_distance`, `converged`, `generations_run`, and
+> `candidates_evaluated`. The distance is the selected candidate’s
+> observed search fitness; evaluate fresh draws to measure performance
+> on new samples.
 
 ## When to use MAR
 

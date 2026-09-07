@@ -382,8 +382,10 @@ https://doi.org/10.1109/ICDM.2017.106) and Bandara et al. (2021,
 https://arxiv.org/abs/2008.02663). Neighbor weighting, per-copy weight
 randomization, banded DTW, and z-normalized alignment are SynForecast's
 own design rather than a reproduction of the reference code. Pairwise
-panel distances are computed once per call in parallel native code,
-while the band limits the otherwise quadratic alignment cost.
+panel distances are computed once per call in bounded parallel chunks,
+retaining only the nearest neighbors per source. Neighbor storage is
+O(number of series * n_neighbors); distance computation still examines
+every pair. The band limits the otherwise quadratic alignment cost.
 
 This panel-aware method caches every usable source series once and
 deliberately bypasses ``_match_autocorrelation``. With the default

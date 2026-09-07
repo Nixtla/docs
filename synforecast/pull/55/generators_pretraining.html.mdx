@@ -387,4 +387,7 @@ feature distance is at or below ``tolerance``. Infeasible targets
 return the best candidate after the fixed budget. Candidates whose
 mixture is not second-order stationary, or whose simulation fails the
 output guards, receive infinite fitness.
+The returned generator's ``tuning_diagnostics`` records the best observed
+distance, whether tolerance was reached, generations run, and candidates
+evaluated.
 
