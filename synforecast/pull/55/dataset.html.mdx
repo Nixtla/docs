@@ -427,7 +427,12 @@ reference and neighbor weights to create distinct augmentations.
 Additional input columns are copied unchanged from the reference
 series; DBA only barycenters the target column.
 
-Banded DTW and barycenter updates execute in native Rust. Seed
+Copies share their initial alignment paths and refine in parallel in
+native Rust. At most eight alignments/copies execute concurrently.
+Parent storage per alignment, cached paths per copy and returned copies
+per reference have separate 64 MiB limits; excessive requests raise
+ValueError. Interrupts are checked
+between work chunks. Seed
 determinism is stable within this native path.
 
 NaNs are interpolated; entirely missing sources are skipped with a
@@ -443,7 +448,7 @@ Name | Type | Description | Default
 `df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input frame containing the configured ID, time and target columns. | *required*
 `n_augment` | <code>[int](#int)</code> | Copies per usable reference, from 1 to 1000 (default: 1). | <code>1</code>
 `n_neighbors` | <code>[int](#int)</code> | Positive maximum neighbor count (default: 3), capped at the number of other usable sources. | <code>3</code>
-`n_iterations` | <code>[int](#int)</code> | Positive number of barycenter updates (default: 5). | <code>5</code>
+`n_iterations` | <code>[int](#int)</code> | Barycenter updates, from 1 to 1000 (default: 5). | <code>5</code>
 `window_fraction` | <code>[float](#float)</code> | DTW band fraction in (0, 1] (default: 0.1). | <code>0.1</code>
 `scale` | <code>[Literal](#typing.Literal)['reference', 'none']</code> | "reference" to restore reference scale (default), or "none" to average raw values. | <code>'reference'</code>
 `include_original` | <code>[bool](#bool)</code> | Include unchanged original rows (default: True). | <code>True</code>
@@ -459,5 +464,5 @@ Type | Description
 
 Type | Description
 ---- | -----------
-<code>[ValueError](#ValueError)</code> | For invalid arguments, missing required columns, infinite target values, or fewer than two usable source series.
+<code>[ValueError](#ValueError)</code> | For invalid arguments, missing required columns, infinite target values, excessive alignment/output storage, or fewer than two usable source series.
 

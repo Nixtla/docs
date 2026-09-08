@@ -341,7 +341,9 @@ AR factor for a random subset of components. Fixed mode supplies all four
 of ``weights``, ``ar_coefficients``, ``intercepts``, and ``noise_scales``
 and is used by feature targeting. Every fixed component must be
 stationary, and the mixture must be second-order stationary (Wong and Li
-2000). The exact mixture check handles effective AR orders through 32.
+2000). The numerical mixture check handles effective AR orders through 32,
+using covariance contraction certificates and a NumPy dense eigenvalue
+fallback. Solver failures are rejected. Validation results are cached.
 Larger mixtures are accepted when all components are identical and stable,
 or every component's sum of absolute AR coefficients is below one.
 Other large mixtures raise an error because stationarity could not be
@@ -372,7 +374,7 @@ rejected draws. Fixed mode raises ``ValueError`` instead.
 #### `MARGenerator.tune_to_features`
 
 ```python
-tune_to_features(target_features, min_length, max_length, freq, seasonal_period=None, n_generations=15, population_size=30, n_draws_per_candidate=3, tolerance=0.05, seed=None)
+tune_to_features(target_features, min_length, max_length, freq, seasonal_period=None, n_generations=15, population_size=30, n_draws_per_candidate=3, tolerance=0.05, seed=None, *, n_jobs=-1, **generator_kwargs)
 ```
 
 Tune fixed MAR parameters toward requested GRATIS-style features.
@@ -395,6 +397,19 @@ output guards, receive infinite fitness.
 The returned generator's ``tuning_diagnostics`` records the best observed
 distance, whether tolerance was reached, generations run, and candidates
 evaluated.
+
+Each generation scores its valid candidates together in native Rust,
+parallelized across candidates. Failed simulations affect only their
+own candidate. ``n_jobs=-1`` uses the default Rayon pool; a positive
+value selects the worker count. Results are independent of worker count.
+This native search uses a different seeded stream from the former
+Python simulation loop. Lengths are limited to 1,000,000 observations.
+
+Additional generator options are forwarded to candidate evaluation and
+the returned generator: ``standardize``, ``burn_in``,
+``innovation_distribution``, ``innovation_params``, ``engine``, ``alias``,
+``id_col``, ``time_col``, ``target_col``, and ``start_datetime``.
+Search-owned model parameters and pattern injection options are rejected.
 
 #### `MARGenerator.tuning_diagnostics`
 
