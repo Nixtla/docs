@@ -119,7 +119,8 @@ This is the pretraining-oriented counterpart to :func:`balanced_pool`. It
 adds the diversity-targeted *meta-generators* that ``balanced_pool``
 deliberately excludes — ``TSIGenerator`` (randomized trend/seasonal/
 irregular composition), ``TCMGenerator`` (random temporal causal graphs),
-and ``KernelSynthGenerator`` (samples from randomly composed GP kernels).
+``KernelSynthGenerator`` (samples from randomly composed GP kernels), and
+``MARGenerator`` (GRATIS-style mixtures of autoregressive components).
 Each resamples a fresh configuration per series, so a handful of instances
 spans a very wide distribution. By default it also includes the full
 ``balanced_pool`` so the corpus carries interpretable single-mechanism
