@@ -44,7 +44,7 @@ Type | Description
 ### `balanced_pool`
 
 ```python
-balanced_pool(min_length=200, max_length=200, freq='D', seed=42, **base_kwargs)
+balanced_pool(min_length=200, max_length=200, freq='D', seed=42, seasonal_period=None, **base_kwargs)
 ```
 
 Create a balanced pool of generators covering diverse temporal behaviors.
@@ -82,6 +82,16 @@ behaviorally diverse panel.
 
 </details>
 
+The seasonal variants (seasonal SARIMA, Holt-Winters ETS, seasonal
+intermittent demand and the periodic Gaussian process) share one seasonal
+period. Unless ``seasonal_period`` is given it is derived from ``freq``
+as the number of steps in the next-larger calendar cycle: hourly data
+gets 24, daily 7, business-daily 5, weekly 52, monthly 12, quarterly 4,
+and multiples divide accordingly (``"15min"`` gives 4, ``"2h"`` gives 12).
+Integer frequencies and offsets without a calendar convention fall back
+to 12. Yearly data has no sub-annual cycle, so its period is 1 and the
+seasonal variants reduce to their non-seasonal counterparts.
+
 **Parameters:**
 
 Name | Type | Description | Default
@@ -90,6 +100,7 @@ Name | Type | Description | Default
 `max_length` | <code>[int](#int)</code> | Maximum time series length for all generators. | <code>200</code>
 `freq` | <code>[str](#str) \| [int](#int)</code> | Frequency for all generators, as a pandas offset alias or integer. | <code>'D'</code>
 `seed` | <code>[int](#int) \| None</code> | Base random seed. Each generator gets seed + i for reproducibility. Set to None for random seeds. | <code>42</code>
+`seasonal_period` | <code>[int](#int) \| None</code> | Seasonal period, in time steps, for the seasonal variants. Defaults to None, which derives it from ``freq``. | <code>None</code>
 `**base_kwargs` | <code>[Any](#typing.Any)</code> | Additional keyword arguments passed to all generators (e.g., engine, id_col, time_col, target_col). | <code>&#123;&#125;</code>
 
 **Returns:**
@@ -110,7 +121,7 @@ Type | Description
 ### `pretraining_pool`
 
 ```python
-pretraining_pool(min_length=256, max_length=1024, freq='D', seed=42, include_balanced=True, n_meta_variants=3, **base_kwargs)
+pretraining_pool(min_length=256, max_length=1024, freq='D', seed=42, include_balanced=True, n_meta_variants=3, seasonal_period=None, **base_kwargs)
 ```
 
 Create a breadth-maximizing pool for foundation-model pretraining.
@@ -139,6 +150,7 @@ Name | Type | Description | Default
 `seed` | <code>[int](#int) \| None</code> | Base random seed. Each generator gets a distinct offset. Set to None for random seeds. | <code>42</code>
 `include_balanced` | <code>[bool](#bool)</code> | When True (default), prepend the full :func:`balanced_pool`; when False, return only the meta-generators (a purely procedural pretraining corpus). | <code>True</code>
 `n_meta_variants` | <code>[int](#int)</code> | Number of independently-seeded instances of each meta-generator (default 3). More instances give the meta-generators a larger share when series are spread evenly across the pool, as in :func:`generate_series`. | <code>3</code>
+`seasonal_period` | <code>[int](#int) \| None</code> | Seasonal period for the seasonal variants of the included :func:`balanced_pool`. Defaults to None, which derives it from ``freq``. | <code>None</code>
 `**base_kwargs` | <code>[Any](#typing.Any)</code> | Additional keyword arguments passed to all generators (e.g., engine, id_col, time_col, target_col). | <code>&#123;&#125;</code>
 
 **Returns:**
