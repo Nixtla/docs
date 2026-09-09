@@ -3,7 +3,7 @@ title: Balanced pool
 ---
 
 `balanced_pool()` returns 42 pre-configured generator instances, built
-from 15 of SynForecast’s 31 generator classes with one class per
+from 15 of SynForecast’s 32 generator classes with one class per
 behavioral niche. The niches span ARMA and exponential smoothing,
 long-range memory, volatility clustering, intermittent demand,
 deterministic chaos, counts, and bounded and heavy-tailed processes.
@@ -21,12 +21,13 @@ series.
 >
 > The pool draws from *interpretable, single-mechanism* generators —
 > each slot is one named data-generating process. The meta-generators
-> (`TSIGenerator`, `TCMGenerator`, `KernelSynthGenerator`) are excluded
-> on purpose: they already randomize across many behaviors internally,
-> so folding them in would blur the one-niche-one-mechanism design. Use
-> the [`pretraining_pool()`](#pretraining-pool) preset for maximal
-> breadth in foundation-model pretraining; it bundles those
-> meta-generators, with `balanced_pool` included by default.
+> (`TSIGenerator`, `TCMGenerator`, `KernelSynthGenerator`,
+> `MARGenerator`) are excluded on purpose: they already randomize across
+> many behaviors internally, so folding them in would blur the
+> one-niche-one-mechanism design. Use the
+> [`pretraining_pool()`](#pretraining-pool) preset for maximal breadth
+> in foundation-model pretraining; it bundles those meta-generators,
+> with `balanced_pool` included by default.
 
 ```python
 import matplotlib.pyplot as plt
@@ -292,14 +293,15 @@ plt.show()
 
 `pretraining_pool()` is the breadth-maximizing counterpart to
 `balanced_pool()`. It keeps the 42 single-mechanism instances above and
-adds independently-seeded copies of the three meta-generators
+adds independently-seeded copies of the four meta-generators
 `balanced_pool` deliberately leaves out — `TSIGenerator`,
-`TCMGenerator`, and `KernelSynthGenerator`. Each of those resamples a
-fresh trend/seasonal, causal-graph, or GP-kernel configuration per
-series, so a handful of instances already spans a very wide distribution
-— the goal when pretraining a foundation model rather than benchmarking
-one named process. The default length range is wider too (256-1024
-steps), matching typical pretraining contexts.
+`TCMGenerator`, `KernelSynthGenerator`, and `MARGenerator`. Each of
+those resamples a fresh trend/seasonal, causal-graph, GP-kernel, or
+mixture-autoregressive configuration per series, so a handful of
+instances already spans a very wide distribution — the goal when
+pretraining a foundation model rather than benchmarking one named
+process. The default length range is wider too (256-1024 steps),
+matching typical pretraining contexts.
 
 Two knobs control the mix: `n_meta_variants` sets how many
 independently-seeded copies of each meta-generator to add (default 3),
@@ -321,18 +323,19 @@ print("  meta-generators:", dict(Counter(type(g).__name__ for g in meta_only)))
 ```
 
 ``` text
-pretraining_pool: 51 generators
+pretraining_pool: 54 generators
   42 single-mechanism (from balanced_pool)
-  9 meta-generator instances
-  meta-generators: {'TSIGenerator': 3, 'TCMGenerator': 3, 'KernelSynthGenerator': 3}
+  12 meta-generator instances
+  meta-generators: {'TSIGenerator': 3, 'TCMGenerator': 3, 'KernelSynthGenerator': 3, 'MARGenerator': 3}
 ```
 
 ```python
-# Each meta-generator instance draws its own structure, so even nine series
-# span trends, seasonality, causal dynamics, and kernel-sampled shapes.
+# Each meta-generator instance draws its own structure, so even twelve series
+# span trends, seasonality, causal dynamics, kernel-sampled shapes, and
+# mixture-autoregressive dynamics.
 meta_df = SynSet(meta_only).generate(n_series_per_generator=1)
 
-fig, axes = plt.subplots(3, 3, figsize=(15, 7))
+fig, axes = plt.subplots(4, 3, figsize=(15, 9))
 for ax, (uid, gen) in zip(axes.ravel(), enumerate(meta_only)):
     series = meta_df.filter(pl.col("unique_id") == str(uid))
     ax.plot(series["y"].to_list(), linewidth=0.8)

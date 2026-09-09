@@ -8,13 +8,17 @@ stationarity), picks a matching generator, fits its parameters, and
 draws new series that share the original’s statistical fingerprint — a
 cheap way to give a global model more to learn from.
 
-> **Two augmentation strategies**
+> **Four augmentation strategies**
 >
 > -   **`augment`** (this guide) — fit a generator per series and draw
 >     statistically similar copies.
 > -   **[`mixup`](#tsmixup-convex-combinations-of-real-series)** — blend
 >     several real series with convex weights (TSMixup), covered at the
 >     end.
+> -   **[`mbb`](nonparametric_augmentation)** — resample blocks from
+>     each series’ decomposed remainder.
+> -   **[`dba`](nonparametric_augmentation)** — build randomized DTW
+>     barycenters from nearby panel series.
 >
 > Fit augmentation on the **training split only** — fitting on
 > validation or test observations leaks information into training.
