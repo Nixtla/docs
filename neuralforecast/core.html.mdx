@@ -105,6 +105,17 @@ Predict with core.NeuralForecast.
 
 Use stored fitted `models` to predict large set of time series from DataFrame `df`.
 
+**Predicting with a different horizon than training**
+
+The `h` argument can override the horizon each model was fitted with, but the allowed values depend on the model and the fit configuration:
+
+- **`h` equal to the fitted horizon** (the default when `h=None`): all models produce a single forward pass of length `h`.
+- **`h` greater than the fitted horizon**: supported, with restrictions.
+  - Direct (non-recurrent) models such as `NHITS`, `NBEATS`, `NBEATSx`, `MLP`, `TFT`, `PatchTST`, and other windows-based models produce the extended horizon by feeding their own forecasts back as inputs and running `ceil(h / fitted_h)` recursive rollouts. Accuracy is not guaranteed beyond the fitted horizon; errors compound across rollouts. Consider refitting with the target horizon (or using an Auto model) if quality matters.
+  - Recurrent models such as `RNN`, `LSTM`, `GRU`, `DilatedRNN`, `TCN`, and `DeepAR` extend the horizon natively by rolling the recurrent state forward.
+  - `h > fitted_h` is **not supported** when the fit was calibrated with `prediction_intervals` (raises `ValueError`) or when any model declares `hist_exog_list` (raises `NotImplementedError`).
+- **`h` smaller than the fitted horizon**: **not supported** and raises `ValueError`. Refit the model with the smaller horizon, or take the first `h` steps of the default forecast yourself.
+
 **Parameters:**
 
 Name | Type | Description | Default
@@ -116,7 +127,7 @@ Name | Type | Description | Default
 `engine` | <code>spark session</code> | Distributed engine for inference. Only used if df is a spark dataframe or if fit was called on a spark dataframe. | <code>None</code>
 `level` | <code>list of ints or floats</code> | Confidence levels between 0 and 100. | <code>None</code>
 `quantiles` | <code>list of floats</code> | Alternative to level, target quantiles to predict. | <code>None</code>
-`h` | <code>[int](#int)</code> | Forecasting horizon. If None, uses the horizon of the fitted models. | <code>None</code>
+`h` | <code>[int](#int)</code> | Forecasting horizon. If `None`, uses the horizon each model was fitted with. Must be greater than or equal to the fitted horizon; see the note above for the restrictions that apply when `h` exceeds it. | <code>None</code>
 `data_kwargs` | <code>[kwargs](#kwargs)</code> | Extra arguments to be passed to the dataset within each model. | <code>{}</code>
 
 **Returns:**
@@ -175,7 +186,7 @@ Name | Type | Description | Default
 `prediction_intervals` | <code>[PredictionIntervals](#neuralforecast.utils.PredictionIntervals)</code> | Configuration to calibrate prediction intervals (Conformal Prediction). Defaults to None. | <code>None</code>
 `level` | <code>list of ints or floats</code> | Confidence levels between 0 and 100. | <code>None</code>
 `quantiles` | <code>list of floats</code> | Alternative to level, target quantiles to predict. | <code>None</code>
-`h` | <code>[int](#int)</code> | Forecasting horizon. If None, uses the horizon of the fitted models. | <code>None</code>
+`h` | <code>[int](#int)</code> | Forecasting horizon. If `None`, uses the horizon each model was fitted with. The same rules as `NeuralForecast.predict` apply: `h` must be greater than or equal to the fitted horizon, and the restrictions on `h > fitted_h` (recursive rollout for direct models, no `prediction_intervals`, no `hist_exog_list`) apply here too. | <code>None</code>
 `data_kwargs` | <code>[kwargs](#kwargs)</code> | Extra arguments to be passed to the dataset within each model. | <code>{}</code>
 
 **Returns:**
