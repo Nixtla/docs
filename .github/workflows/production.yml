@@ -77,26 +77,15 @@ jobs:
 
       - name: Copy documentation and merge configs
         run: |
-          # Mirror each library's built docs into docs/<repo> (keep this list in
-          # sync with the checkout steps above).
-          # - `--delete` removes pages that were deleted or renamed upstream, which a
-          #   plain `cp -R` would leave behind as stale, orphaned pages.
-          # - `--exclude .git` keeps each checkout's own repo metadata out of docs/,
-          #   so git never sees docs/<repo> as an embedded repository.
-          # - `--checksum` compares content rather than size+mtime, so a same-second
-          #   checkout can never leave a changed page un-synced.
-          # - `--info=DEL` logs every deleted path as an audit trail.
-          # The trailing slashes are load-bearing: "$repo/" syncs the directory's
-          # contents into "docs/$repo/" instead of nesting docs/<repo>/<repo>/.
-          # Refuse to mirror a checkout without docs.json: with `--delete` an empty
-          # or half-built upstream branch would otherwise silently wipe the library's
-          # pages (merge_docs.py skips a missing docs.json) and force-push the result.
-          for repo in statsforecast mlforecast neuralforecast hierarchicalforecast \
-                      utilsforecast datasetsforecast coreforecast synforecast; do
-            test -f "$repo/docs.json" \
-              || { echo "::error::$repo checkout has no docs.json; refusing to mirror with --delete"; exit 1; }
-            rsync -a --checksum --delete --info=DEL --exclude .git "$repo/" "docs/$repo/"
-          done
+          cp -R statsforecast docs/
+          cp -R mlforecast docs/
+          cp -R neuralforecast docs/
+          cp -R hierarchicalforecast docs/
+          cp -R utilsforecast docs/
+          cp -R datasetsforecast docs/
+          cp -R coreforecast docs/
+          rm -rf synforecast/.git
+          cp -R synforecast docs/
           cd docs && python3 merge_docs.py
 
       - name: Commit and push changes
@@ -105,6 +94,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git checkout docs
+          git rm -r -q --cached --ignore-unmatch -- synforecast
           git add .
           git diff-index --quiet --cached HEAD -- || git commit -m "Update documentation"
           git push origin docs --force
