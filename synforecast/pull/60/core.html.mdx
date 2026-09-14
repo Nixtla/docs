@@ -1,0 +1,92 @@
+---
+title: BaseGenerator
+description: Base class for all time series generators
+---
+
+### `BaseGenerator`
+
+Bases: <code>[BaseModel](#pydantic.BaseModel)</code>, <code>[ABC](#abc.ABC)</code>
+
+Base class for all time series generators.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`min_length` | <code>[int](#int)</code> | Minimum length of each series | *required*
+`max_length` | <code>[int](#int)</code> | Maximum length of each series | *required*
+`freq` | <code>[str](#str) \| [int](#int)</code> | Frequency of the data. Either a pandas offset alias (e.g. 'D', 'h', '5min', 'MS', 'W-MON') or an integer for an integer time index | *required*
+`engine` | <code>[str](#str)</code> | Output dataframe library (default: 'pandas'). Options are 'pandas', 'polars', 'cudf', 'modin', 'pyarrow' | *required*
+`alias` | <code>[str](#str) \| None</code> | Name of the generator (default: class name) | *required*
+`id_col` | <code>[str](#str)</code> | Name of the ID column (default: 'unique_id') | *required*
+`time_col` | <code>[str](#str)</code> | Name of the timestamp column (default: 'ds') | *required*
+`target_col` | <code>[str](#str)</code> | Name of the value column (default: 'y') | *required*
+`start_datetime` | <code>[str](#str)</code> | First timestamp of every series, in any format accepted by pandas.Timestamp (default: '2000-01-01'). Ignored when freq is an integer | *required*
+`seed` | <code>[int](#int) \| None</code> | Random seed for reproducibility (default: None) | *required*
+`Exogenous parameters` |  |  | *required*
+`exogenous` | <code>[ExogenousConfig](#synforecast.exogenous.ExogenousConfig) \| None</code> | Configuration for exogenous variable generation. None = no exogenous columns (default: None) | *required*
+`Missingness parameters` |  |  | *required*
+`missing_data` | <code>[bool](#bool)</code> | Enable missing data patterns (default: False) | *required*
+`missing_pattern` | <code>[str](#str)</code> | Pattern: 'random', 'block', 'seasonal' (default: 'random') | *required*
+`missing_rate` | <code>[float](#float)</code> | Proportion of missing values 0-1 (default: 0.1) | *required*
+`missing_block_size` | <code>[int](#int)</code> | Size of missing blocks for 'block' pattern (default: 3) | *required*
+`missing_seasonal_period` | <code>[int](#int)</code> | Period for 'seasonal' pattern (default: 7) | *required*
+`Anomaly parameters` |  |  | *required*
+`anomalies` | <code>[bool](#bool)</code> | Enable anomaly injection (default: False) | *required*
+`anomaly_fraction` | <code>[float](#float)</code> | Fraction of points that are anomalies (default: 0.05) | *required*
+`anomaly_types` | <code>[list](#list)[[str](#str)]</code> | Types: 'spike', 'dip', 'level_shift' (default: ['spike', 'dip']) | *required*
+`spike_magnitude` | <code>[float](#float)</code> | Magnitude of spikes (default: 10.0) | *required*
+`dip_magnitude` | <code>[float](#float)</code> | Magnitude of dips (default: -10.0) | *required*
+`level_shift_magnitude` | <code>[float](#float)</code> | Magnitude of level shifts (default: 20.0) | *required*
+`level_shift_duration` | <code>[int](#int)</code> | Duration of level shifts in time steps (default: 10) | *required*
+`Changepoint parameters` |  |  | *required*
+`changepoints` | <code>[bool](#bool)</code> | Enable changepoint injection (default: False) | *required*
+`num_changepoints` | <code>[int](#int)</code> | Number of changepoints (default: 2) | *required*
+`changepoint_type` | <code>[str](#str)</code> | Type: 'level', 'trend', 'variance', 'mixed' (default: 'level') | *required*
+`changepoint_level_changes` | <code>[list](#list)[[float](#float)] \| None</code> | Size of level changes (default: random) | *required*
+`changepoint_trend_changes` | <code>[list](#list)[[float](#float)] \| None</code> | Size of trend changes (default: random) | *required*
+`changepoint_variance_changes` | <code>[list](#list)[[float](#float)] \| None</code> | Size of variance changes (default: random) | *required*
+`changepoint_locations` | <code>[list](#list)[[float](#float)] \| None</code> | Relative positions 0-1 (default: random) | *required*
+
+#### `BaseGenerator.generate`
+
+```python
+generate(n_series, start_id=0, n_jobs=-1)
+```
+
+Generate synthetic time series data.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`n_series` | <code>[int](#int)</code> | Number of time series to generate | *required*
+`start_id` | <code>[int](#int)</code> | Starting ID for the series numbering (default: 0) Series will be numbered from start_id to start_id + n_series - 1 | <code>0</code>
+`n_jobs` | <code>[int](#int)</code> | Number of parallel workers. -1 (default) uses ``RAYON_NUM_THREADS`` if set, otherwise all logical cores. Results are seed-deterministic and do not depend on n_jobs. | <code>-1</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[IntoDataFrameT](#narwhals.stable.v2.typing.IntoDataFrameT)</code> | DataFrame in long format with columns [id_col, time_col, target_col] (default ['unique_id', 'ds', 'y']), plus any exogenous or flag columns.
+
+#### `BaseGenerator.generate_single_series`
+
+```python
+generate_single_series(length)
+```
+
+Generate values for a single time series.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`length` | <code>[int](#int)</code> | The length of the series to generate | *required*
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[ndarray](#numpy.ndarray)</code> | Array of time series values
+
