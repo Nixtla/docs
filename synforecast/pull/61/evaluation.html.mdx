@@ -1,0 +1,438 @@
+---
+title: Corpus evaluation
+description: Native feature extraction and reference-anchored coverage diagnostics
+---
+
+# Corpus evaluation
+
+`compute_features` extracts one row of native summaries per series.
+`compare_feature_coverage` fits a scaler, PCA projection, and grid on the
+retained real reference panel, then projects each synthetic corpus into that
+same space. Adding another corpus leaves existing scores unchanged under
+these defaults. Corpus size still affects occupancy; compare matched sizes.
+
+The twelve-feature schema is **`native_v1`**. Its feature names, order,
+definitions, normalization, and undefined-value rules are fixed; changes to
+those contracts require a new schema identifier. Period and window settings
+remain explicit extraction parameters, recorded with the schema. Raw-input
+coverage metadata records both the requested and effective window size.
+These are SynForecast definitions, not an external feature package reproduction.
+The existing private MAR-targeting helper is unchanged.
+
+The earlier `native_candidate_v1` pilot used these same definitions. Its saved
+artifacts retain their original labels and fitted-space IDs; the benchmark
+validator accepts either label with the exact twelve-feature order. Newly
+computed raw-input coverage reports `native_v1`. Precomputed feature frames
+still require callers to preserve extraction metadata separately.
+
+The initial native pilot retained every real series in its Monthly samples
+and, with `window_size=5`, in its short Yearly samples. The first two PCA
+components retained only 63–68% of real-feature variance across two sample
+seeds, with substantial losses for controlled spike and variance changes.
+Treat the map as a two-dimensional diagnostic, not comprehensive feature-space
+coverage. The reproducible pilot and artifacts live under
+`benchmarks/benchmark_feature_coverage.py` and
+`benchmarks/data/feature_coverage_pilot/` in the repository.
+
+The follow-up `benchmarks/validate_feature_coverage.py` compares full-feature
+Euclidean distances with PCA distances using separate real fitting,
+calibration, and evaluation subsets. Its results support the aggregate
+balanced-pool/MAR ordering on these samples, while showing substantial
+disagreement on individual neighbours and coverage decisions. It also
+isolates large grid-boundary effects with PCA coordinates held fixed.
+Report full-feature distance distributions and real-calibrated coverage
+curves alongside the map; neither a single radius nor a grid score establishes
+general fidelity. This is currently a benchmark diagnostic, with artifacts in
+`benchmarks/data/feature_coverage_validation/`, rather than a public distance API.
+
+An availability audit of all 100,000 M4 training series supports the following
+explicit extraction recipes, using at most the last 512 observations. These
+are benchmark settings; the API does not infer them from timestamps.
+
+| Panel | `seasonal_period` | `window_size` |
+|---|---:|---:|
+| Yearly | `None` | 5 |
+| Quarterly | 4 | 4 |
+| Monthly | 12 | 12 |
+| Weekly | `None` | 10 |
+| Daily | 7 | 7 |
+| Hourly | 24 | 24 |
+
+All real rows are finite in all twelve features under these settings. Weekly
+uses M4's nonseasonal convention: its two seasonal features are constant and
+annual seasonality is unmeasured. A separate 52-week recipe excludes 65/359
+series that lack two full cycles; it must be reported as a separate eligible
+population. Daily's seven-day cycle is an explicit assumption (M4 metadata
+declares it nonseasonal), and Hourly's 24-hour period covers only that cycle.
+Run `benchmarks/benchmark_feature_coverage.py --availability-only` to reproduce
+the audit; results are in `benchmarks/data/feature_coverage_availability/`.
+
+```python
+from synforecast import compare_feature_coverage, compute_features
+
+# real, balanced, and mar are long-format panels: unique_id, ds, y.
+# Supply at least two usable real series and a seasonal period in observations.
+results = compare_feature_coverage(
+    real,
+    {"balanced": balanced, "mar": mar},
+    seasonal_period=12,
+)
+result = results["balanced"]
+print(result.uncovered_real_cell_fraction)
+print(result.synthetic_out_of_range_fraction)
+result.plot()
+
+# Cache features once for repeated evaluations or different grid resolutions.
+real_features = compute_features(real, seasonal_period=12)
+balanced_features = compute_features(balanced, seasonal_period=12)
+cached = compare_feature_coverage(
+    real_features, {"balanced": balanced_features}, precomputed=True
+)
+```
+
+Feature frames preserve the input dataframe engine and ID dtype. Observations
+are sorted by ID and time. Raw targets must be finite, IDs/times non-null, and
+timestamps unique within each series. `n_jobs` controls threads over the
+native calculations; None uses one worker and -1 uses available CPUs.
+
+## Native feature contracts
+
+All features require at least three observations. The original four retain
+their existing formulas; evaluation explicitly marks seasonal strength NaN
+when a declared period cannot fit two cycles. The eight additions normalize
+each series to zero mean and unit population variance. Constant input maps
+to zero; normalization scales by the maximum absolute value first to avoid
+overflow. No absolute amplitude cutoff is used for this normalization.
+
+| Feature | Definition and additional minimum length |
+|---|---|
+| spectral_entropy | Normalized non-DC periodogram entropy; existing epsilon guards |
+| trend_strength | Classical moving-average decomposition strength; existing endpoint extension |
+| seasonal_strength | Classical decomposition strength; two declared cycles, or zero without a period |
+| acf1 | Existing mean-centered biased lag-one ACF |
+| x_acf10 | Squared ACF sum at lags 1 through 10; at least 11 observations |
+| diff1_acf1 | Lag-one ACF of first differences of normalized values |
+| seas_acf1 | ACF at the declared period; more observations than the period; zero without a period |
+| spike | Population variance of leave-one-out population variances of the normalized-input decomposition remainder |
+| lumpiness | Population variance of full-tile population variances; incomplete final tile omitted |
+| max_level_shift | Largest absolute mean difference between adjacent nonoverlapping windows, checking every valid split |
+| max_var_shift | Largest absolute population-variance difference between those windows |
+| crossing_points | Raw count of transitions across the median; ties belong to the lower half |
+
+For lumpiness and shift features, `window_size` can explicitly set the width
+(at least 2). The default is the declared period, or 10 without one; at least
+two full windows are required. `window_size` does not change the decomposition
+or seasonal ACF. For short nonseasonal panels, the pilot evaluates a fixed
+`window_size=5` across the whole panel; a ten-observation window otherwise
+excludes series shorter than 20 observations. Record the width with cached
+features and use the same setting for real and synthetic corpora. ACF uses the full
+mean-centered sum of squares in its denominator at every lag. New ACF
+summaries return zero if that sum is at most machine epsilon. Spike uses the
+same adaptive decomposition as the original helper when a period is unusable.
+Crossing counts and other estimates remain length-dependent, so match length
+distributions as well as sample sizes.
+
+## Reading the scores
+
+- `miscoverage`: uncovered real cells divided by **all** grid cells.
+- `reverse_miscoverage`: synthetic-only cells divided by all grid cells,
+  restricted to the grid's bounding box.
+- `uncovered_real_cell_fraction`: uncovered real cells divided by occupied
+  real cells.
+- `uncovered_real_series_fraction`: retained real series in uncovered cells
+  divided by all retained real series.
+- `synthetic_out_of_range_fraction`: synthetic series outside the box divided
+  by all retained synthetic series, including those outside it.
+
+The default real-range grid adds one percent padding per axis. It excludes
+out-of-range synthetic points rather than clipping them onto edge cells.
+Out-of-range is evidence of extrapolation in the displayed coordinates, not
+proof of unrealistic data. Differences in discarded dimensions may be hidden;
+inspect explained variance and the features themselves. Zero miscoverage is
+not evidence of predictive fidelity or privacy.
+
+`missing="raise"` rejects undefined feature values. Explicit `missing="drop"`
+evaluates complete cases, logs exclusions, and returns retained/dropped IDs
+and reasons. Counts and fractions describe the retained population. Constant
+columns are determined from the fitting population using an absolute 1e-12
+tolerance about their mean. Real-constant columns cannot enter reference PCA;
+synthetic deviations from those reference values are counted separately.
+
+At least two retained real series and one variable feature are needed for the
+default fit. Rank-one PCA uses a zero second coordinate. Result metadata stores
+fitted parameters, a space identifier, and a reference fingerprint. A shared
+space identifier does not make different reference samples or sample sizes
+interchangeable. Persist extraction settings with cached native feature frames;
+precomputed frames do not carry an implicit native schema.
+
+`fit="pooled"` and `grid_range="pooled"` provide a joint-fitting sensitivity
+case. Synthetic outliers can shift that space and its bin widths. Optional
+t-SNE requires `embedding="tsne", fit="pooled", seed=...`, scikit-learn,
+and more than 30 retained series for its fixed perplexity of 30. It fits all
+declared points jointly and does not project new points. Pooled PCA uses the
+same occupancy measure but does not reproduce Kang's t-SNE experiment.
+
+## API
+
+### `compute_features`
+
+```python
+compute_features(df, *, seasonal_period=None, window_size=None, features=None, id_col='unique_id', time_col='ds', target_col='y', n_jobs=None)
+```
+
+Return one row of native features per series in the caller's engine.
+
+The native_v1 schema fixes feature definitions and order.
+``features=None`` selects all twelve features. Supply an explicit list
+to fix a representation. ``seasonal_period`` is an observation count >= 2;
+None denotes no declared seasonality. Short series yield NaN for undefined
+features and one summary log warning. Invalid raw inputs raise.
+
+``window_size`` explicitly sets the width (>=2) for lumpiness and level/
+variance shifts. None uses the seasonal period, or 10 without one. It does
+not change decomposition or seasonal ACF. Use one fixed width per panel;
+short nonseasonal panels can, for example, select five-observation windows.
+
+``n_jobs=None`` uses one worker, -1 uses available CPUs, and a positive
+integer selects that many threads over native computations. The private
+MAR-targeting feature helper is unchanged.
+
+
+### `feature_coverage`
+
+```python
+feature_coverage(real, synthetic, *, seasonal_period=None, window_size=None, features=None, precomputed=False, embedding='pca', fit='real', grid_range=None, n_bins=30, seed=None, missing='raise', n_jobs=None, id_col='unique_id', time_col='ds', target_col='y')
+```
+
+Compare one synthetic corpus; see :func:`compare_feature_coverage` for the protocol.
+
+
+### `compare_feature_coverage`
+
+```python
+compare_feature_coverage(real, synthetics, *, seasonal_period=None, window_size=None, features=None, precomputed=False, embedding='pca', fit='real', grid_range=None, n_bins=30, seed=None, missing='raise', n_jobs=None, id_col='unique_id', time_col='ds', target_col='y')
+```
+
+Compare synthetic corpora using a common feature space and grid.
+
+Defaults fit the scaler, PCA, constant-column selection, and padded grid
+on retained real data only. Synthetic corpora cannot shift that space.
+``fit='pooled'`` fits jointly; ``grid_range=None`` follows ``fit``. Pooled
+scores can change when a corpus is added and are a sensitivity analysis.
+t-SNE requires ``fit='pooled'``, an explicit seed, and >30 retained series.
+
+``precomputed=True`` expects an ID column and numeric feature columns;
+None selects all non-ID columns and requires matching schemas. Otherwise
+native extraction uses the same keywords as :func:`compute_features`.
+``window_size`` is recorded in the fitted-space parameters for raw inputs;
+for cached features, record their extraction settings with the cache.
+``missing='raise'`` rejects undefined feature values; 'drop' explicitly
+evaluates complete cases and reports excluded IDs. No sampling is implicit.
+Result metadata stores fitted parameters and the native or caller-defined
+schema; callers should record external extraction settings separately.
+
+
+### `CoverageDiagnostics`
+
+```python
+CoverageDiagnostics(n_input, retained_ids, dropped_ids, drop_reasons)
+```
+
+Series retained or excluded from a corpus, in embedding row order.
+
+#### `CoverageDiagnostics.drop_reasons`
+
+```python
+drop_reasons: dict[Any, tuple[str, ...]]
+```
+
+#### `CoverageDiagnostics.dropped_ids`
+
+```python
+dropped_ids: tuple[Any, ...]
+```
+
+#### `CoverageDiagnostics.n_input`
+
+```python
+n_input: int
+```
+
+#### `CoverageDiagnostics.retained_ids`
+
+```python
+retained_ids: tuple[Any, ...]
+```
+
+
+### `CoverageResult`
+
+```python
+CoverageResult(miscoverage, reverse_miscoverage, uncovered_real_cell_fraction, uncovered_real_series_fraction, n_bins, embedding, explained_variance, real_embedding, synthetic_embedding, real_occupancy, synthetic_occupancy, grid_edges, uncovered_real_ids, n_synthetic_out_of_range, synthetic_out_of_range_fraction, features_used, constant_features_dropped, synthetic_constant_feature_deviations, real_diagnostics, synthetic_diagnostics, fit, grid_range, space_id, metadata)
+```
+
+Occupancy scores and the parameters needed to interpret them.
+
+``miscoverage`` divides uncovered real cells by all grid cells;
+``uncovered_real_cell_fraction`` divides by occupied real cells instead.
+``reverse_miscoverage`` counts synthetic-only cells within the grid.
+Out-of-range synthetic points are excluded from occupancy, but included
+in the denominator of ``synthetic_out_of_range_fraction``. These scores
+describe retained series; inspect the diagnostics before comparing corpora.
+
+#### `CoverageResult.constant_features_dropped`
+
+```python
+constant_features_dropped: tuple[str, ...]
+```
+
+#### `CoverageResult.embedding`
+
+```python
+embedding: str
+```
+
+#### `CoverageResult.explained_variance`
+
+```python
+explained_variance: tuple[float, float] | None
+```
+
+#### `CoverageResult.features_used`
+
+```python
+features_used: tuple[str, ...]
+```
+
+#### `CoverageResult.fit`
+
+```python
+fit: str
+```
+
+#### `CoverageResult.grid_edges`
+
+```python
+grid_edges: tuple[np.ndarray, np.ndarray]
+```
+
+#### `CoverageResult.grid_range`
+
+```python
+grid_range: str
+```
+
+#### `CoverageResult.metadata`
+
+```python
+metadata: dict[str, Any]
+```
+
+#### `CoverageResult.miscoverage`
+
+```python
+miscoverage: float
+```
+
+#### `CoverageResult.n_bins`
+
+```python
+n_bins: int
+```
+
+#### `CoverageResult.n_synthetic_out_of_range`
+
+```python
+n_synthetic_out_of_range: int
+```
+
+#### `CoverageResult.plot`
+
+```python
+plot(ax=None)
+```
+
+Plot occupied cells and uncovered real points; import matplotlib lazily.
+
+Points outside the grid are omitted from this view and counted in the
+title. Out-of-range means outside the observed projected reference
+box, not necessarily unrealistic. Returns the matplotlib axes.
+
+#### `CoverageResult.real_diagnostics`
+
+```python
+real_diagnostics: CoverageDiagnostics
+```
+
+#### `CoverageResult.real_embedding`
+
+```python
+real_embedding: np.ndarray
+```
+
+#### `CoverageResult.real_occupancy`
+
+```python
+real_occupancy: np.ndarray
+```
+
+#### `CoverageResult.reverse_miscoverage`
+
+```python
+reverse_miscoverage: float
+```
+
+#### `CoverageResult.space_id`
+
+```python
+space_id: str
+```
+
+#### `CoverageResult.synthetic_constant_feature_deviations`
+
+```python
+synthetic_constant_feature_deviations: dict[str, int]
+```
+
+#### `CoverageResult.synthetic_diagnostics`
+
+```python
+synthetic_diagnostics: CoverageDiagnostics
+```
+
+#### `CoverageResult.synthetic_embedding`
+
+```python
+synthetic_embedding: np.ndarray
+```
+
+#### `CoverageResult.synthetic_occupancy`
+
+```python
+synthetic_occupancy: np.ndarray
+```
+
+#### `CoverageResult.synthetic_out_of_range_fraction`
+
+```python
+synthetic_out_of_range_fraction: float
+```
+
+#### `CoverageResult.uncovered_real_cell_fraction`
+
+```python
+uncovered_real_cell_fraction: float
+```
+
+#### `CoverageResult.uncovered_real_ids`
+
+```python
+uncovered_real_ids: tuple[Any, ...]
+```
+
+#### `CoverageResult.uncovered_real_series_fraction`
+
+```python
+uncovered_real_series_fraction: float
+```
+
