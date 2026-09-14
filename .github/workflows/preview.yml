@@ -77,15 +77,13 @@ jobs:
 
       - name: Copy documentation and merge configs
         run: |
-          cp -R statsforecast docs/
-          cp -R mlforecast docs/
-          cp -R neuralforecast docs/
-          cp -R hierarchicalforecast docs/
-          cp -R utilsforecast docs/
-          cp -R datasetsforecast docs/
-          cp -R coreforecast docs/
-          rm -rf synforecast/.git
-          cp -R synforecast docs/
+          # Mirror each library's built docs into docs/<repo>. `--delete` removes
+          # pages that no longer exist upstream (e.g. from an old PR preview build),
+          # which a plain `cp -R` would leave behind as stale, broken pages.
+          for repo in statsforecast mlforecast neuralforecast hierarchicalforecast \
+                      utilsforecast datasetsforecast coreforecast synforecast; do
+            rsync -a --delete --exclude .git "$repo/" "docs/$repo/"
+          done
           cd docs && python3 merge_docs.py
 
       - name: Commit and push changes
