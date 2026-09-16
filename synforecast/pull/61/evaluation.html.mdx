@@ -30,14 +30,15 @@ and, with `window_size=5`, in its short Yearly samples. The first two PCA
 components retained only 63–68% of real-feature variance across two sample
 seeds, with substantial losses for controlled spike and variance changes.
 Treat the map as a two-dimensional diagnostic, not comprehensive feature-space
-coverage. The reproducible pilot and artifacts live under
-`benchmarks/benchmark_feature_coverage.py` and
-`benchmarks/data/feature_coverage_pilot/` in the repository.
+coverage. The pilot is reproduced by `benchmarks/benchmark_feature_coverage.py`, writing to
+`benchmarks/data/feature_coverage_pilot/`. That script and its artifacts land in
+a follow-up pull request; neither is in the repository yet.
 
 The follow-up `benchmarks/validate_feature_coverage.py` compares full-feature
 Euclidean distances with PCA distances using separate real fitting,
 calibration, and evaluation subsets. Its results support the aggregate
-balanced-pool/MAR ordering on these samples, while showing substantial
+interpretable-pool/MAR ordering on these samples (the artifacts label that pool
+`balanced_pool`, its name when they were produced), while showing substantial
 disagreement on individual neighbours and coverage decisions. It also
 isolates large grid-boundary effects with PCA coordinates held fixed.
 Report full-feature distance distributions and real-calibrated coverage
@@ -65,7 +66,8 @@ series that lack two full cycles; it must be reported as a separate eligible
 population. Daily's seven-day cycle is an explicit assumption (M4 metadata
 declares it nonseasonal), and Hourly's 24-hour period covers only that cycle.
 Run `benchmarks/benchmark_feature_coverage.py --availability-only` to reproduce
-the audit; results are in `benchmarks/data/feature_coverage_availability/`.
+the audit, writing to `benchmarks/data/feature_coverage_availability/`. The
+script arrives in a follow-up pull request.
 
 ```python
 from synforecast import compare_feature_coverage, compute_features
@@ -197,6 +199,10 @@ short nonseasonal panels can, for example, select five-observation windows.
 integer selects that many threads over native computations. The private
 MAR-targeting feature helper is unchanged.
 
+Features depend on observation counts, not on the calendar: ``freq`` is
+never inspected. ``crossing_points`` is a raw count and therefore grows
+with series length, so compare panels of comparable length.
+
 
 ### `feature_coverage`
 
@@ -222,12 +228,23 @@ scores can change when a corpus is added and are a sensitivity analysis.
 t-SNE requires ``fit='pooled'``, an explicit seed, and >30 retained series.
 
 ``precomputed=True`` expects an ID column and numeric feature columns;
-None selects all non-ID columns and requires matching schemas. Otherwise
-native extraction uses the same keywords as :func:`compute_features`.
-``window_size`` is recorded in the fitted-space parameters for raw inputs;
-for cached features, record their extraction settings with the cache.
+None selects all non-ID columns and requires matching schemas. It skips
+native extraction, so ``seasonal_period`` and ``window_size`` are rejected
+rather than silently ignored; record their values with the cache instead.
+Otherwise native extraction uses the same keywords as
+:func:`compute_features`, and ``window_size`` is recorded in the
+fitted-space parameters.
+
+Features are computed per series from observation counts alone, so the
+frequency and calendar of ``time_col`` are never compared across corpora,
+and ``crossing_points`` is a raw count that grows with series length.
+Generate synthetic series at lengths comparable to the real panel; the
+preset pools default to fixed lengths that may not match yours.
 ``missing='raise'`` rejects undefined feature values; 'drop' explicitly
 evaluates complete cases and reports excluded IDs. No sampling is implicit.
+``n_bins`` sets both grid axes, so each corpus retains two ``n_bins**2``
+boolean occupancy grids; memory grows quadratically and the default 30 is
+a few hundred bytes, while a four-digit ``n_bins`` reaches megabytes.
 Result metadata stores fitted parameters and the native or caller-defined
 schema; callers should record external extraction settings separately.
 

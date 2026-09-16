@@ -57,7 +57,7 @@ import polars as pl
 from synforecast import SynSet, interpretable_pool, pretraining_pool
 ```
 
-## Generate a balanced dataset
+## Generate an interpretable dataset
 
 Create 42 generators and generate one series per generator.
 
@@ -136,7 +136,7 @@ for i, gen in enumerate(generators):
 
 ## Overview: all 42 series
 
-A compact grid showing every series in the balanced pool.
+A compact grid showing every series in the interpretable pool.
 
 ```python
 fig, axes = plt.subplots(7, 6, figsize=(18, 16))
@@ -150,7 +150,7 @@ for i, gen in enumerate(generators):
     axes[i].set_title(gen.alias, fontsize=7)
     axes[i].tick_params(labelsize=5)
 
-fig.suptitle("Balanced pool: 42 generators across 15 behavioral niches", fontsize=14)
+fig.suptitle("Interpretable pool: 42 generators across 15 behavioral niches", fontsize=14)
 plt.tight_layout()
 plt.show()
 ```
@@ -239,8 +239,8 @@ for niche_name, indices in niches:
 
 ## Summary statistics
 
-Compare key statistics across all 42 series to see how the balanced pool
-spans different value ranges and variabilities.
+Compare key statistics across all 42 series to see how the interpretable
+pool spans different value ranges and variabilities.
 
 ```python
 stats = (

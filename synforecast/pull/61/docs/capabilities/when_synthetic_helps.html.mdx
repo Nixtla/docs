@@ -41,7 +41,9 @@ for M4’s varied scales) trained on:
 We forecast the official 18-month M4 holdout and score seasonal MASE,
 paired within each seed. The full sweep (20 seeds) lives in
 [`benchmarks/benchmark_augmentation.py`](https://github.com/Nixtla/synforecast/blob/main/benchmarks/benchmark_augmentation.py);
-here we load its committed summary.
+here we load the summary it writes; that artifact is untracked, so this
+page publishes stored outputs and re-running it needs a local benchmark
+run first.
 
 ```python
 import json

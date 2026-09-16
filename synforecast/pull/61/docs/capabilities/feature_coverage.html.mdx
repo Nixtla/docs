@@ -9,8 +9,9 @@ whole region of real behaviour has no synthetic neighbour, no amount of
 pretraining on that corpus can teach it. This page walks through the
 frozen twelve-feature schema, the distance-based scoring protocol, the
 results across the six M4 frequencies, and the one frequency where the
-pools fall short. Every number is loaded from committed benchmark
-summaries; the scripts that produced them are listed at the end.
+pools fall short. Every number on this page is read from a benchmark
+summary rather than transcribed by hand; the scripts that produced them
+are listed at the end.
 
 > **Summary**
 >
@@ -20,7 +21,7 @@ summaries; the scripts that produced them are listed at the end.
 >     changes in dependence, seasonality, spikes, level shifts, and
 >     variance shifts.
 > -   **M4, Yearly to Daily:** the balanced and pretraining pools cover
->     56–88% of fresh held-out real queries at the real-calibrated
+>     52–88% of fresh held-out real queries at the real-calibrated
 >     radius, against real-to-real baselines of 80–91%. No M4 panel
 >     other than Hourly shows a material gap over three generation seeds
 >     and four query groups.
@@ -51,8 +52,8 @@ summaries; the scripts that produced them are listed at the end.
 spectral entropy, trend and seasonal strength from a classical
 decomposition, four autocorrelation summaries, spike and lumpiness, the
 largest level and variance shift between adjacent windows, and the
-number of mean crossings. The definitions are frozen as `native_v1`; the
-seasonal period and window width are extraction parameters that you
+number of median crossings. The definitions are frozen as `native_v1`;
+the seasonal period and window width are extraction parameters that you
 declare per panel, not part of the schema.
 
 The example below extracts features for a small hourly panel and
@@ -270,14 +271,17 @@ seeds; the bar behind it spans the twelve fold–seed pairs. Three things
 stand out.
 
 -   **Yearly and Quarterly are essentially covered.** The pools sit
-    within a few points of what real candidates achieve. Monthly,
-    Weekly, and Daily fall 5–20 points short, with Weekly flagged as a
-    minor gap and Daily depending strongly on which real series are
-    queried (two folds gap by more than 25 points, two by less than 10).
+    within a few points of what real candidates achieve. Monthly falls
+    about 5 points short and Weekly about 20, the latter flagged as a
+    minor gap. Daily is the widest of the three, roughly 25 to 30 points
+    below the real-to-real baseline, and depends strongly on which real
+    series are queried (two folds gap by more than 25 points, two by
+    less than 10).
 -   **The two pools are interchangeable here.** They stay within five
     points of each other on every panel, so the meta-generators added by
     the pretraining pool do not buy coverage in this feature space.
-    Random MAR is far behind everywhere except Quarterly.
+    Random MAR is far behind on every panel, Quarterly included, where
+    it reaches 34% against 88% for the pools.
 -   **Hourly is a different regime.** Coverage is 1–2% against a 91%
     baseline, and the twelve fold–seed pairs never exceed 16%. The rest
     of this page is about that gap.
@@ -924,20 +928,22 @@ fails no-harm: its gap is an intermittent-demand gap that the seasonal
 preset does not address, while the pretraining pool’s meta-generators
 help a little, so displacing their share costs 3 points. Added on top of
 both pools rather than in place of a share, a post-hoc comparison
-against adding random MAR shows the preset never hurts and helps where
-seasonality is strong. That is how the preset is documented: an opt-in
-addition on top of a pool, kept out of the defaults.
+against adding random MAR shows the preset helps where seasonality is
+strong and is within a point either way elsewhere, including −0.8 points
+on car parts. That is how the preset is documented: an opt-in addition
+on top of a pool, kept out of the defaults.
 
 A last pre-declared test asked whether the addition should become the
 `pretraining_pool` default, through the new `include_seasonal` flag, by
 comparing the pool with and without it as equal-count corpora on fifteen
 panels at every frequency but yearly. The flag raised coverage on every
-quarterly and monthly panel, by 2 to 14 points, and lowered it by 3 to 6
-points on weekly, daily, and intermittent panels, where it builds a
-cycle those series do not have and displaces breadth. Six panels failed
-the no-harm gate, so the default stays off, and the flag is recommended
-for quarterly and monthly targets only. The table below is from that
-run.
+quarterly and monthly panel, by 2 to 14 points, and lowered it on
+weekly, daily, and intermittent panels, by up to about 6 points on M4
+weekly and daily and about 3 on car parts, while traffic weekly and
+weather daily were essentially unchanged; it builds a cycle those series
+do not have and displaces breadth. Six panels failed the no-harm gate,
+so the default stays off, and the flag is recommended for quarterly and
+monthly targets only. The table below is from that run.
 
 ```python
 default_test = load("feature_coverage_pretraining_seasonal_default")
@@ -1019,9 +1025,13 @@ default_table.style.format("{:.1%}", subset=["without flag", "with flag", "real 
 
 ## Reproduce
 
-The benchmarks run in sequence, each reading the previous one’s
-committed `summary.json`. Detailed per-query traces are written next to
-the summaries and are gitignored; the READMEs in each directory document
+The benchmark scripts and their artifacts are not yet in the repository;
+they land in a follow-up pull request that keeps this one focused on the
+library change. The commands below are recorded now so the protocol is
+on the record, and the numbers on this page come from a local run of
+exactly these steps. Once the scripts land they run in sequence, each
+reading the previous one’s `summary.json`, with detailed per-query
+traces written alongside and a README per directory documenting
 protocol, results, and limits.
 
 ```bash
@@ -1050,7 +1060,8 @@ python benchmarks/validate_pretraining_seasonal_default.py --download
 python benchmarks/export_coverage_examples.py
 ```
 
-Summaries live under `benchmarks/data/feature_coverage_*/`. The API used
-above, `compute_features` and `compare_feature_coverage`, is documented
-in the [evaluation reference](../../evaluation.html).
+Summaries are written under `benchmarks/data/feature_coverage_*/`, which
+is untracked. The API used above, `compute_features` and
+`compare_feature_coverage`, is documented in the [evaluation
+reference](../../evaluation.html).
 
