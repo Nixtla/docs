@@ -1,5 +1,6 @@
 ---
 title: Cross validation | StatsForecast
+description: Evaluate model performance with time series cross-validation in StatsForecast, using sliding windows, cutoffs, and RMSE to compare forecasts.
 ---
 
 > In this example, we’ll implement time series cross-validation to
@@ -169,6 +170,13 @@ Once the `StatsForecast`object has been instantiated, we can use the
     meaning the number of forecasting processes in the past you want to
     evaluate.
 
+> **Note**
+>
+> `h` and `step_size` are measured in timesteps of your data’s
+> frequency, not in calendar time. For example, if each row of your
+> data is one hour, `step_size = 24` moves each window forward by 24
+> hourly observations, regardless of how often new data arrives.
+
 For this particular example, we’ll use 3 windows of 24 hours.
 
 ```python
@@ -227,6 +235,22 @@ for k in range(len(cutoff)):
 
 Notice that in each cutoff period, we generated a forecast for the next
 24 hours using only the data `y` before said period.
+
+### How cutoffs are determined
+
+`cross_validation` doesn’t accept a list of explicit cutoff dates. The
+validation windows are always anchored to the end of `df`:
+
+-   The last cutoff is the last timestamp in `df` minus `h` timesteps.
+-   Each earlier cutoff is `step_size` timesteps before the next one,
+    for a total of `n_windows` cutoffs.
+-   Alternatively, you can set `test_size` (the total length of the
+    test period), in which case `n_windows` is computed automatically.
+
+To evaluate a specific cutoff date, trim `df` so that it ends exactly
+`h` timesteps after the desired cutoff and run `cross_validation` with
+`n_windows = 1`. Repeat this for each cutoff you need and concatenate
+the results.
 
 ## Evaluate results
 
