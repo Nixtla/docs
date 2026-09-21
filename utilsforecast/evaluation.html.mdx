@@ -6,7 +6,7 @@ description: Model performance evaluation
 ### `evaluate`
 
 ```python
-evaluate(df, metrics, models=None, train_df=None, level=None, id_col='unique_id', time_col='ds', target_col='y', cutoff_col='cutoff', agg_fn=None)
+evaluate(df, metrics, models=None, train_df=None, level=None, id_col='unique_id', time_col='ds', target_col='y', cutoff_col='cutoff', agg_fn=None, weights=None)
 ```
 
 Evaluate forecast using different metrics.
@@ -24,11 +24,39 @@ Name | Type | Description | Default
 `time_col` | <code>[str](#str)</code> | Column that identifies each timestep, its values can be timestamps or integers. Defaults to 'ds'. | <code>'ds'</code>
 `target_col` | <code>[str](#str)</code> | Column that contains the target. Defaults to 'y'. | <code>'y'</code>
 `cutoff_col` | <code>[str](#str)</code> | Column that identifies the cutoff point for each forecast cross-validation fold. Defaults to 'cutoff'. | <code>'cutoff'</code>
-`agg_fn` | <code>[str](#str)</code> | Statistic to compute on the scores by id to reduce them to a single number. Defaults to None. | <code>None</code>
+`agg_fn` | <code>[str](#str)</code> | Statistic to compute on the per-id scores to reduce them to a single value per metric. See [Accepted `agg_fn` values](#accepted-agg-fn-values) below. Defaults to None. | <code>None</code>
+`weights` | <code>str, pandas or polars DataFrame</code> | Weights to use when `agg_fn='weighted_mean'`. See [Weighted aggregation](#weighted-aggregation) below. Defaults to None. | <code>None</code>
 
 **Returns:**
 
 Type | Description
 ---- | -----------
 <code>[AnyDFType](#utilsforecast.compat.AnyDFType)</code> | pandas, polars, dask or spark DataFrame: Metrics with one row per (id, metric) combination and one column per model. If `agg_fn` is not `None`, there is only one row per metric.
+
+#### Accepted `agg_fn` values
+
+`agg_fn` is forwarded to the underlying dataframe backend's group-by aggregation, so any aggregation name supported by that backend works.
+
+- For pandas dataframes, `agg_fn` is passed to `pandas.core.groupby.DataFrameGroupBy.agg`. Common values: `'mean'`, `'median'`, `'sum'`, `'min'`, `'max'`, `'std'`, `'var'`, `'count'`, `'first'`, `'last'`.
+- For polars dataframes, `agg_fn` is used as a method name on `polars.Expr` inside `GroupBy.agg`. Common values: `'mean'`, `'median'`, `'sum'`, `'min'`, `'max'`, `'std'`, `'var'`, `'count'`, `'first'`, `'last'`.
+- `'weighted_mean'` is a special value handled by `evaluate` itself and requires `weights` (see below).
+- `agg_fn` is not supported when `df` is a distributed (dask or spark) dataframe.
+
+Example — mean RMSE and MAE across all series:
+
+```python
+from utilsforecast.evaluation import evaluate
+from utilsforecast.losses import rmse, mae
+
+evaluate(forecasts_df, metrics=[rmse, mae], agg_fn='mean')
+```
+
+#### Weighted aggregation
+
+Set `agg_fn='weighted_mean'` to compute a weighted average of per-id metric values. `weights` is required in that case and accepts:
+
+- `'auto'` — weights are computed as the sum of `target_col` in the forecast/evaluation window (not from `train_df`).
+- A pandas or polars DataFrame with a `weight` column plus `id_col`. If `df` has `cutoff_col`, the weights dataframe may also include `cutoff_col` for per-cutoff weights; if it doesn't, the same per-series weight is applied to every cutoff.
+
+`weights` can only be used with `agg_fn='weighted_mean'`, and `agg_fn='weighted_mean'` requires `weights` to be set.
 
