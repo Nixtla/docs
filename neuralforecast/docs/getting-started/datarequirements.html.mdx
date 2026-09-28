@@ -17,6 +17,15 @@ While missing values are supported, we require data to be uniformly
 samples. This means that each consecutive timesteps must be evenly
 spaced.
 
+Each series must also have at most one row per timestamp. Duplicate `ds`
+values within the same `unique_id` break the uniform sampling
+requirement. If your raw data has several records for the same
+timestamp, aggregate them before fitting, for example:
+
+```python
+Y_df = Y_df.groupby(['unique_id', 'ds'], as_index=False)['y'].sum()
+```
+
 You can run these experiments using GPU with Google Colab.
 
 <a href="https://colab.research.google.com/github/Nixtla/neuralforecast/blob/main/nbs/docs/getting-started/datarequirements.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
