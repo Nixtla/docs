@@ -1,5 +1,6 @@
 ---
 title: Exogenous Regressors
+description: Forecast with exogenous regressors in StatsForecast, pass future values through X_df, access fitted AutoARIMA coefficients, and fix common errors.
 ---
 
 > In this notebook, we’ll incorporate exogenous regressors to a
@@ -36,6 +37,8 @@ they can help enhance the forecast.
 5.  Create future exogenous regressors
 6.  Train model
 7.  Evaluate results
+8.  Access the fitted coefficients
+9.  Troubleshooting
 
 > **Tip**
 >
@@ -340,4 +343,61 @@ The MAE without exogenous regressors is 12.18
 
 Hence, we can conclude that using `sell_price` and `snap_CA` as external
 regressors helped improve the forecast.
+
+## Access the fitted coefficients
+
+ARIMA-family models with exogenous regressors are *regressions with
+ARIMA errors*. The exogenous regressors enter the model linearly and
+additively:
+
+$$\hat{y}_t = \text{ARMA part} + C_1 x_{1,t} + C_2 x_{2,t} + \dots + C_N x_{N,t}$$
+
+This means the contribution of each regressor to a given prediction is
+its coefficient multiplied by its value at that point.
+
+To inspect the coefficients, train the model with the `fit` method
+(rather than `forecast`) and access the fitted model of each series
+through the `fitted_` attribute. `fitted_` is an array of shape
+(number of series, number of models).
+
+```python
+sf.fit(df=train)
+
+result = sf.fitted_[0, 0].model_  # first series, first model
+print(result['coef'])
+```
+
+`result['coef']` is a dictionary. The AR and MA terms use keys like
+`ar1`, `ma1`, `sar1`, and `sma1`. The exogenous regressors use the keys
+`ex_1`, `ex_2`, and so on, in the same order as the columns of the
+training dataframe. When the model includes a constant, the dictionary
+also contains an `intercept` or `drift` key.
+
+## Troubleshooting
+
+Common errors when forecasting with exogenous regressors:
+
+**`ValueError: xreg is rank deficient`**. `AutoARIMA` checks that the
+training exogenous regressors are linearly independent before fitting.
+The check drops constant columns and then stacks the remaining columns
+with a linear trend, so it fails when one column is a linear combination
+of the others or of a linear time trend. To fix it, remove redundant
+columns. For example, drop one category from a full set of one-hot
+encoded dummies, or remove a column that increases linearly with time.
+This check only applies to the training data. The future values in
+`X_df` are only multiplied by the fitted coefficients, so linear
+dependence that appears only in the forecast horizon does not raise this
+error.
+
+**`ValueError: Expected X to have shape (a, b), but got (c, d)`**.
+`X_df` must contain the `unique_id` and `ds` columns plus exactly the
+same exogenous columns used in training, with one row per series for
+each timestamp in the forecast horizon. An extra column (such as a
+leftover `y`) or a missing column changes the shape and raises this
+error.
+
+**`Models require the following exogenous features ...`**. If the
+training data contains exogenous columns and a model that supports them
+is used, the `forecast` method requires their future values through
+`X_df`.
 
