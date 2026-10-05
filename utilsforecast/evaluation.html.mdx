@@ -32,3 +32,36 @@ Type | Description
 ---- | -----------
 <code>[AnyDFType](#utilsforecast.compat.AnyDFType)</code> | pandas, polars, dask or spark DataFrame: Metrics with one row per (id, metric) combination and one column per model. If `agg_fn` is not `None`, there is only one row per metric.
 
+
+## Custom metrics
+
+`utilsforecast.losses` doesn't include an R² (coefficient of determination) metric. You can pass any function as a metric to `evaluate` as long as it follows the same contract as the built-in losses:
+
+- It accepts the arguments `df`, `models`, `id_col`, and `target_col`. Add a `train_df` argument only if the metric needs the training set. `evaluate` then also passes `time_col` and `cutoff_col`.
+- It returns a DataFrame with the `id_col` column and one column per model.
+
+`evaluate` uses the function name as the value in the `metric` column.
+
+The following example defines R² per series for pandas forecasts:
+
+```python
+import pandas as pd
+import utilsforecast.losses as ufl
+from utilsforecast.evaluation import evaluate
+
+def r2(df, models, id_col='unique_id', target_col='y'):
+    group_cols = [id_col, 'cutoff'] if 'cutoff' in df.columns else [id_col]
+    y = df[target_col]
+    y_mean = df.groupby(group_cols)[target_col].transform('mean')
+    sq = df[group_cols].copy()
+    sq['_ss_tot'] = (y - y_mean) ** 2
+    for model in models:
+        sq[model] = (y - df[model]) ** 2
+    sums = sq.groupby(group_cols).sum()
+    scores = 1 - sums[models].div(sums['_ss_tot'], axis=0)
+    return scores.reset_index()
+
+evaluate(forecasts_df, metrics=[ufl.mae, ufl.rmse, r2])
+```
+
+The `cutoff` check keeps one score per series and cross-validation window when you evaluate cross-validation results. Higher R² values are better, unlike the error metrics in `utilsforecast.losses`.
