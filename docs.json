@@ -233,7 +233,6 @@
                   "mlforecast/core.html",
                   "mlforecast/target_transforms.html",
                   "mlforecast/lag_transforms.html",
-                  "mlforecast/date_features.html",
                   "mlforecast/feature_engineering.html",
                   "mlforecast/callbacks.html"
                 ]
