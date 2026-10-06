@@ -52,7 +52,7 @@ print(f"Total observations: {len(df)}")
 df.head(10)
 ```
 
-``` text
+```shell
 Generated 3 time series
 Total observations: 1500
 ```
@@ -99,7 +99,7 @@ print(f"Regime variances: {info['regime_variances']}")
 print(f"Stationary distribution: {[f'{p:.3f}' for p in info['stationary_distribution']]}")
 ```
 
-``` text
+```shell
 Number of regimes: 2
 Regime means: [0.05, -0.03]
 Regime variances: [1.0, 4.0]
@@ -118,7 +118,7 @@ print(f"Regime 0 (Bull) observations: {regime_counts[0]}")
 print(f"Regime 1 (Bear) observations: {regime_counts[1]}")
 ```
 
-``` text
+```shell
 Regime 0 (Bull) observations: 398
 Regime 1 (Bear) observations: 102
 ```

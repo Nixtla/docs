@@ -51,7 +51,7 @@ print(f"Columns: {df.columns}")
 df.head(10)
 ```
 
-``` text
+```shell
 Columns: ['unique_id', 'ds', 'y', 'year', 'quarter', 'month', 'day_of_year', 'day_of_week', 'day_of_month', 'is_weekend', 'hour', 'hour_sin', 'hour_cos', 'dow_sin', 'dow_cos', 'month_sin', 'month_cos', 'doy_sin', 'doy_cos']
 ```
 
@@ -148,7 +148,7 @@ print(f"Anomalies: {df['anomaly_flag'].sum()}, "
 df.head(10)
 ```
 
-``` text
+```shell
 Columns: ['unique_id', 'ds', 'y', 'anomaly_flag', 'changepoint_flag', 'missing_flag']
 Anomalies: 15, Changepoints: 3, Missing: 20
 ```
@@ -271,7 +271,7 @@ print(f"Target correlation: 0.8, actual: {corr:.3f}")
 df.head(10)
 ```
 
-``` text
+```shell
 Columns: ['unique_id', 'ds', 'y', 'corr_noise', 'lagged_y', 'trend']
 Target correlation: 0.8, actual: 0.822
 ```
@@ -378,7 +378,7 @@ print(f"Columns: {df.columns}")
 df.head(10)
 ```
 
-``` text
+```shell
 Generated DataFrame: 200 rows x 24 columns
 Columns: ['unique_id', 'ds', 'y', 'anomaly_flag', 'changepoint_flag', 'missing_flag', 'year', 'quarter', 'month', 'day_of_year', 'day_of_week', 'day_of_month', 'is_weekend', 'hour', 'hour_sin', 'hour_cos', 'dow_sin', 'dow_cos', 'month_sin', 'month_cos', 'doy_sin', 'doy_cos', 'price', 'trend']
 ```

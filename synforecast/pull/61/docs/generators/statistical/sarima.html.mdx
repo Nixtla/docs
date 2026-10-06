@@ -66,7 +66,7 @@ print(f"\nExpanded AR polynomial lags: {model_info['full_ar_polynomial_lags']}")
 print(f"Expanded AR polynomial coeffs: {model_info['full_ar_polynomial_coeffs']}")
 ```
 
-``` text
+```shell
 Model: SARIMA(2,1,1)(1,1,1)[7]
 AR parameters: [0.2298813963661166, -0.04889724819835817]
 MA parameters: [0.35859791991138246]
@@ -88,7 +88,7 @@ print(f"Total observations: {len(df)}")
 df.head(10)
 ```
 
-``` text
+```shell
 Generated 3 time series
 Total observations: 600
 ```
@@ -174,7 +174,7 @@ print(f"Series mean: {df_arma['y'].mean():.2f}")
 print(f"Series std: {df_arma['y'].std():.2f}")
 ```
 
-``` text
+```shell
 Model: ARIMA(1,0,1)
 Mean: 50.0
 Series mean: 50.35
@@ -226,7 +226,7 @@ print("\nFirst 24 months:")
 df_seasonal.head(24)
 ```
 
-``` text
+```shell
 Model: SARIMA(0,0,0)(1,1,1)[12]
 
 First 24 months:

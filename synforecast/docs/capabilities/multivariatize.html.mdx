@@ -63,7 +63,7 @@ seed and auditable after the fact.
 coupled.last_recipe
 ```
 
-``` text
+```shell
 {'couplings': ['mixing', 'leadlag'],
  'length': 256,
  'mixing': {'strength': 0.5072149078264366,
@@ -95,7 +95,7 @@ wide = df.pivot(on="unique_id", index="ds", values="y").sort("ds")
 np.corrcoef(wide.drop("ds").to_numpy().T)
 ```
 
-``` text
+```shell
 array([[ 1.        ,  0.13490276, -0.03079865,  0.01106283],
        [ 0.13490276,  1.        , -0.39781199, -0.1085008 ],
        [-0.03079865, -0.39781199,  1.        , -0.15540655],

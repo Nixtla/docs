@@ -79,7 +79,7 @@ print(f"Final cumulative count: {cumulative_df['y'].tail(1).item():.0f}")
 cumulative_df.head(10)
 ```
 
-``` text
+```shell
 Generated 50 hourly cumulative counts
 Final cumulative count: 146
 ```
@@ -137,7 +137,7 @@ print(f"Statistics: Mean={daily_df['y'].mean():.4f}, Total Events={daily_df['y']
 daily_df.head(10)
 ```
 
-``` text
+```shell
 Generated 100 daily event counts
 Statistics: Mean=4.9400, Total Events=494
 ```
@@ -195,7 +195,7 @@ print(f"Overall Statistics: Mean={multi_df['y'].mean():.4f}, Total Events={multi
 multi_df.filter(pl.col("unique_id") == "0").head(10)
 ```
 
-``` text
+```shell
 Generated 4 different Poisson processes with 200 total observations
 Overall Statistics: Mean=2.9900, Total Events=598
 ```

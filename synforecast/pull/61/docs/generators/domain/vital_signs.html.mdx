@@ -54,7 +54,7 @@ print(f"Mean heart rate: {values.mean():.1f} bpm")
 print(f"Std deviation: {values.std():.1f} bpm")
 ```
 
-``` text
+```shell
 Heart rate range: [50.0, 89.9] bpm
 Mean heart rate: 61.8 bpm
 Std deviation: 7.1 bpm
@@ -97,7 +97,7 @@ for ptype in patient_types:
     )
 ```
 
-``` text
+```shell
 healthy        : mean=61.8, std=7.1, range=[50, 90]
 cardiac        : mean=69.5, std=11.0, range=[50, 125]
 sepsis         : mean=85.3, std=12.8, range=[70, 150]
@@ -155,7 +155,7 @@ for col in vital_cols:
     )
 ```
 
-``` text
+```shell
 Vital sign statistics for sepsis patient:
   heart_rate        : mean=92.9, range=[70.0, 118.9]
   systolic_bp       : mean=90.3, range=[70.0, 129.8]
@@ -205,7 +205,7 @@ for ptype in ["healthy", "respiratory", "sepsis"]:
     )
 ```
 
-``` text
+```shell
 healthy     : mean=97.0%, min=95.2%, time <95%: 0.0%
 respiratory : mean=89.2%, min=85.0%, time <95%: 99.7%
 sepsis      : mean=90.2%, min=85.0%, time <95%: 98.5%
@@ -230,7 +230,7 @@ for vital, params in info["baselines"].items():
     )
 ```
 
-``` text
+```shell
 Patient type: healthy
 Current vital sign: heart_rate
 Circadian rhythm: True

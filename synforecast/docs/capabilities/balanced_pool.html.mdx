@@ -52,7 +52,7 @@ print(f"Series: {df['unique_id'].n_unique()}")
 print(f"Total observations: {len(df)}")
 ```
 
-``` text
+```shell
 Generators: 42
 Series: 42
 Total observations: 8400
@@ -68,7 +68,7 @@ for i, gen in enumerate(generators):
     print(f"  {i}: {gen.alias}")
 ```
 
-``` text
+```shell
   0: SARIMAGenerator
   1: ETSGenerator
   2: FractionalBrownianMotionGenerator
@@ -222,8 +222,10 @@ Compare key statistics across all 42 series to see how the balanced pool
 spans different value ranges and variabilities.
 
 ```python
+# unique_id is a string, so sorting on it would put "10" before "2";
+# keep the generation order (pool order) instead.
 stats = (
-    df.group_by("unique_id")
+    df.group_by("unique_id", maintain_order=True)
     .agg(
         [
             pl.col("y").count().alias("count"),
@@ -233,7 +235,6 @@ stats = (
             pl.col("y").std().alias("std"),
         ]
     )
-    .sort("unique_id")
 )
 stats
 ```
@@ -263,7 +264,7 @@ print(f"Series: {df_large['unique_id'].n_unique()}")
 print(f"Total observations: {len(df_large)}")
 ```
 
-``` text
+```shell
 Series: 210
 Total observations: 42000
 ```
@@ -322,7 +323,7 @@ print(f"  {len(meta_only)} meta-generator instances")
 print("  meta-generators:", dict(Counter(type(g).__name__ for g in meta_only)))
 ```
 
-``` text
+```shell
 pretraining_pool: 54 generators
   42 single-mechanism (from balanced_pool)
   12 meta-generator instances

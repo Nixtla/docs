@@ -87,7 +87,7 @@ if len(event_days) > 0:
     print(f"Event day lift: {(avg_event_day/avg_normal_day - 1)*100:.1f}%")
 ```
 
-``` text
+```shell
 Days when events occurred:
 shape: (4, 4)
 ┌───────────┬─────────────────────┬──────────────┬───────┐
@@ -128,7 +128,7 @@ print(f"Generated {len(hourly_df)} hourly observations")
 hourly_df.head(24)
 ```
 
-``` text
+```shell
 Generated 168 hourly observations
 ```
 
@@ -186,7 +186,7 @@ print("\nEvents per product:")
 print(total_events)
 ```
 
-``` text
+```shell
 Generated 5 products with 150 total observations
 
 Product 0 preview:
@@ -263,7 +263,7 @@ print(f"Columns: {custom_df.columns}")
 custom_df.head(10)
 ```
 
-``` text
+```shell
 Columns: ['product_id', 'date', 'dau', 'marketing_campaign']
 ```
 

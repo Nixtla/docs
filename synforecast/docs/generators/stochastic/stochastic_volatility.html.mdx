@@ -61,7 +61,7 @@ stats = df.group_by("unique_id").agg(
 stats
 ```
 
-``` text
+```shell
 Generated 3 price paths
 ```
 
@@ -99,7 +99,7 @@ print(f"Volatility range: [{vols.min():.3f}, {vols.max():.3f}]")
 print(f"Mean volatility: {vols.mean():.3f} ({vols.mean() * np.sqrt(252) * 100:.1f}% annualized)")
 ```
 
-``` text
+```shell
 Price range: [83.34, 109.86]
 Volatility range: [0.155, 0.309]
 Mean volatility: 0.227 (359.7% annualized)
@@ -132,7 +132,7 @@ print(f"Return-VolChange correlation: {corr:.3f}")
 print("(Negative = leverage effect: vol rises when prices fall)")
 ```
 
-``` text
+```shell
 Return-VolChange correlation: -0.666
 (Negative = leverage effect: vol rises when prices fall)
 ```
@@ -160,7 +160,7 @@ sabr_df = sabr_gen.generate(n_series=1)
 print(f"SABR price range: [{sabr_df['y'].min():.2f}, {sabr_df['y'].max():.2f}]")
 ```
 
-``` text
+```shell
 SABR price range: [95.99, 101.42]
 ```
 
@@ -189,7 +189,7 @@ for key, value in info.items():
     print(f"{key}: {value}")
 ```
 
-``` text
+```shell
 model: heston
 initial_price: 100.0
 initial_vol: 0.04
@@ -220,7 +220,7 @@ for k, iv in zip(strikes, impl_vols):
     print(f"  {k:3d}  |   {iv * 100:.2f}%")
 ```
 
-``` text
+```shell
 Strike | Implied Vol
 -------------------------
    80  |   3.98%
@@ -266,7 +266,7 @@ for output_type in ["price", "returns", "volatility"]:
     print(f"{output_type:12s}: mean={vals.mean():.4f}, std={vals.std():.4f}")
 ```
 
-``` text
+```shell
 price       : mean=104.0363, std=6.2124
 returns     : mean=-0.0010, std=0.0140
 volatility  : mean=0.2009, std=0.0333

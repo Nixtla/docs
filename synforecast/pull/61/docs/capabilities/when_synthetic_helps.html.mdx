@@ -41,9 +41,7 @@ for M4’s varied scales) trained on:
 We forecast the official 18-month M4 holdout and score seasonal MASE,
 paired within each seed. The full sweep (20 seeds) lives in
 [`benchmarks/benchmark_augmentation.py`](https://github.com/Nixtla/synforecast/blob/main/benchmarks/benchmark_augmentation.py);
-here we load the summary it writes; that artifact is untracked, so this
-page publishes stored outputs and re-running it needs a local benchmark
-run first.
+here we load its committed summary.
 
 ```python
 import json
@@ -72,7 +70,7 @@ print(f"{summary['dataset']} | {summary['model']} | {summary['seeds']} seeds")
 table
 ```
 
-``` text
+```shell
 M4 Monthly (official 18-month holdout) | HistGradientBoostingRegressor via MLForecast, per-series scaling | 20 seeds
 ```
 
@@ -131,10 +129,10 @@ measure:
 >
 > -   **Coverage and diversity.**
 >     [`generate_series`](../getting-started/quickstart.html) and the
->     [balanced pool](./balanced_pool.html) span behaviors — volatility
->     clustering, long memory, intermittency, chaos — that no single
->     real dataset contains. Useful for stress-testing a pipeline and
->     for pretraining breadth; [feature-space
+>     [interpretable pool](./balanced_pool.html) span behaviors —
+>     volatility clustering, long memory, intermittency, chaos — that no
+>     single real dataset contains. Useful for stress-testing a pipeline
+>     and for pretraining breadth; [feature-space
 >     coverage](./feature_coverage.html) measures how much of real M4
 >     behaviour the pools reach.
 > -   **Robustness testing.** Inject [anomalies](./anomalies.html),
@@ -223,7 +221,7 @@ print(f"{pt['dataset']} | {pt['model']} | {pt['seeds']} seeds x "
 pt_table
 ```
 
-``` text
+```shell
 M3 Monthly (last 18 months held out) | NHITS via NeuralForecast, per-series standardization | 10 seeds x 300 series
 ```
 

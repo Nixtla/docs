@@ -73,7 +73,7 @@ print(f"Total observations: {len(df)}")
 df.head(10)
 ```
 
-``` text
+```shell
 Generated 6 time series
 Total observations: 740
 ```
@@ -152,7 +152,7 @@ print("Sample of series 0 (Random Walk - first 10 rows):")
 df.filter(pl.col("unique_id") == "0").head(10)
 ```
 
-``` text
+```shell
 Sample of series 0 (Random Walk - first 10 rows):
 ```
 
@@ -175,7 +175,7 @@ print("Sample of series 3 (Seasonal - first 10 rows):")
 df.filter(pl.col("unique_id") == "3").head(10)
 ```
 
-``` text
+```shell
 Sample of series 3 (Seasonal - first 10 rows):
 ```
 

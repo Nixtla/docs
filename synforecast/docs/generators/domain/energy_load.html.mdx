@@ -90,7 +90,7 @@ print(
 extreme_df.head(24)
 ```
 
-``` text
+```shell
 Generated 336 hourly observations with extreme weather events
 Statistics: Mean=62.60 kW, Min=20.00 kW, Max=205.00 kW
 ```
@@ -147,7 +147,7 @@ print(
 holiday_df.head(24)
 ```
 
-``` text
+```shell
 Generated 336 hourly observations with holiday/weekend effects
 Statistics: Mean=101.44 kW, Min=69.02 kW, Max=128.92 kW
 ```
@@ -204,7 +204,7 @@ print(
 high_temp_df.head(24)
 ```
 
-``` text
+```shell
 Generated 168 hourly observations with high temperature sensitivity
 Statistics: Mean=56.94 kW, Min=20.36 kW, Max=99.35 kW
 ```
@@ -261,7 +261,7 @@ print(
 multi_df.filter(pl.col("unique_id") == "0").head(24)
 ```
 
-``` text
+```shell
 Generated 5 residential customers with 840 total observations
 Overall Statistics: Mean=55.30 kW, Total Load=276.52 kW
 ```

@@ -67,7 +67,7 @@ print(f"target rate 15%, actual {missing_rate(random_df):.1%}")
 plot_missing(random_df, "Random missing (15%)")
 ```
 
-``` text
+```shell
 target rate 15%, actual 15.0%
 ```
 
@@ -95,7 +95,7 @@ print(f"target rate 20%, actual {missing_rate(block_df):.1%}, block size 5")
 plot_missing(block_df, "Block missing (outages, ~5-day blocks)")
 ```
 
-``` text
+```shell
 target rate 20%, actual 20.0%, block size 5
 ```
 
@@ -126,7 +126,7 @@ print(f"target rate 12%, actual {missing_rate(seasonal_df):.1%}")
 plot_missing(seasonal_df.head(84), "Seasonal missing (first 12 weeks)")
 ```
 
-``` text
+```shell
 target rate 12%, actual 10.2%
 ```
 
@@ -183,7 +183,7 @@ print(
 )
 ```
 
-``` text
+```shell
 target   5%  ->  actual 5.0%
 target  15%  ->  actual 15.0%
 target  30%  ->  actual 30.0%

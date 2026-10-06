@@ -46,7 +46,7 @@ print(f"Generated {len(df_auto)} observations for 3 variables")
 df_auto.head(10)
 ```
 
-``` text
+```shell
 Generated 600 observations for 3 variables
 ```
 
@@ -99,7 +99,7 @@ if len(series_cols) >= 2:
     print(f"  0 vs 1: {corr_01:.3f}")
 ```
 
-``` text
+```shell
 Summary statistics:
 shape: (3, 3)
 ┌───────────┬───────────┬──────────┐
@@ -147,7 +147,7 @@ print(f"Coefficient matrix:\n{coef_matrix}")
 df_custom.head(10)
 ```
 
-``` text
+```shell
 Generated 600 observations
 Coefficient matrix:
 [[0.3 0.6]
@@ -195,7 +195,7 @@ if len(custom_cols) >= 2:
     print(f"Note: Strong cross-dependencies create correlation between variables")
 ```
 
-``` text
+```shell
 Series correlation: 0.414
 Note: Strong cross-dependencies create correlation between variables
 ```
@@ -222,7 +222,7 @@ print(f"Model: VAR(3) - uses 3 lags of each variable")
 df_var3.head(10)
 ```
 
-``` text
+```shell
 Generated 400 hourly observations
 Model: VAR(3) - uses 3 lags of each variable
 ```
@@ -289,7 +289,7 @@ if len(corr_cols) >= 2:
     print(f"Note: Correlated innovations create additional correlation")
 ```
 
-``` text
+```shell
 Generated 400 observations
 Innovation covariance matrix:
 [[1.  0.7]
@@ -337,7 +337,7 @@ print(f"Unique series IDs: {df_multi['unique_id'].unique().to_list()}")
 df_multi.filter(pl.col("unique_id") == "0").head(5)
 ```
 
-``` text
+```shell
 Generated 3 bivariate VAR series
 Total rows: 300
 Unique series IDs: ['0', '1', '2']

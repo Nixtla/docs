@@ -39,7 +39,7 @@ series.
 > -   **`pretraining_pool`** when breadth matters more than
 >     interpretability, as in pretraining a foundation model. It
 >     contains the whole interpretable pool plus randomised
->     meta-generators; `include_balanced=False` gives a purely
+>     meta-generators; `include_interpretable=False` gives a purely
 >     procedural corpus.
 > -   **`seasonal_pool`**, added on top of either, when the target data
 >     has a strong regular yearly cycle on a moving level: tourism,
@@ -73,7 +73,7 @@ print(f"Series: {df['unique_id'].n_unique()}")
 print(f"Total observations: {len(df)}")
 ```
 
-``` text
+```shell
 Generators: 42
 Series: 42
 Total observations: 8400
@@ -89,7 +89,7 @@ for i, gen in enumerate(generators):
     print(f"  {i}: {gen.alias}")
 ```
 
-``` text
+```shell
   0: SARIMAGenerator
   1: ETSGenerator
   2: FractionalBrownianMotionGenerator
@@ -243,8 +243,10 @@ Compare key statistics across all 42 series to see how the interpretable
 pool spans different value ranges and variabilities.
 
 ```python
+# unique_id is a string, so sorting on it would put "10" before "2";
+# keep the generation order (pool order) instead.
 stats = (
-    df.group_by("unique_id")
+    df.group_by("unique_id", maintain_order=True)
     .agg(
         [
             pl.col("y").count().alias("count"),
@@ -254,7 +256,6 @@ stats = (
             pl.col("y").std().alias("std"),
         ]
     )
-    .sort("unique_id")
 )
 stats
 ```
@@ -284,7 +285,7 @@ print(f"Series: {df_large['unique_id'].n_unique()}")
 print(f"Total observations: {len(df_large)}")
 ```
 
-``` text
+```shell
 Series: 210
 Total observations: 42000
 ```
@@ -326,14 +327,14 @@ matching typical pretraining contexts.
 
 Two knobs control the mix: `n_meta_variants` sets how many
 independently-seeded copies of each meta-generator to add (default 3),
-and `include_balanced=False` drops the single-mechanism generators for a
-purely procedural corpus.
+and `include_interpretable=False` drops the single-mechanism generators
+for a purely procedural corpus.
 
 ```python
 pretrain = pretraining_pool(
     min_length=256, max_length=256, freq="D", seed=42, engine="polars"
 )
-meta_only = pretraining_pool(include_balanced=False, engine="polars")
+meta_only = pretraining_pool(include_interpretable=False, engine="polars")
 
 from collections import Counter
 
@@ -343,7 +344,7 @@ print(f"  {len(meta_only)} meta-generator instances")
 print("  meta-generators:", dict(Counter(type(g).__name__ for g in meta_only)))
 ```
 
-``` text
+```shell
 pretraining_pool: 54 generators
   42 single-mechanism (from interpretable_pool)
   12 meta-generator instances
@@ -400,7 +401,7 @@ print(f"{len(pool)} generators, {df['unique_id'].n_unique()} series")
 
 ```
 
-``` text
+```shell
 50 generators, 50 series
 ```
 

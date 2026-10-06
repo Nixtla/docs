@@ -117,7 +117,7 @@ print(f"Statistics: Mean={declining_df['y'].mean():.4f}, Std={declining_df['y'].
 declining_df.head(10)
 ```
 
-``` text
+```shell
 Generated 300 observations with declining trend
 Statistics: Mean=140.8307, Std=27.3867
 ```
@@ -176,7 +176,7 @@ print(f"Statistics: Mean={complex_df['y'].mean():.4f}, Std={complex_df['y'].std(
 complex_df.head(10)
 ```
 
-``` text
+```shell
 Generated 500 observations with multiple overlapping cycles
 Statistics: Mean=105.8392, Std=43.9463
 ```
@@ -235,7 +235,7 @@ print(f"Overall Statistics: Mean={multi_df['y'].mean():.4f}, Std={multi_df['y'].
 multi_df.filter(pl.col("unique_id") == "0").head(10)
 ```
 
-``` text
+```shell
 Generated 3 series with 600 total observations
 Overall Statistics: Mean=103.3095, Std=24.7829
 ```

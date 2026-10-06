@@ -54,7 +54,7 @@ print(f"Generated {len(df_gaussian)} observations with 3 correlated variables")
 df_gaussian.head(10)
 ```
 
-``` text
+```shell
 Generated 600 observations with 3 correlated variables
 ```
 
@@ -113,7 +113,7 @@ if len(series_cols) >= 3:
     print(f"  1 vs 2: {corr_1_2:.3f} (specified: 0.700)")
 ```
 
-``` text
+```shell
 Correlations (compared to specified):
   0 vs 1: 0.809 (specified: 0.800)
   0 vs 2: 0.627 (specified: 0.600)
@@ -192,7 +192,7 @@ for name, (x, y) in wide.items():
 print(f"\n  independent channels would give {q:.0%}")
 ```
 
-``` text
+```shell
 Same specified correlation (0.7), joint 5%-tail behavior:
 
   gaussian copula: correlation 0.70, P(other channel also in its 5% tail) = 39%
@@ -251,7 +251,7 @@ stats = df_mixed.group_by("unique_id").agg(
 stats.sort("unique_id")
 ```
 
-``` text
+```shell
 Generated 800 observations with mixed marginals
 ```
 
@@ -301,7 +301,7 @@ print(f"Unique series IDs: {df_multi['unique_id'].unique().to_list()}")
 df_multi.filter(pl.col("unique_id") == "0").head(5)
 ```
 
-``` text
+```shell
 Generated 3 multivariate series
 Total rows: 300
 Unique series IDs: ['0', '1', '2']

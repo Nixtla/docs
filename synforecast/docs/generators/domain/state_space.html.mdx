@@ -49,7 +49,7 @@ print(
 local_level_df.head(10)
 ```
 
-``` text
+```shell
 Generated 200 observations from local level model
 Statistics: Mean=-0.0235, Std=0.4556
 ```
@@ -104,7 +104,7 @@ print(
 two_dim_df.head(10)
 ```
 
-``` text
+```shell
 Generated 200 observations from 2D state space model
 Statistics: Mean=-0.0315, Std=0.4513
 ```
@@ -161,7 +161,7 @@ print(
 custom_transition_df.head(10)
 ```
 
-``` text
+```shell
 Generated 200 observations with custom transition matrix
 Statistics: Mean=0.2258, Std=0.7764
 ```
@@ -217,7 +217,7 @@ print(
 custom_obs_df.head(10)
 ```
 
-``` text
+```shell
 Generated 200 observations with custom observation matrix
 Statistics: Mean=-0.0163, Std=0.4940
 ```
@@ -274,7 +274,7 @@ print(
 high_noise_df.head(10)
 ```
 
-``` text
+```shell
 Generated 200 observations with high process noise
 Statistics: Mean=-0.1518, Std=2.2105
 ```
@@ -330,7 +330,7 @@ print(
 noisy_obs_df.head(10)
 ```
 
-``` text
+```shell
 Generated 200 observations with high observation noise
 Statistics: Mean=-0.2227, Std=2.9604
 ```
@@ -388,7 +388,7 @@ print("\nHidden States:")
 print(states_df.head(10))
 ```
 
-``` text
+```shell
 Generated observations and hidden states
 Observation Statistics: Mean=-0.0286, Std=0.4412
 
@@ -474,7 +474,7 @@ print(
 multi_df.filter(pl.col("unique_id") == "0").head(10)
 ```
 
-``` text
+```shell
 Generated 3 series with 450 total observations
 Overall Statistics: Mean=-0.0026, Std=0.4818
 ```

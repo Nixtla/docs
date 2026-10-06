@@ -10,8 +10,10 @@ pretraining on that corpus can teach it. This page walks through the
 frozen twelve-feature schema, the distance-based scoring protocol, the
 results across the six M4 frequencies, and the one frequency where the
 pools fall short. Every number on this page is read from a benchmark
-summary rather than transcribed by hand; the scripts that produced them
-are listed at the end.
+summary rather than transcribed by hand. Those summaries and the scripts
+that produce them are not in the repository yet, so this page publishes
+stored outputs and only the first example runs from a fresh checkout;
+the scripts are listed at the end.
 
 > **Summary**
 >
@@ -20,8 +22,8 @@ are listed at the end.
 >     recipes, and they respond in the expected direction to controlled
 >     changes in dependence, seasonality, spikes, level shifts, and
 >     variance shifts.
-> -   **M4, Yearly to Daily:** the balanced and pretraining pools cover
->     52–88% of fresh held-out real queries at the real-calibrated
+> -   **M4, Yearly to Daily:** the interpretable and pretraining pools
+>     cover 52–88% of fresh held-out real queries at the real-calibrated
 >     radius, against real-to-real baselines of 80–91%. No M4 panel
 >     other than Hourly shows a material gap over three generation seeds
 >     and four query groups.
@@ -39,9 +41,9 @@ are listed at the end.
 > -   **Configuring existing generators** closes most of the M4 Hourly
 >     gap (67% coverage) but transfers only partly to an independent
 >     traffic panel (19%). A moderated seasonal corpus, added to the
->     balanced pool at equal candidate count, raises coverage on all
->     five quarterly and monthly panels tested, three of them held out,
->     by 3 to 32 points. That corpus ships as the opt-in
+>     interpretable pool at equal candidate count, raises coverage on
+>     all five quarterly and monthly panels tested, three of them held
+>     out, by 3 to 32 points. That corpus ships as the opt-in
 >     `seasonal_pool()` preset; a pre-declared test on four more panels
 >     passes on M1 monthly, is neutral on M4, and shows no benefit on
 >     intermittent data, so the default pools are unchanged.
@@ -105,15 +107,15 @@ features.head(5)
 
 ```python
 result = compare_feature_coverage(
-    reference, {"balanced": candidates}, seasonal_period=24, window_size=24, missing="drop"
-)["balanced"]
+    reference, {"interpretable": candidates}, seasonal_period=24, window_size=24, missing="drop"
+)["interpretable"]
 print(f"features used: {len(result.features_used)}; constant dropped: {result.constant_features_dropped}")
 print(f"real series retained: {len(result.real_diagnostics.retained_ids)} of {result.real_diagnostics.n_input}")
 print(f"PCA(2) explained variance: {sum(result.explained_variance):.0%}")
 print(f"uncovered real series (grid): {result.uncovered_real_series_fraction:.0%}")
 ```
 
-``` text
+```shell
 features used: 12; constant dropped: ()
 real series retained: 106 of 106
 PCA(2) explained variance: 66%
@@ -174,7 +176,7 @@ COLORS = {
     "real": "#0b0b0b",
 }
 LABELS = {
-    "balanced_pool": "balanced pool",
+    "balanced_pool": "interpretable pool",
     "pretraining_pool": "pretraining pool",
     "synforecast_mar": "random MAR",
     "real": "real baseline",
@@ -185,8 +187,8 @@ LABELS = {
 
 The cross-frequency benchmark samples 640 training series per M4
 frequency (all 359 for Weekly), forms four disjoint groups of 64 fresh
-queries, and scores the unchanged `interpretable_pool` (labelled
-“balanced pool” in the benchmark artifacts, its name at the time),
+queries, and scores the unchanged `interpretable_pool` (stored under the
+key `balanced_pool` in the benchmark artifacts, its name at the time),
 `pretraining_pool`, and a random MAR corpus over three generation seeds
 with 240 matched candidates each. Hourly comes from the earlier
 fresh-split validation, which used the same protocol.
@@ -225,15 +227,15 @@ frequencies[["balanced_pool", "pretraining_pool", "synforecast_mar", "real"]].re
 ).style.format("{:.1%}")
 ```
 
-|           | balanced pool | pretraining pool | random MAR | real baseline |
-|-----------|---------------|------------------|------------|---------------|
-| frequency |               |                  |            |               |
-| Yearly    | 81.2%         | 79.7%            | 9.4%       | 85.2%         |
-| Quarterly | 87.5%         | 85.9%            | 34.4%      | 90.6%         |
-| Monthly   | 70.3%         | 72.7%            | 14.8%      | 85.9%         |
-| Weekly    | 61.7%         | 57.8%            | 1.6%       | 79.7%         |
-| Daily     | 56.2%         | 51.6%            | 0.0%       | 81.2%         |
-| Hourly    | 0.8%          | 1.6%             | 0.0%       | 90.6%         |
+|           | interpretable pool | pretraining pool | random MAR | real baseline |
+|-----------|--------------------|------------------|------------|---------------|
+| frequency |                    |                  |            |               |
+| Yearly    | 81.2%              | 79.7%            | 9.4%       | 85.2%         |
+| Quarterly | 87.5%              | 85.9%            | 34.4%      | 90.6%         |
+| Monthly   | 70.3%              | 72.7%            | 14.8%      | 85.9%         |
+| Weekly    | 61.7%              | 57.8%            | 1.6%       | 79.7%         |
+| Daily     | 56.2%              | 51.6%            | 0.0%       | 81.2%         |
+| Hourly    | 0.8%               | 1.6%             | 0.0%       | 90.6%         |
 
 ```python
 fig, ax = plt.subplots(figsize=(9, 4.5))
@@ -292,10 +294,10 @@ Coverage numbers summarize distances between feature vectors, so it is
 worth checking that a covered query actually resembles its nearest
 synthetic neighbour. The examples below are real M4 series from the
 first fold and first seed of the benchmark above, chosen at fixed rank
-percentiles (10th, 50th, 90th) of their distance to the balanced pool
-rather than for visual effect, and shown next to their nearest neighbour
-from each pool. Every series is standardized so that shape, not scale,
-is compared; the label gives the generator prototype and the
+percentiles (10th, 50th, 90th) of their distance to the interpretable
+pool rather than for visual effect, and shown next to their nearest
+neighbour from each pool. Every series is standardized so that shape,
+not scale, is compared; the label gives the generator prototype and the
 standardized feature distance.
 
 ```python
@@ -404,24 +406,24 @@ for group, panel in third["panels"].items():
         }
         | {
             "real": agg["balanced_pool"]["full"]["real_baseline_coverage"]["median"][1],
-            "balanced on M4": m4_balanced[group],
+            "interpretable on M4": m4_balanced[group],
             "flag": "material" if panel["gap_flags"]["material_gap"] else ("minor" if panel["gap_flags"]["minor_gap"] else "none"),
         }
     )
 third_panels = pd.DataFrame(third_rows).set_index("frequency")
-third_panels[["balanced_pool", "pretraining_pool", "synforecast_mar", "real", "balanced on M4", "flag"]].rename(
+third_panels[["balanced_pool", "pretraining_pool", "synforecast_mar", "real", "interpretable on M4", "flag"]].rename(
     columns=LABELS
-).style.format("{:.1%}", subset=["balanced pool", "pretraining pool", "random MAR", "real baseline", "balanced on M4"])
+).style.format("{:.1%}", subset=["interpretable pool", "pretraining pool", "random MAR", "real baseline", "interpretable on M4"])
 ```
 
-|                               | balanced pool | pretraining pool | random MAR | real baseline | balanced on M4 | flag     |
-|-------------------------------|---------------|------------------|------------|---------------|----------------|----------|
-| frequency                     |               |                  |            |               |                |          |
-| Yearly (tourism_yearly)       | 82.8%         | 82.0%            | 18.8%      | 90.6%         | 81.2%          | none     |
-| Quarterly (tourism_quarterly) | 46.9%         | 42.2%            | 19.5%      | 91.4%         | 87.5%          | material |
-| Monthly (hospital)            | 57.8%         | 53.9%            | 31.2%      | 85.2%         | 70.3%          | minor    |
-| Weekly (traffic_weekly)       | 71.1%         | 70.3%            | 54.7%      | 84.4%         | 61.7%          | none     |
-| Daily (weather)               | 47.7%         | 51.6%            | 14.1%      | 85.2%         | 56.2%          | material |
+|                               | interpretable pool | pretraining pool | random MAR | real baseline | interpretable on M4 | flag     |
+|-------------------------------|--------------------|------------------|------------|---------------|---------------------|----------|
+| frequency                     |                    |                  |            |               |                     |          |
+| Yearly (tourism_yearly)       | 82.8%              | 82.0%            | 18.8%      | 90.6%         | 81.2%               | none     |
+| Quarterly (tourism_quarterly) | 46.9%              | 42.2%            | 19.5%      | 91.4%         | 87.5%               | material |
+| Monthly (hospital)            | 57.8%              | 53.9%            | 31.2%      | 85.2%         | 70.3%               | minor    |
+| Weekly (traffic_weekly)       | 71.1%              | 70.3%            | 54.7%      | 84.4%         | 61.7%               | none     |
+| Daily (weather)               | 47.7%              | 51.6%            | 14.1%      | 85.2%         | 56.2%               | material |
 
 ```python
 fig, ax = plt.subplots(figsize=(9, 4.2))
@@ -437,9 +439,9 @@ ax.scatter(
     zorder=4, label=LABELS["real"],
 )
 ax.scatter(
-    third_panels["balanced on M4"], [i - 0.22 for i in y], marker="o", s=70,
+    third_panels["interpretable on M4"], [i - 0.22 for i in y], marker="o", s=70,
     facecolors="none", edgecolors=COLORS["balanced_pool"], linewidth=1.2, zorder=2,
-    label="balanced pool on M4 (same frequency)",
+    label="interpretable pool on M4 (same frequency)",
 )
 ax.set_yticks(list(y))
 ax.set_yticklabels(third_panels.index)
@@ -459,17 +461,18 @@ plt.show()
 ![](./feature_coverage_files/figure-markdown_strict/cell-10-output-1.png)
 
 Filled dots are the pools on the independent panel; the hollow blue
-circle is the balanced pool’s M4 result at the same frequency. Tourism
-yearly and traffic weekly are covered as well as, or better than, M4.
-Tourism quarterly is the sharpest change: the balanced pool falls from
-88% on M4 Quarterly to 47%, with every fold–seed pair between 34% and
-59% while real candidates still cover 91%. Weather daily sits 34–38
-points below its baseline and hospital monthly 27 points below. Both
-tourism quarterly and hospital monthly are flagged by the declared gates
-because the real series are **more strongly seasonal** than any pool
-neighbour, by 0.2–0.6 standardized units of seasonal strength; on
-weather the differences are first-difference autocorrelation and level
-shifts across a panel that mixes rain, temperature, and solar radiation.
+circle is the interpretable pool’s M4 result at the same frequency.
+Tourism yearly and traffic weekly are covered as well as, or better
+than, M4. Tourism quarterly is the sharpest change: the interpretable
+pool falls from 88% on M4 Quarterly to 47%, with every fold–seed pair
+between 34% and 59% while real candidates still cover 91%. Weather daily
+sits 34–38 points below its baseline and hospital monthly 27 points
+below. Both tourism quarterly and hospital monthly are flagged by the
+declared gates because the real series are **more strongly seasonal**
+than any pool neighbour, by 0.2–0.6 standardized units of seasonal
+strength; on weather the differences are first-difference
+autocorrelation and level shifts across a panel that mixes rain,
+temperature, and solar radiation.
 
 Coverage is therefore panel-specific rather than frequency-specific.
 Within M4 only Hourly is short, but across domains, strongly seasonal
@@ -540,7 +543,7 @@ one ingredient.
 controls = hourly["control_summary"]
 existing = hourly["existing_summary"]
 order = [
-    ("balanced pool", existing["balanced_pool"]),
+    ("interpretable pool", existing["balanced_pool"]),
     ("pretraining pool", existing["pretraining_pool"]),
     ("cycle + noise", controls["cycle"]),
     ("+ amplitude envelope", controls["cycle_amplitude"]),
@@ -564,7 +567,7 @@ control_table.style.format("{:.1%}")
 |                                     | full features | omit trend strength | daily-profile shape |
 |-------------------------------------|---------------|---------------------|---------------------|
 | source                              |               |                     |                     |
-| balanced pool                       | 0.8%          | 43.8%               | 68.8%               |
+| interpretable pool                  | 0.8%          | 43.8%               | 68.8%               |
 | pretraining pool                    | 1.6%          | 44.5%               | 68.8%               |
 | cycle + noise                       | 1.6%          | 46.9%               | 67.2%               |
 | \+ amplitude envelope               | 3.1%          | 50.0%               | 67.2%               |
@@ -614,8 +617,8 @@ plot_examples(
 
 ![](./feature_coverage_files/figure-markdown_strict/cell-15-output-1.png)
 
-For all three real queries, the nearest balanced-pool neighbour is the
-same periodic Gaussian-process prototype: a regular sine on a flat
+For all three real queries, the nearest interpretable-pool neighbour is
+the same periodic Gaussian-process prototype: a regular sine on a flat
 level. The real series drift, change amplitude from week to week, and in
 the 90th-percentile query have sharp, non-sinusoidal daily peaks. The
 first-round composition supplies daily cycles on a moving level, mostly
@@ -778,13 +781,13 @@ for key, panel in seasonal["panels"].items():
         {
             "panel": label,
             "role": panel["role"],
-            "balanced pool": agg["balanced_pool"]["full"]["coverage"]["median"][1],
+            "interpretable pool": agg["balanced_pool"]["full"]["coverage"]["median"][1],
             "pretraining pool": agg["pretraining_pool"]["full"]["coverage"]["median"][1],
             "round 1 (strong)": agg["seasonal_composition"]["full"]["coverage"]["median"][1],
             "round 2 (moderated)": agg["moderated_seasonal_composition"]["full"]["coverage"]["median"][1],
             "real baseline": agg["balanced_pool"]["full"]["real_baseline_coverage"]["median"][1],
-            "balanced + pretraining (480)": union["balanced_plus_pretraining_median_q90"],
-            "balanced + round 2 (480)": union["balanced_plus_moderated_seasonal_composition"]["median_q90"],
+            "interpretable + pretraining (480)": union["balanced_plus_pretraining_median_q90"],
+            "interpretable + round 2 (480)": union["balanced_plus_moderated_seasonal_composition"]["median_q90"],
             "paired change": union["balanced_plus_moderated_seasonal_composition"]["paired_median_change_vs_control"],
         }
     )
@@ -792,30 +795,30 @@ seasonal_table = pd.DataFrame(seasonal_rows).set_index("panel")
 seasonal_table.style.format("{:.1%}", subset=[c for c in seasonal_table.columns if c != "role"])
 ```
 
-|                   | role       | balanced pool | pretraining pool | round 1 (strong) | round 2 (moderated) | real baseline | balanced + pretraining (480) | balanced + round 2 (480) | paired change |
-|-------------------|------------|---------------|------------------|------------------|---------------------|---------------|------------------------------|--------------------------|---------------|
-| panel             |            |               |                  |                  |                     |               |                              |                          |               |
-| tourism quarterly | design     | 46.9%         | 42.2%            | 20.3%            | 57.8%               | 91.4%         | 53.1%                        | 78.1%                    | 29.7%         |
-| hospital monthly  | design     | 57.8%         | 53.9%            | 2.3%             | 45.3%               | 85.2%         | 62.5%                        | 72.7%                    | 7.8%          |
-| m3 quarterly      | validation | 82.8%         | 80.5%            | 4.7%             | 26.6%               | 86.7%         | 83.6%                        | 86.7%                    | 3.1%          |
-| m3 monthly        | validation | 68.0%         | 66.4%            | 3.1%             | 42.2%               | 85.9%         | 75.0%                        | 84.4%                    | 9.4%          |
-| tourism monthly   | validation | 10.9%         | 8.6%             | 5.5%             | 37.5%               | 85.9%         | 13.3%                        | 42.2%                    | 32.0%         |
+|                   | role       | interpretable pool | pretraining pool | round 1 (strong) | round 2 (moderated) | real baseline | interpretable + pretraining (480) | interpretable + round 2 (480) | paired change |
+|-------------------|------------|--------------------|------------------|------------------|---------------------|---------------|-----------------------------------|-------------------------------|---------------|
+| panel             |            |                    |                  |                  |                     |               |                                   |                               |               |
+| tourism quarterly | design     | 46.9%              | 42.2%            | 20.3%            | 57.8%               | 91.4%         | 53.1%                             | 78.1%                         | 29.7%         |
+| hospital monthly  | design     | 57.8%              | 53.9%            | 2.3%             | 45.3%               | 85.2%         | 62.5%                             | 72.7%                         | 7.8%          |
+| m3 quarterly      | validation | 82.8%              | 80.5%            | 4.7%             | 26.6%               | 86.7%         | 83.6%                             | 86.7%                         | 3.1%          |
+| m3 monthly        | validation | 68.0%              | 66.4%            | 3.1%             | 42.2%               | 85.9%         | 75.0%                             | 84.4%                         | 9.4%          |
+| tourism monthly   | validation | 10.9%              | 8.6%             | 5.5%             | 37.5%               | 85.9%         | 13.3%                             | 42.2%                         | 32.0%         |
 
 ```python
 fig, ax = plt.subplots(figsize=(9, 4))
 y = range(len(seasonal_table))
 ax.hlines(
-    list(y), seasonal_table["balanced + pretraining (480)"], seasonal_table["balanced + round 2 (480)"],
+    list(y), seasonal_table["interpretable + pretraining (480)"], seasonal_table["interpretable + round 2 (480)"],
     color="#b5b4ae", linewidth=2, zorder=2,
 )
-ax.scatter(seasonal_table["balanced + pretraining (480)"], list(y), color="#b5b4ae", s=64, zorder=3, label="balanced + pretraining pool (480 candidates)")
-ax.scatter(seasonal_table["balanced + round 2 (480)"], list(y), color="#eb6834", s=64, zorder=3, label="balanced + moderated seasonal corpus (480 candidates)")
-ax.scatter(seasonal_table["balanced pool"], list(y), color="#2a78d6", s=40, zorder=3, label="balanced pool alone (240 candidates)")
+ax.scatter(seasonal_table["interpretable + pretraining (480)"], list(y), color="#b5b4ae", s=64, zorder=3, label="interpretable + pretraining pool (480 candidates)")
+ax.scatter(seasonal_table["interpretable + round 2 (480)"], list(y), color="#eb6834", s=64, zorder=3, label="interpretable + moderated seasonal corpus (480 candidates)")
+ax.scatter(seasonal_table["interpretable pool"], list(y), color="#2a78d6", s=40, zorder=3, label="interpretable pool alone (240 candidates)")
 ax.scatter(
     seasonal_table["real baseline"], list(y), marker="|", s=260, color="#0b0b0b", linewidth=2, zorder=4,
     label="real baseline",
 )
-for i, (b, change) in enumerate(zip(seasonal_table["balanced + round 2 (480)"], seasonal_table["paired change"])):
+for i, (b, change) in enumerate(zip(seasonal_table["interpretable + round 2 (480)"], seasonal_table["paired change"])):
     ax.text(b, i - 0.28, f"{change * 100:+.0f} pts paired", ha="center", color="#52514e", fontsize=8)
 ax.set_yticks(list(y))
 ax.set_yticklabels([f"{p} ({r})" for p, r in zip(seasonal_table.index, seasonal_table["role"])])
@@ -823,7 +826,7 @@ ax.set_ylim(len(seasonal_table) - 0.4, -0.8)
 ax.set_xlim(-0.02, 1.02)
 ax.xaxis.set_major_formatter(plt.matplotlib.ticker.PercentFormatter(1.0))
 ax.set_xlabel("held-out real queries covered at the real-calibrated q90 radius")
-ax.set_title("Adding the moderated seasonal corpus to the balanced pool, against adding the pretraining pool")
+ax.set_title("Adding the moderated seasonal corpus to the interpretable pool, against adding the pretraining pool")
 ax.set_axisbelow(True)
 ax.grid(axis="x", color="#e6e5e1")
 ax.spines[["top", "right"]].set_visible(False)
@@ -840,15 +843,15 @@ pools on the two tourism panels but, being narrow, covers far fewer
 queries than they do on the broad M3 panels. That criterion answers the
 wrong question for a corpus meant to fill a gap. The question a preset
 change poses is whether **adding** the corpus helps, so the chart
-compares the balanced pool plus the moderated corpus with the balanced
-pool plus the pretraining pool, both at 480 candidates and the same
-real-calibrated radius. The addition is ahead on all five panels, by 3
-points where the pools were already near the baseline and by about 30
-points on the tourism panels, and higher in 53 of 60 fold–seed pairs.
-This comparison was specified after the replacement results were known,
-so it is a post-hoc analysis and is labelled as such in the benchmark
-report; the three validation panels were nevertheless never used to tune
-the recipe.
+compares the interpretable pool plus the moderated corpus with the
+interpretable pool plus the pretraining pool, both at 480 candidates and
+the same real-calibrated radius. The addition is ahead on all five
+panels, by 3 points where the pools were already near the baseline and
+by about 30 points on the tourism panels, and higher in 53 of 60
+fold–seed pairs. This comparison was specified after the replacement
+results were known, so it is a post-hoc analysis and is labelled as such
+in the benchmark report; the three validation panels were nevertheless
+never used to tune the recipe.
 
 Tourism monthly, one of the held-out panels, is itself a new finding:
 the pools cover 11% of its queries against an 86% real baseline. The
@@ -883,8 +886,8 @@ criterion **before** testing the preset on four panels never used in any
 earlier step: fresh M4 Quarterly and Monthly samples, M1 monthly, and
 intermittent car-parts sales as a no-harm check. The gates were a median
 paired gain of at least 5 points in three of four folds, and no fold
-below −2 points, for balanced + preset against balanced + pretraining at
-480 candidates each.
+below −2 points, for interpretable + preset against interpretable +
+pretraining at 480 candidates each.
 
 ```python
 preset = load("feature_coverage_seasonal_preset")
@@ -896,11 +899,11 @@ for key, panel in preset["panels"].items():
     preset_rows.append(
         {
             "panel": key.replace("_", " "),
-            "balanced pool": agg["balanced_pool"]["full"]["coverage"]["median"][1],
+            "interpretable pool": agg["balanced_pool"]["full"]["coverage"]["median"][1],
             "preset alone": agg["seasonal_pool"]["full"]["coverage"]["median"][1],
             "real baseline": agg["balanced_pool"]["full"]["real_baseline_coverage"]["median"][1],
-            "balanced + pretraining (480)": union["balanced_plus_pretraining_pool"]["median"],
-            "balanced + preset (480)": union["balanced_plus_seasonal_pool"]["median"],
+            "interpretable + pretraining (480)": union["balanced_plus_pretraining_pool"]["median"],
+            "interpretable + preset (480)": union["balanced_plus_seasonal_pool"]["median"],
             "paired change": union["paired_change"]["median"],
             "gain gate": "pass" if panel["criterion"]["gain"] else "fail",
             "no-harm gate": "pass" if panel["criterion"]["no_harm"] else "fail",
@@ -911,13 +914,13 @@ preset_table = pd.DataFrame(preset_rows).set_index("panel")
 preset_table.style.format("{:.1%}", subset=[c for c in preset_table.columns if "gate" not in c])
 ```
 
-|                    | balanced pool | preset alone | real baseline | balanced + pretraining (480) | balanced + preset (480) | paired change | gain gate | no-harm gate | on top of both pools vs + MAR (720) |
-|--------------------|---------------|--------------|---------------|------------------------------|-------------------------|---------------|-----------|--------------|-------------------------------------|
-| panel              |               |              |               |                              |                         |               |           |              |                                     |
-| m4 quarterly fresh | 78.1%         | 32.8%        | 84.4%         | 84.4%                        | 81.2%                   | 0.0%          | fail      | fail         | 1.6%                                |
-| m4 monthly fresh   | 89.1%         | 56.2%        | 94.5%         | 91.4%                        | 96.9%                   | 2.3%          | fail      | pass         | 3.9%                                |
-| m1 monthly         | 66.4%         | 66.4%        | 90.6%         | 76.6%                        | 89.8%                   | 12.5%         | pass      | pass         | 7.8%                                |
-| car parts          | 43.8%         | 21.1%        | 85.2%         | 50.0%                        | 46.9%                   | -3.1%         | fail      | fail         | -0.8%                               |
+|                    | interpretable pool | preset alone | real baseline | interpretable + pretraining (480) | interpretable + preset (480) | paired change | gain gate | no-harm gate | on top of both pools vs + MAR (720) |
+|--------------------|--------------------|--------------|---------------|-----------------------------------|------------------------------|---------------|-----------|--------------|-------------------------------------|
+| panel              |                    |              |               |                                   |                              |               |           |              |                                     |
+| m4 quarterly fresh | 78.1%              | 32.8%        | 84.4%         | 84.4%                             | 81.2%                        | 0.0%          | fail      | fail         | 1.6%                                |
+| m4 monthly fresh   | 89.1%              | 56.2%        | 94.5%         | 91.4%                             | 96.9%                        | 2.3%          | fail      | pass         | 3.9%                                |
+| m1 monthly         | 66.4%              | 66.4%        | 90.6%         | 76.6%                             | 89.8%                        | 12.5%         | pass      | pass         | 7.8%                                |
+| car parts          | 43.8%              | 21.1%        | 85.2%         | 50.0%                             | 46.9%                        | -3.1%         | fail      | fail         | -0.8%                               |
 
 The verdict is mixed and is reported as such. M1 monthly, where the
 pools sit 24 points below the real baseline, passes both gates with a

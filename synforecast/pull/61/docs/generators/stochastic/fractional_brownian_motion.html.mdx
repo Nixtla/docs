@@ -68,7 +68,7 @@ for hurst, behavior in zip(hurst_values, behaviors):
     print(f"  Statistics: {stats.to_dicts()[0]}\n")
 ```
 
-``` text
+```shell
 Hurst = 0.2: Anti-persistent (mean-reverting)
   True Hurst: 0.2
   Estimated Hurst (R/S): 0.980
@@ -144,7 +144,7 @@ print(f"fBm mean: {fbm_df['y'].mean():.3f}, std: {fbm_df['y'].std():.3f}")
 print(f"fGn mean: {fgn_df['y'].mean():.3f}, std: {fgn_df['y'].std():.3f}")
 ```
 
-``` text
+```shell
 fBm mean: -16.055, std: 11.956
 fGn mean: -0.231, std: 0.959
 ```
@@ -176,7 +176,7 @@ for key, value in info.items():
     print(f"{key}: {value}")
 ```
 
-``` text
+```shell
 hurst_exponent: 0.7
 sigma: 1.0
 behavior: persistent (trending)

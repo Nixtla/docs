@@ -47,7 +47,7 @@ print(f"Statistics: Mean={basic_df['y'].mean():.4f}, Std={basic_df['y'].std():.4
 basic_df.head(10)
 ```
 
-``` text
+```shell
 Generated 200 observations with GARCH(1,1)
 Statistics: Mean=-0.0104, Std=0.4302
 ```
@@ -113,7 +113,7 @@ print(f"Statistics: Mean={high_vol_df['y'].mean():.4f}, Std={high_vol_df['y'].st
 high_vol_df.head(10)
 ```
 
-``` text
+```shell
 Generated 200 observations with high base volatility
 Statistics: Mean=-0.0233, Std=0.9620
 ```
@@ -170,7 +170,7 @@ print(f"Overall Statistics: Mean={multi_df['y'].mean():.4f}, Std={multi_df['y'].
 multi_df.filter(pl.col("unique_id") == "0").head(10)
 ```
 
-``` text
+```shell
 Generated 3 series with 450 total observations
 Overall Statistics: Mean=0.0004, Std=0.4641
 ```

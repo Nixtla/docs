@@ -64,7 +64,7 @@ print(
 print(f"Series IDs: {sorted(augmented_df['unique_id'].unique().to_list())}")
 ```
 
-``` text
+```shell
 Original dataset: 100 rows, 1 series
 Augmented dataset: 400 rows, 4 series
 Series IDs: ['series_0', 'series_0_aug_0', 'series_0_aug_1', 'series_0_aug_2']
@@ -135,7 +135,7 @@ for series_id, info in analysis.items():
     print(f"    Is intermittent: {props['intermittency']['is_intermittent']}")
 ```
 
-``` text
+```shell
 Analysis results for each series:
 
   seasonal:
@@ -195,7 +195,7 @@ unique_ids = sorted(augmented_override["unique_id"].unique().to_list())
 print(f"Series IDs: {unique_ids}")
 ```
 
-``` text
+```shell
 Augmented with overrides: 6 series
 Series IDs: ['intermittent', 'intermittent_aug_0', 'random_walk', 'random_walk_aug_0', 'seasonal', 'seasonal_aug_0']
 ```
@@ -222,7 +222,7 @@ for i in range(5):
     print(f"  series_0_aug_{i}: mean={aug['y'].mean():.4f}, std={aug['y'].std():.4f}")
 ```
 
-``` text
+```shell
 Original series (series_0):
   Mean: -2.6976
   Std:  2.0971
@@ -298,7 +298,7 @@ print(f"\nAfter augmentation: {augmented_combined['unique_id'].n_unique()} serie
 print(f"Series IDs: {sorted(augmented_combined['unique_id'].unique().to_list())}")
 ```
 
-``` text
+```shell
 Generated dataset: 4 series
 Series IDs: ['0', '1', '2', '3']
 
@@ -352,7 +352,7 @@ print(
 mixed.filter(pl.col("unique_id") == mixup_ids[0]).head()
 ```
 
-``` text
+```shell
 4 source series -> 6 TSMixup series
 ```
 
@@ -409,7 +409,7 @@ for aug_id, aug_values, aug_ts in augmented_tuples:
     print(f"  {aug_id}: length={len(aug_values)}, mean={np.mean(aug_values):.4f}")
 ```
 
-``` text
+```shell
 Generated 2 augmented series:
   my_series_aug_0: length=100, mean=-2.6976
   my_series_aug_1: length=100, mean=-2.6975

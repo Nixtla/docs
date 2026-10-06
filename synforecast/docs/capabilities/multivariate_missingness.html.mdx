@@ -52,7 +52,7 @@ print(f"Total observations: {len(df_var)}")
 df_var.head(30)
 ```
 
-``` text
+```shell
 Generated 3 correlated series with VAR(1) model
 Total observations: 600
 ```
@@ -82,7 +82,7 @@ for series_id in df_var["unique_id"].unique().sort():
     print(f"  {series_id}: {nan_count} missing ({nan_rate:.1%})")
 ```
 
-``` text
+```shell
 Missing data statistics by series:
   0: 30 missing (15.0%)
   1: 30 missing (15.0%)
@@ -135,7 +135,7 @@ print(f"Missing blocks of size: {copula_params['missing_block_size']} days")
 df_copula.head(40)
 ```
 
-``` text
+```shell
 Generated 3 correlated series with Gaussian copula
 Missing blocks of size: 7 days
 ```
@@ -178,7 +178,7 @@ for series_id in df_copula["unique_id"].unique().sort():
     )
 ```
 
-``` text
+```shell
 Block missing statistics by series:
   0: 33 missing (16.5%), max block: 12 days
   1: 35 missing (17.5%), max block: 7 days
@@ -239,7 +239,7 @@ for series_id in df_var_seasonal["unique_id"].unique().sort():
 df_var_seasonal.head(30)
 ```
 
-``` text
+```shell
 Generated 2 correlated series (1 year)
 Seasonal period: 7 days (weekly)
 
@@ -335,7 +335,7 @@ print(f"Correlation (25% missing):   {corr_missing:.3f}")
 print(f"Correlation preserved:       {abs(corr_complete - corr_missing) < 0.1}")
 ```
 
-``` text
+```shell
 Correlation (complete data): 0.069
 Correlation (25% missing):   0.041
 Correlation preserved:       True

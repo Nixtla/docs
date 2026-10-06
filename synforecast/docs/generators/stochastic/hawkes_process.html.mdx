@@ -57,7 +57,7 @@ stats = df.group_by("unique_id").agg(
 stats
 ```
 
-``` text
+```shell
 Generated 3 time series
 Total observations: 600
 Total events: 836.0
@@ -108,7 +108,7 @@ print(f"Intensity range: [{intensity_df['y'].min():.3f}, {intensity_df['y'].max(
 print(f"Mean intensity: {intensity_df['y'].mean():.3f}")
 ```
 
-``` text
+```shell
 Intensity range: [0.501, 1.510]
 Mean intensity: 0.723
 ```
@@ -143,7 +143,7 @@ print(f"Expected cluster size: {info['expected_cluster_size']:.3f}")
 print(f"Process is stable: {info['is_stable']}")
 ```
 
-``` text
+```shell
 Baseline intensity (mu): 1.0
 Excitation amplitude (alpha): 0.5
 Decay rate (beta): 2.0
@@ -163,7 +163,7 @@ print(f"Event rate: {len(event_times) / 50:.2f} events/unit time")
 print(f"First 10 event times: {event_times[:10].round(3)}")
 ```
 
-``` text
+```shell
 Simulated 64 events over 50 time units
 Event rate: 1.28 events/unit time
 First 10 event times: [1.714 2.527 2.584 3.022 3.662 5.29  5.583 5.682 6.25  6.494]
@@ -206,7 +206,7 @@ power_law_df = power_law_gen.generate(n_series=1)
 print(f"Power-law kernel total events: {power_law_df['y'].sum()}")
 ```
 
-``` text
+```shell
 Power-law kernel total events: 76.0
 ```
 

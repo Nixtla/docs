@@ -50,7 +50,7 @@ print(f"Generated {len(df_temp)} temperature readings")
 df_temp.head(20)
 ```
 
-``` text
+```shell
 Generated 500 temperature readings
 ```
 
@@ -94,7 +94,7 @@ last_100 = np.mean(values[-100:])
 print(f"  Drift:    {last_100 - first_100:.2f} C (first 100 vs last 100)")
 ```
 
-``` text
+```shell
 Temperature statistics:
   Mean:     23.14 C
   Min:      22.34 C
@@ -138,7 +138,7 @@ df_humidity.filter(pl.col("ds").dt.minute() == 0).filter(
 ).head(12)
 ```
 
-``` text
+```shell
 Generated 24 hours of humidity readings (1-minute intervals)
 
 Humidity statistics:
@@ -211,7 +211,7 @@ print(f"    Std: {second_half_std:.2f} hPa")
 print(f"  Quality degradation: {((second_half_std/first_half_std - 1) * 100):.1f}% increase in noise")
 ```
 
-``` text
+```shell
 Generated 400 pressure readings
 Battery degradation starts at reading 200
 
@@ -272,7 +272,7 @@ print(f"  Failed readings:  {nan_count} ({nan_count/len(values_light)*100:.1f}%)
 df_light.head(50)
 ```
 
-``` text
+```shell
 Generated 300 light readings (1-second intervals)
 
 Failure statistics:
@@ -332,7 +332,7 @@ print(f"Total readings: {len(df_network)}")
 df_network.head(30)
 ```
 
-``` text
+```shell
 Generated sensor network with 4 sensors
 Total readings: 800
 ```
@@ -385,7 +385,7 @@ print(f"  Sensor 2 <-> Sensor 3 (adjacent):  {corr_23:.3f}")
 print(f"  Sensor 0 <-> Sensor 3 (distant):   {corr_03:.3f}")
 ```
 
-``` text
+```shell
 Spatial correlation between sensors:
   Sensor 0 <-> Sensor 1 (adjacent):  0.588
   Sensor 1 <-> Sensor 2 (adjacent):  0.683
@@ -429,7 +429,7 @@ else:
     print(f"\nSensor operated normally (no failure occurred)")
 ```
 
-``` text
+```shell
 Generated 200 motion sensor readings (100ms intervals)
 
 Sensor failed at reading 0
@@ -478,7 +478,7 @@ for series_id in df_multi["unique_id"].unique().sort():
     )
 ```
 
-``` text
+```shell
 Generated 3 independent sensors
 
 Statistics per sensor:
