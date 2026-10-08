@@ -584,7 +584,8 @@
                 "group": "Evaluation",
                 "pages": [
                   "synforecast/docs/capabilities/when_synthetic_helps.html",
-                  "synforecast/docs/capabilities/robustness_testing.html"
+                  "synforecast/docs/capabilities/robustness_testing.html",
+                  "synforecast/docs/capabilities/feature_coverage.html"
                 ]
               },
               "synforecast/docs/capabilities/custom_generator.html"
@@ -668,6 +669,7 @@
               "synforecast/core.html",
               "synforecast/exogenous.html",
               "synforecast/dataset.html",
+              "synforecast/evaluation.html",
               "synforecast/generators_statistical.html",
               "synforecast/generators_stochastic.html",
               "synforecast/generators_multivariate.html",

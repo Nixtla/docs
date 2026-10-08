@@ -1,9 +1,9 @@
 ---
-title: Balanced pool
+title: Interpretable pool
 ---
 
-`balanced_pool()` returns 42 pre-configured generator instances, built
-from 15 of SynForecast’s 32 generator classes with one class per
+`interpretable_pool()` returns 42 pre-configured generator instances,
+built from 15 of SynForecast’s 32 generator classes with one class per
 behavioral niche. The niches span ARMA and exponential smoothing,
 long-range memory, volatility clustering, intermittent demand,
 deterministic chaos, counts, and bounded and heavy-tailed processes.
@@ -27,21 +27,42 @@ series.
 > one-niche-one-mechanism design. Use the
 > [`pretraining_pool()`](#pretraining-pool) preset for maximal breadth
 > in foundation-model pretraining; it bundles those meta-generators,
-> with `balanced_pool` included by default.
+> with `interpretable_pool` included by default.
+
+> **Which pool?**
+>
+> -   **`interpretable_pool`** when every series should be one named,
+>     interpretable process: benchmarking a method against known
+>     mechanisms, stress-testing a pipeline, or building a panel whose
+>     behaviours you can name. It is the default behind
+>     `generate_series`.
+> -   **`pretraining_pool`** when breadth matters more than
+>     interpretability, as in pretraining a foundation model. It
+>     contains the whole interpretable pool plus randomised
+>     meta-generators; `include_interpretable=False` gives a purely
+>     procedural corpus.
+> -   **`seasonal_pool`**, added on top of either, when the target data
+>     has a strong regular yearly cycle on a moving level: tourism,
+>     hospital, or retail demand at quarterly or monthly frequency.
+>     `pretraining_pool(include_seasonal=True)` appends it for you. Add
+>     it, never substitute it for part of a pool, and skip it for
+>     intermittent or weakly seasonal data. The [feature-space
+>     coverage](./feature_coverage.html) page shows where it helps and
+>     where it does not.
 
 ```python
 import matplotlib.pyplot as plt
 import polars as pl
 
-from synforecast import SynSet, balanced_pool, pretraining_pool
+from synforecast import SynSet, interpretable_pool, pretraining_pool
 ```
 
-## Generate a balanced dataset
+## Generate an interpretable dataset
 
 Create 42 generators and generate one series per generator.
 
 ```python
-generators = balanced_pool(
+generators = interpretable_pool(
     min_length=200, max_length=200, freq="D", seed=42, engine="polars"
 )
 dataset = SynSet(generators)
@@ -115,7 +136,7 @@ for i, gen in enumerate(generators):
 
 ## Overview: all 42 series
 
-A compact grid showing every series in the balanced pool.
+A compact grid showing every series in the interpretable pool.
 
 ```python
 fig, axes = plt.subplots(7, 6, figsize=(18, 16))
@@ -129,7 +150,7 @@ for i, gen in enumerate(generators):
     axes[i].set_title(gen.alias, fontsize=7)
     axes[i].tick_params(labelsize=5)
 
-fig.suptitle("Balanced pool: 42 generators across 15 behavioral niches", fontsize=14)
+fig.suptitle("Interpretable pool: 42 generators across 15 behavioral niches", fontsize=14)
 plt.tight_layout()
 plt.show()
 ```
@@ -218,8 +239,8 @@ for niche_name, indices in niches:
 
 ## Summary statistics
 
-Compare key statistics across all 42 series to see how the balanced pool
-spans different value ranges and variabilities.
+Compare key statistics across all 42 series to see how the interpretable
+pool spans different value ranges and variabilities.
 
 ```python
 # unique_id is a string, so sorting on it would put "10" before "2";
@@ -293,9 +314,9 @@ plt.show()
 ## Pretraining pool
 
 `pretraining_pool()` is the breadth-maximizing counterpart to
-`balanced_pool()`. It keeps the 42 single-mechanism instances above and
-adds independently-seeded copies of the four meta-generators
-`balanced_pool` deliberately leaves out — `TSIGenerator`,
+`interpretable_pool()`. It keeps the 42 single-mechanism instances above
+and adds independently-seeded copies of the four meta-generators
+`interpretable_pool` deliberately leaves out — `TSIGenerator`,
 `TCMGenerator`, `KernelSynthGenerator`, and `MARGenerator`. Each of
 those resamples a fresh trend/seasonal, causal-graph, GP-kernel, or
 mixture-autoregressive configuration per series, so a handful of
@@ -306,26 +327,26 @@ matching typical pretraining contexts.
 
 Two knobs control the mix: `n_meta_variants` sets how many
 independently-seeded copies of each meta-generator to add (default 3),
-and `include_balanced=False` drops the single-mechanism generators for a
-purely procedural corpus.
+and `include_interpretable=False` drops the single-mechanism generators
+for a purely procedural corpus.
 
 ```python
 pretrain = pretraining_pool(
     min_length=256, max_length=256, freq="D", seed=42, engine="polars"
 )
-meta_only = pretraining_pool(include_balanced=False, engine="polars")
+meta_only = pretraining_pool(include_interpretable=False, engine="polars")
 
 from collections import Counter
 
 print(f"pretraining_pool: {len(pretrain)} generators")
-print(f"  {len(pretrain) - len(meta_only)} single-mechanism (from balanced_pool)")
+print(f"  {len(pretrain) - len(meta_only)} single-mechanism (from interpretable_pool)")
 print(f"  {len(meta_only)} meta-generator instances")
 print("  meta-generators:", dict(Counter(type(g).__name__ for g in meta_only)))
 ```
 
 ```shell
 pretraining_pool: 54 generators
-  42 single-mechanism (from balanced_pool)
+  42 single-mechanism (from interpretable_pool)
   12 meta-generator instances
   meta-generators: {'TSIGenerator': 3, 'TCMGenerator': 3, 'KernelSynthGenerator': 3, 'MARGenerator': 3}
 ```
@@ -349,6 +370,40 @@ plt.show()
 ```
 
 ![](./balanced_pool_files/figure-markdown_strict/cell-12-output-1.png)
+
+## Seasonal pool
+
+`seasonal_pool()` is a small, opt-in addition: eight configured
+instances of `TSIGenerator`, `ETSGenerator`, and `SeasonalGenerator`
+with a pronounced seasonal cycle whose swing moves with the level, under
+moderate to heavy noise, persistent dependence, and occasional level or
+slope breaks. The period follows `freq` as elsewhere, so `"QS"` gives
+period 4 and `"MS"` period 12; yearly frequencies raise because there is
+no cycle to build.
+
+Coverage benchmarks on real quarterly and monthly panels found this
+region under-represented: real tourism and hospital series had no close
+synthetic neighbour in either pool. Adding the seasonal pool on top of
+the interpretable pool raised the share of real series with a close
+neighbour by 8 to 32 points on tourism, hospital, and M1 monthly panels,
+was neutral on M4, and gave nothing on intermittent car-parts data,
+where it cost a few points when it displaced the pretraining pool’s
+share instead of being added. Its effect on forecasting accuracy has not
+been measured, which is why it is not part of any default.
+
+```python
+from synforecast import SynSet, interpretable_pool, seasonal_pool
+
+pool = interpretable_pool(min_length=96, max_length=96, freq="MS", engine="polars")
+pool += seasonal_pool(min_length=96, max_length=96, freq="MS", engine="polars")
+df = SynSet(pool).generate(n_series_per_generator=1, n_jobs=1)
+print(f"{len(pool)} generators, {df['unique_id'].n_unique()} series")
+
+```
+
+```shell
+50 generators, 50 series
+```
 
 Whether pretraining on a synthetic corpus like this actually helps
 depends on the target data and the amount of real history available. See
