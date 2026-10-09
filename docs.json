@@ -499,7 +499,6 @@
             "pages": [
               "utilsforecast/preprocessing.html",
               "utilsforecast/feature_engineering.html",
-              "utilsforecast/date_features.html",
               "utilsforecast/evaluation.html",
               "utilsforecast/losses.html",
               "utilsforecast/plotting.html",
