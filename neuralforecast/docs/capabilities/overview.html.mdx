@@ -70,7 +70,10 @@ NeuralForecast currently offers the following models.
 6.  **Exogenous**: Whether the model accepts exogenous variables. This
     can be exogenous variables that contain information about the past
     and future (F), about the past only (*historical*, H), or that
-    contain static information (*static*, S).
+    contain static information (*static*, S). A dash (\-) means the
+    model does not accept exogenous variables. Passing an unsupported
+    exogenous list (for example, `futr_exog_list`) raises an exception
+    such as `PatchTST does not support future exogenous variables.`
 7.  **HINT** is a modular framework that can combine any type of neural
     architecture with task-specialized mixture probability and advanced
     hierarchical reconciliation strategies.
