@@ -86,8 +86,9 @@ behaviorally diverse panel.
 
 The seasonal variants (seasonal SARIMA, Holt-Winters ETS, seasonal
 intermittent demand and the periodic Gaussian process) share one seasonal
-period. Unless ``seasonal_period`` is given it is derived from ``freq``
-as the number of steps in the next-larger calendar cycle: hourly data
+period, which also sets the mean period of the two cyclic variants. Unless
+``seasonal_period`` is given it is derived from ``freq`` as the number of
+steps in the next-larger calendar cycle: hourly data
 gets 24, daily 7, business-daily 5, weekly 52, monthly 12, quarterly 4,
 and multiples divide accordingly (``"15min"`` gives 4, ``"2h"`` gives 12).
 Integer frequencies and offsets without a calendar convention fall back
