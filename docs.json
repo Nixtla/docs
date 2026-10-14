@@ -582,6 +582,7 @@
                 "group": "Augmentation",
                 "pages": [
                   "synforecast/docs/capabilities/augmentation.html",
+                  "synforecast/docs/capabilities/nonparametric_augmentation.html",
                   "synforecast/docs/capabilities/augmentation_real_data.html"
                 ]
               },
@@ -589,7 +590,8 @@
                 "group": "Evaluation",
                 "pages": [
                   "synforecast/docs/capabilities/when_synthetic_helps.html",
-                  "synforecast/docs/capabilities/robustness_testing.html"
+                  "synforecast/docs/capabilities/robustness_testing.html",
+                  "synforecast/docs/capabilities/feature_coverage.html"
                 ]
               },
               "synforecast/docs/capabilities/custom_generator.html"
@@ -651,7 +653,8 @@
                 "pages": [
                   "synforecast/docs/generators/pretraining/tsi.html",
                   "synforecast/docs/generators/pretraining/tcm.html",
-                  "synforecast/docs/generators/pretraining/kernel_synth.html"
+                  "synforecast/docs/generators/pretraining/kernel_synth.html",
+                  "synforecast/docs/generators/pretraining/mar.html"
                 ]
               }
             ]
@@ -672,6 +675,7 @@
               "synforecast/core.html",
               "synforecast/exogenous.html",
               "synforecast/dataset.html",
+              "synforecast/evaluation.html",
               "synforecast/generators_statistical.html",
               "synforecast/generators_stochastic.html",
               "synforecast/generators_multivariate.html",
@@ -684,7 +688,86 @@
       {
         "anchor": "ConformalForecast",
         "icon": "bullseye",
-        "groups": []
+        "groups": [
+          {
+            "group": " ",
+            "pages": [
+              "conformalforecast/index.html"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "conformalforecast/docs/getting-started/installation.html",
+              "conformalforecast/docs/getting-started/quickstart.html"
+            ]
+          },
+          {
+            "group": "Concepts",
+            "pages": [
+              "conformalforecast/docs/concepts/architecture.html",
+              "conformalforecast/docs/concepts/embedding.html"
+            ]
+          },
+          {
+            "group": "Capabilities",
+            "pages": [
+              "conformalforecast/docs/capabilities/diagnostics.html",
+              "conformalforecast/docs/capabilities/exogenous.html",
+              "conformalforecast/docs/capabilities/ragged-panels.html",
+              "conformalforecast/docs/capabilities/online-updating.html",
+              "conformalforecast/docs/capabilities/transfer.html"
+            ]
+          },
+          {
+            "group": "Methods",
+            "pages": [
+              "conformalforecast/docs/methods/index.html",
+              {
+                "group": "Offline",
+                "pages": [
+                  "conformalforecast/docs/methods/split.html",
+                  "conformalforecast/docs/methods/cqr.html",
+                  "conformalforecast/docs/methods/weighted_split.html"
+                ]
+              },
+              {
+                "group": "Online & adaptive",
+                "pages": [
+                  "conformalforecast/docs/methods/aci.html",
+                  "conformalforecast/docs/methods/agaci.html",
+                  "conformalforecast/docs/methods/nexcp.html",
+                  "conformalforecast/docs/methods/spci.html"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Nixtlaverse",
+            "pages": [
+              "conformalforecast/docs/adapters/index.html",
+              "conformalforecast/docs/adapters/statsforecast.html",
+              "conformalforecast/docs/adapters/mlforecast.html",
+              "conformalforecast/docs/adapters/neuralforecast.html"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "conformalforecast/methods.html",
+              "conformalforecast/base.html",
+              "conformalforecast/adapters.html",
+              "conformalforecast/capabilities.html",
+              "conformalforecast/panel.html",
+              "conformalforecast/nonconformity.html",
+              "conformalforecast/diagnostics.html",
+              "conformalforecast/aggregators.html",
+              "conformalforecast/weighting.html",
+              "conformalforecast/quantile_regressors.html",
+              "conformalforecast/compat.html"
+            ]
+          }
+        ]
       },
       {
         "anchor": "CoreForecast",

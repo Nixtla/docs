@@ -128,7 +128,7 @@ print("\nSample data (first series, first 5 rows):")
 df_sample.filter(pl.col("unique_id") == sample_ids[0]).head(5)
 ```
 
-``` text
+```shell
   0%|          | 0.00/555k [00:00<?, ?iB/s]2.35MiB [00:00, 73.7MiB/s]                 
 INFO:datasetsforecast.utils:Successfully downloaded Hourly-train.csv, 2347115, bytes.
   0%|          | 0.00/36.8k [00:00<?, ?iB/s]133kiB [00:00, 20.7MiB/s]                   
@@ -140,7 +140,7 @@ INFO:datasetsforecast.utils:Successfully downloaded submission-Naive2.zip, 35646
 INFO:datasetsforecast.utils:Decompressing zip file...
 ```
 
-``` text
+```shell
 Loaded 414 hourly series from M4
 Using 5 series for demonstration: ['H144', 'H146', 'H235', 'H234', 'H357']
 Total rows in sample: 4520
@@ -194,7 +194,7 @@ for series_id in sample_ids:
     print(f"    Is stationary: {props['stationarity']['is_stationary']}")
 ```
 
-``` text
+```shell
 
   H144:
     Recommended generator: SeasonalGenerator
@@ -243,7 +243,7 @@ print(f"Original series: {df_sample['unique_id'].n_unique()}")
 print(f"Total series after augmentation: {augmented_df['unique_id'].n_unique()}")
 ```
 
-``` text
+```shell
 Original series: 5
 Total series after augmentation: 20
 ```
@@ -316,7 +316,7 @@ print(
 )
 ```
 
-``` text
+```shell
 Detailed comparison for series: H144
 
 Statistic           Original Synthetic (avg)     Diff %   Source  
@@ -383,14 +383,14 @@ print(
 )
 ```
 
-``` text
+```shell
   0%|          | 0.00/32.5M [00:00<?, ?iB/s] 22%|██▏       | 7.26M/32.5M [00:00<00:00, 72.6MiB/s] 45%|████▌     | 14.7M/32.5M [00:00<00:00, 73.4MiB/s] 68%|██████▊   | 22.0M/32.5M [00:00<00:00, 73.4MiB/s] 91%|█████████ | 29.5M/32.5M [00:00<00:00, 74.2MiB/s]37.0MiB [00:00, 73.8MiB/s]                           44.3MiB [00:00, 73.1MiB/s]51.7MiB [00:00, 73.2MiB/s]59.3MiB [00:00, 74.1MiB/s]66.7MiB [00:00, 73.0MiB/s]74.2MiB [00:01, 73.7MiB/s]81.6MiB [00:01, 73.5MiB/s]89.0MiB [00:01, 73.3MiB/s]95.8MiB [00:01, 73.6MiB/s]
 INFO:datasetsforecast.utils:Successfully downloaded Daily-train.csv, 95765153, bytes.
   0%|          | 0.00/198k [00:00<?, ?iB/s]576kiB [00:00, 32.6MiB/s]                  
 INFO:datasetsforecast.utils:Successfully downloaded Daily-test.csv, 576459, bytes.
 ```
 
-``` text
+```shell
 Loaded 4227 daily series from M4
 Using 4 series: ['D1215', 'D3868', 'D3423', 'D1859']
 
@@ -496,7 +496,7 @@ print(
 )
 ```
 
-``` text
+```shell
 Original series (5 series):
   Mean of means: 175.2437 (std: 210.1079)
   Mean of stds:  130.3940 (std: 157.5724)
@@ -562,7 +562,7 @@ print(f"  Min: {lengths['length'].min()}, Max: {lengths['length'].max()}")
 print(f"  Mean: {lengths['length'].mean():.1f}")
 ```
 
-``` text
+```shell
 Original training set: 10 series
 Total observations: 9300
 
@@ -635,7 +635,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-``` text
+```shell
 closest pair of REAL series:          z-distance 0.12
 every synthetic to its NEAREST real:  z-distance >= 1.06
 synthetic closer to a real than the closest real-real pair: 0 / 15

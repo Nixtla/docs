@@ -72,7 +72,7 @@ print(f'{labels.sum()} injected anomalies across {len(labels)} points '
       f'({labels.mean():.1%})')
 ```
 
-``` text
+```shell
 400 injected anomalies across 10000 points (4.0%)
 ```
 
@@ -203,7 +203,7 @@ print('MASE at 0% / 16% contamination: '
 
 ![](./robustness_testing_files/figure-markdown_strict/cell-5-output-1.png)
 
-``` text
+```shell
 MASE at 0% / 16% contamination: 0.722 / 1.157
 ```
 
@@ -214,9 +214,10 @@ metric respond.
 
 > **Related capabilities**
 >
-> -   [Anomalies](anomalies), [changepoints](changepoints), and
->     [missingness](missingness) — the injection knobs used here, each
->     with a ground-truth flag column.
-> -   [When does synthetic data help?](when_synthetic_helps) — the
->     accuracy picture, and the uses that sit outside it.
+> -   [Anomalies](./anomalies.html),
+>     [changepoints](./changepoints.html), and
+>     [missingness](./missingness.html) — the injection knobs used here,
+>     each with a ground-truth flag column.
+> -   [When does synthetic data help?](./when_synthetic_helps.html) —
+>     the accuracy picture, and the uses that sit outside it.
 
