@@ -75,6 +75,13 @@ jobs:
           path: synforecast
           ref: docs-preview
 
+      - name: Clone conformalforecast
+        uses: actions/checkout@v4
+        with:
+          repository: Nixtla/conformalforecast
+          path: conformalforecast
+          ref: docs-preview
+
       - name: Copy documentation and merge configs
         run: |
           # Mirror each library's built docs into docs/<repo> (keep this list in
@@ -92,7 +99,7 @@ jobs:
           # or half-built upstream branch would otherwise silently wipe the library's
           # pages (merge_docs.py skips a missing docs.json) and force-push the result.
           for repo in statsforecast mlforecast neuralforecast hierarchicalforecast \
-                      utilsforecast datasetsforecast coreforecast synforecast; do
+                      utilsforecast datasetsforecast coreforecast synforecast conformalforecast; do
             test -f "$repo/docs.json" \
               || { echo "::error::$repo checkout has no docs.json; refusing to mirror with --delete"; exit 1; }
             rsync -a --checksum --delete --info=DEL --exclude .git "$repo/" "docs/$repo/"
