@@ -159,6 +159,10 @@ season length. The trend component will be forecasted with an
 `AutoARIMA` model. (You can also try with: `AutoTheta`, `AutoCES`, and
 `AutoETS`)
 
+The order of the values in `season_length` doesn't matter. `MSTL` sorts
+the periods from shortest to longest before decomposing the series, so
+`[24, 24 * 7]` and `[24 * 7, 24]` produce the same model.
+
 ```python
 # Create a list of models and instantiation parameters
 
