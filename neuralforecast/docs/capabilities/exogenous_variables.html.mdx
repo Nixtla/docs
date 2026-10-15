@@ -10,8 +10,8 @@ add different types of exogenous variables to NeuralForecast models for
 making day-ahead hourly electricity price forecasts (EPF) for France and
 Belgium markets.
 
-All NeuralForecast models are capable of incorporating exogenous
-variables to model the following conditional predictive distribution:
+Many NeuralForecast models can incorporate exogenous variables to model
+the following conditional predictive distribution:
 $$\mathbb{P}(\mathbf{y}_{t+1:t+H} \;|\; \mathbf{y}_{[:t]},\; \mathbf{x}^{(h)}_{[:t]},\; \mathbf{x}^{(f)}_{[:t+H]},\; \mathbf{x}^{(s)} )$$
 
 where the regressors are static exogenous $\mathbf{x}^{(s)}$, historic
@@ -20,6 +20,17 @@ the prediction $\mathbf{x}^{(f)}_{[:t+H]}$ and autoregressive features
 $\mathbf{y}_{[:t]}$. Depending on the [train
 loss](../../losses.pytorch.html), the model outputs can be point
 forecasts (location estimators) or uncertainty intervals (quantiles).
+
+> **Note**
+>
+> Not every model supports every type of exogenous variable. Check the
+> **Exogenous** column in the [models overview](/neuralforecast/docs/capabilities/overview.html) to see
+> which types (F = future, H = historical, S = static) each model
+> accepts. If you pass an unsupported list, such as `futr_exog_list` to
+> `PatchTST`, the model raises an exception like
+> `PatchTST does not support future exogenous variables.` To fix it,
+> remove that list from the model arguments or switch to a model that
+> supports that variable type, such as `NHITS`, `TFT`, or `TiDE`.
 
 We will show you how to include exogenous variables in the data, specify
 variables to a model, and produce forecasts using future exogenous
