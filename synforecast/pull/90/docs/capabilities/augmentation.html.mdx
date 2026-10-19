@@ -33,7 +33,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import polars as pl
 
-from synforecast import FitAndSimulate, Mixup, analyze
+from synforecast import FitAndSimulate, Mixup
+from synforecast.augment import analyze
 from synforecast.generators import RandomWalkGenerator, SeasonalGenerator
 ```
 
@@ -148,19 +149,19 @@ Analysis results for each series:
     Is stationary: True
     Is intermittent: False
 
-  intermittent:
-    Recommended generator: IntermittentDemandGenerator
-    Has seasonality: False
-    Has trend: False
-    Is stationary: True
-    Is intermittent: True
-
   random_walk:
     Recommended generator: RandomWalkGenerator
     Has seasonality: False
     Has trend: True
     Is stationary: False
     Is intermittent: False
+
+  intermittent:
+    Recommended generator: IntermittentDemandGenerator
+    Has seasonality: False
+    Has trend: False
+    Is stationary: True
+    Is intermittent: True
 ```
 
 ```python
@@ -233,11 +234,11 @@ Original series (series_0):
   Max:  2.3403
 
 Synthetic series:
-  series_0_aug_0: mean=-2.6977, std=2.0971
-  series_0_aug_1: mean=-2.6973, std=2.0972
-  series_0_aug_2: mean=-2.6975, std=2.0969
-  series_0_aug_3: mean=-2.6970, std=2.0969
-  series_0_aug_4: mean=-2.6976, std=2.0970
+  series_0_aug_0: mean=-2.6976, std=2.0973
+  series_0_aug_1: mean=-2.6975, std=2.0970
+  series_0_aug_2: mean=-2.6973, std=2.0970
+  series_0_aug_3: mean=-2.6977, std=2.0971
+  series_0_aug_4: mean=-2.6973, std=2.0972
 ```
 
 ```python

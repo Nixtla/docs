@@ -102,6 +102,9 @@ The fit-and-simulate process:
 4. Generate n_augment synthetic series that preserve these properties
 5. Return combined DataFrame with original and synthetic series
 
+Series are processed in order of first appearance in the input, so
+reordering the input rows changes seeded output.
+
 Synthetic series IDs follow the pattern ``"{original_id}_aug_{i}"``.
 
 **Parameters:**
@@ -109,7 +112,7 @@ Synthetic series IDs follow the pattern ``"{original_id}_aug_{i}"``.
 Name | Type | Description | Default
 ---- | ---- | ----------- | -------
 `n_augment` | <code>[int](#int)</code> | Number of synthetic series to generate per original series, from 1 to 1000 (default: 1) | *required*
-`generator_override` | <code>[dict](#dict) \| None</code> | Optional dict mapping unique_id to generator name. Overrides automatic generator selection for specified series; keys match on ``str(unique_id)``. Example: &#123;"series_0": "SARIMAGenerator"&#125; | *required*
+`generator_override` | <code>[dict](#dict) \| None</code> | Optional dict mapping unique_id to generator name. Overrides automatic generator selection for specified series; keys match on ``str(unique_id)``. Stored as a read-only mapping; ``model_dump`` returns a plain dict. Example: &#123;"series_0": "SARIMAGenerator"&#125; | *required*
 `on_error` | <code>[str](#str)</code> | What to do when a fitted generator fails for a series. 'raise' (default) propagates the error; 'ar1' substitutes an AR(1) series matching the source's mean, std, and lag-1 autocorrelation, and reports all substitutions in a single warning at the end of `apply`. | *required*
 `seed` | <code>[int](#int) \| None</code> | Default random seed for ``apply`` (default: None) | *required*
 
@@ -201,6 +204,12 @@ including nearest-value filling at the ends. Entirely missing
 series are excluded. When ``include_original=True``, the original
 rows and their missing values are retained unchanged.
 
+Sources are indexed by sorted id, so seeded output does not depend on
+the input row order. With ``source_col``, each mixup series names its
+anchor, the first chosen source, whose window supplies the timestamps
+and extra columns. The other blended sources also contribute values, so
+grouping CV folds by ``source_col`` does not prevent leakage.
+
 Mixup IDs follow the pattern ``"mixup_{i}"``.
 
 **Parameters:**
@@ -281,6 +290,9 @@ sources use nonseasonal decomposition and are listed in a logged warning.
 Infinite values reject the call with the offending series ID; NaNs
 follow the interpolation/skip policy above.
 
+Sources are processed in sorted id order, so seeded output does not
+depend on the input row order.
+
 IDs follow the pattern ``"{original_id}_mbb_{i}"``.
 
 **Parameters:**
@@ -356,6 +368,11 @@ warning. Infinite values reject the call with the offending series ID.
 Reference scaling preserves zero scale for constant sources, producing
 constant copies. Sources with standard deviation below 1e-8 are listed
 in a warning because their copies may add little or no variation.
+
+References are processed in sorted id order, so seeded output does not
+depend on the input row order. With ``source_col``, each copy names its
+reference series; its neighbors also contribute values, so grouping CV
+folds by ``source_col`` does not prevent leakage.
 
 IDs follow the pattern ``"{original_id}_dba_{i}"``.
 
@@ -437,9 +454,11 @@ A thin facade over the augmentation specs in :mod:`synforecast.augment`,
 which are the primary API: :class:`~synforecast.FitAndSimulate`,
 :class:`~synforecast.Mixup`, :class:`~synforecast.MovingBlockBootstrap`
 and :class:`~synforecast.DBA`. Each method builds the matching spec and
-calls its ``apply`` with this instance's seed, columns and engine, so when
-``seed`` is set, repeated calls with the same arguments return the same
-output.
+calls its ``apply`` with this instance's columns, engine and a seed. The
+first drawing call uses ``seed`` itself; each later call uses a distinct
+seed derived from it, so repeated calls give fresh draws while a new
+instance with the same ``seed`` replays the same sequence of outputs.
+Call a spec's ``apply`` directly for output that is identical per call.
 
 - :meth:`augment` fits a parametric generator per series and simulates
   from it (IDs ``"{original_id}_aug_{i}"``).
@@ -511,7 +530,7 @@ analyze(df)
 
 Analyze all series in DataFrame and return properties.
 
-See :func:`synforecast.analyze`.
+See :func:`synforecast.augment.analyze`.
 
 **Parameters:**
 
@@ -621,12 +640,12 @@ Runs :class:`~synforecast.Mixup`, which documents the method.
 Name | Type | Description | Default
 ---- | ---- | ----------- | -------
 `df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input DataFrame with time series (must have id_col, time_col, target_col). | *required*
-`n_series` | <code>[int](#int) \| None</code> | Total number of synthetic series to create. Defaults to the number of input series. | <code>None</code>
+`n_series` | <code>[int](#int) \| None</code> | Total number of synthetic series to create. Defaults to the number of usable input series. | <code>None</code>
 `max_mix` | <code>[int](#int)</code> | Maximum number of source series combined per synthetic series (default: 3). | <code>3</code>
 `alpha` | <code>[float](#float)</code> | Concentration of the symmetric Dirichlet weight distribution (default: 1.5). | <code>1.5</code>
 `scaling` | <code>[Literal](#typing.Literal)['mean', 'std', 'none']</code> | Per-window scaling before mixing: 'mean', 'std', or 'none' (default: 'mean'). | <code>'mean'</code>
 `include_original` | <code>[bool](#bool)</code> | Prepend the original series to the output (default: True). | <code>True</code>
-`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding each row's source series id; None (default) adds no column. | <code>None</code>
+`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding each row's source series id; None (default) adds no column. Mixup rows name the anchor series only, though other blended series contribute values, so grouping CV folds by it does not prevent leakage. | <code>None</code>
 
 **Returns:**
 
@@ -704,7 +723,7 @@ Name | Type | Description | Default
 `window_fraction` | <code>[float](#float)</code> | DTW band fraction in (0, 1] (default: 0.1). | <code>0.1</code>
 `scale` | <code>[Literal](#typing.Literal)['reference', 'none']</code> | "reference" to restore reference scale (default), or "none" to average raw values. | <code>'reference'</code>
 `include_original` | <code>[bool](#bool)</code> | Include unchanged original rows (default: True). | <code>True</code>
-`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding each row's source series id; None (default) adds no column. | <code>None</code>
+`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding each row's source series id; None (default) adds no column. DBA rows name the reference series only, though its neighbors contribute values, so grouping CV folds by it does not prevent leakage. | <code>None</code>
 
 **Returns:**
 
