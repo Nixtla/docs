@@ -205,10 +205,9 @@ series are excluded. When ``include_original=True``, the original
 rows and their missing values are retained unchanged.
 
 Sources are indexed by sorted id, so seeded output does not depend on
-the input row order. With ``source_col``, each mixup series names its
-anchor, the first chosen source, whose window supplies the timestamps
-and extra columns. The other blended sources also contribute values, so
-grouping CV folds by ``source_col`` does not prevent leakage.
+the input row order. The anchor, the first chosen source, supplies the
+timestamps, extra columns and ``source_col`` (see
+:meth:`BaseAugmenter.apply`).
 
 Mixup IDs follow the pattern ``"mixup_{i}"``.
 
@@ -370,9 +369,8 @@ constant copies. Sources with standard deviation below 1e-8 are listed
 in a warning because their copies may add little or no variation.
 
 References are processed in sorted id order, so seeded output does not
-depend on the input row order. With ``source_col``, each copy names its
-reference series; its neighbors also contribute values, so grouping CV
-folds by ``source_col`` does not prevent leakage.
+depend on the input row order. ``source_col`` names the reference (see
+:meth:`BaseAugmenter.apply`).
 
 IDs follow the pattern ``"{original_id}_dba_{i}"``.
 
@@ -645,7 +643,7 @@ Name | Type | Description | Default
 `alpha` | <code>[float](#float)</code> | Concentration of the symmetric Dirichlet weight distribution (default: 1.5). | <code>1.5</code>
 `scaling` | <code>[Literal](#typing.Literal)['mean', 'std', 'none']</code> | Per-window scaling before mixing: 'mean', 'std', or 'none' (default: 'mean'). | <code>'mean'</code>
 `include_original` | <code>[bool](#bool)</code> | Prepend the original series to the output (default: True). | <code>True</code>
-`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding each row's source series id; None (default) adds no column. Mixup rows name the anchor series only, though other blended series contribute values, so grouping CV folds by it does not prevent leakage. | <code>None</code>
+`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding each row's source series id (the anchor; see :meth:`~synforecast.BaseAugmenter.apply`); None (default) adds no column. | <code>None</code>
 
 **Returns:**
 
@@ -723,7 +721,7 @@ Name | Type | Description | Default
 `window_fraction` | <code>[float](#float)</code> | DTW band fraction in (0, 1] (default: 0.1). | <code>0.1</code>
 `scale` | <code>[Literal](#typing.Literal)['reference', 'none']</code> | "reference" to restore reference scale (default), or "none" to average raw values. | <code>'reference'</code>
 `include_original` | <code>[bool](#bool)</code> | Include unchanged original rows (default: True). | <code>True</code>
-`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding each row's source series id; None (default) adds no column. DBA rows name the reference series only, though its neighbors contribute values, so grouping CV folds by it does not prevent leakage. | <code>None</code>
+`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding each row's source series id (the reference; see :meth:`~synforecast.BaseAugmenter.apply`); None (default) adds no column. | <code>None</code>
 
 **Returns:**
 
