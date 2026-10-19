@@ -70,6 +70,33 @@ Type | Description
 ---- | -----------
 <code>[IntoDataFrameT](#narwhals.stable.v2.typing.IntoDataFrameT)</code> | DataFrame in long format with columns [id_col, time_col, target_col] (default ['unique_id', 'ds', 'y']), plus any exogenous or flag columns.
 
+#### `BaseGenerator.generate_values`
+
+```python
+generate_values(n_series, n_jobs=-1)
+```
+
+Generate series as value arrays, without building a DataFrame.
+
+Draws exactly the series :meth:`generate` would, with the same overlays
+(missing points as NaN), and leaves the generator in the same state.
+No DataFrame, exogenous column, or calendar is built, so lengths beyond
+pandas' datetime range work.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`n_series` | <code>[int](#int)</code> | Number of time series to generate. | *required*
+`n_jobs` | <code>[int](#int)</code> | Number of parallel workers. -1 (default) uses ``RAYON_NUM_THREADS`` if set, otherwise all logical cores. Results are seed-deterministic and do not depend on n_jobs. | <code>-1</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[list](#list)[[ndarray](#numpy.ndarray)]</code> | One 1-D float array per series in id order (``n_series * n_sensors``
+<code>[list](#list)[[ndarray](#numpy.ndarray)]</code> | for ``IoTSensorGenerator``).
+
 #### `BaseGenerator.generate_single_series`
 
 ```python

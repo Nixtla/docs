@@ -277,6 +277,12 @@ Base kernels (r = |x_i - x_j|, all on the normalized grid):
     - white: ``w`` on the diagonal — independent noise
     - constant: a constant offset
 
+Each composition is a polynomial ``K = sum_d (x x')^d T_d(x - x')`` with
+stationary PSD ``T_d`` (only the linear kernel is non-stationary), sampled
+exactly as ``sum_d x^d * f_d`` with independent O(n^2) Durbin-Levinson
+draws ``f_d ~ GP(0, T_d)``. Bulk ``generate()`` runs in the Rust batch
+path, whose RNG stream differs from NumPy's.
+
 Because a composed kernel can be near-degenerate or produce an exploding
 scale, non-finite, near-constant, or ``|y| >= 1e8`` draws are redrawn a
 bounded number of times before falling back to Gaussian noise.
@@ -292,7 +298,7 @@ Name | Type | Description | Default
 `linear_sigmas` | <code>[list](#list)[[float](#float)]</code> | ``sigma_0`` offsets for the linear (DotProduct) kernel (default: [0.0, 1.0, 10.0]). | *required*
 `white_noise_levels` | <code>[list](#list)[[float](#float)]</code> | Diagonal noise levels for the white kernel (default: [0.1, 1.0]). | *required*
 `include_constant` | <code>[bool](#bool)</code> | Include a constant kernel in the bank (default: True). | *required*
-`jitter` | <code>[float](#float)</code> | Diagonal jitter added before factorization for numerical stability (default: 1e-6). | *required*
+`jitter` | <code>[float](#float)</code> | Diagonal jitter added to each term ``T_d``, escalated if the recursion still breaks down (default: 1e-6). | *required*
 `standardize` | <code>[bool](#bool)</code> | Standardize each sampled series to zero mean and unit variance. Kernel compositions span extreme scales, so standardization keeps the pool comparable for pretraining (default: True). | *required*
 `seed` | <code>[int](#int) \| None</code> | Random seed for reproducibility (default: None). | *required*
 
