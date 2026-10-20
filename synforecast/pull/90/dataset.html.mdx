@@ -112,7 +112,7 @@ Synthetic series IDs follow the pattern ``"{original_id}_aug_{i}"``.
 Name | Type | Description | Default
 ---- | ---- | ----------- | -------
 `n_augment` | <code>[int](#int)</code> | Number of synthetic series to generate per original series, from 1 to 1000 (default: 1) | *required*
-`generator_override` | <code>[dict](#dict) \| None</code> | Optional dict mapping unique_id to generator name. Overrides automatic generator selection for specified series; an id matches a key equal to it, else a key with the same ``str``. Keys may be any hashable. Stored as a read-only mapping; ``model_dump`` returns a plain dict. Example: &#123;"series_0": "SARIMAGenerator"&#125; | *required*
+`generator_override` | <code>[dict](#dict) \| None</code> | Optional dict mapping unique_id to generator name. Overrides automatic generator selection for specified series. Keys may be any hashable and are stored as ``str(key)``; a series matches when ``str(id)`` equals a key, so ``1`` and ``"1"`` are the same key. Stored as a read-only mapping; ``model_dump`` returns a plain dict. Keys matching no series are warned about and ignored, so one spec can be reused on subsets. Example: &#123;"series_0": "SARIMAGenerator"&#125; | *required*
 `on_error` | <code>[str](#str)</code> | What to do when a fitted generator fails for a series. 'raise' (default) propagates the error; 'ar1' substitutes an AR(1) series matching the source's mean, std, and lag-1 autocorrelation, and reports all substitutions in a single warning at the end of `apply`. | *required*
 `seed` | <code>[int](#int) \| None</code> | Default random seed for ``apply`` (default: None) | *required*
 
@@ -152,6 +152,8 @@ Name | Type | Description | Default
 Type | Description
 ---- | -----------
 <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows.
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | The id column is categorical (as before); cast it before
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | concatenating the output with the input.
 
 **Raises:**
 
@@ -263,6 +265,8 @@ Name | Type | Description | Default
 Type | Description
 ---- | -----------
 <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows.
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | The id column is categorical (as before); cast it before
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | concatenating the output with the input.
 
 **Raises:**
 
@@ -352,6 +356,8 @@ Name | Type | Description | Default
 Type | Description
 ---- | -----------
 <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows.
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | The id column is categorical (as before); cast it before
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | concatenating the output with the input.
 
 **Raises:**
 
@@ -404,6 +410,8 @@ warning. Infinite values reject the call with the offending series ID.
 Reference scaling preserves zero scale for constant sources, producing
 constant copies. Sources with standard deviation below 1e-8 are listed
 in a warning because their copies may add little or no variation.
+DBA needs at least 2 usable series; ``apply`` raises ValueError
+otherwise.
 
 References are processed in sorted id order, so seeded output does not
 depend on the input row order. ``source_col`` names the reference (see
@@ -448,6 +456,8 @@ Name | Type | Description | Default
 Type | Description
 ---- | -----------
 <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows.
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | The id column is categorical (as before); cast it before
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | concatenating the output with the input.
 
 **Raises:**
 
