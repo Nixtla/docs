@@ -112,7 +112,7 @@ Synthetic series IDs follow the pattern ``"{original_id}_aug_{i}"``.
 Name | Type | Description | Default
 ---- | ---- | ----------- | -------
 `n_augment` | <code>[int](#int)</code> | Number of synthetic series to generate per original series, from 1 to 1000 (default: 1) | *required*
-`generator_override` | <code>[dict](#dict) \| None</code> | Optional dict mapping unique_id to generator name. Overrides automatic generator selection for specified series; keys match on ``str(unique_id)``. Stored as a read-only mapping; ``model_dump`` returns a plain dict. Example: &#123;"series_0": "SARIMAGenerator"&#125; | *required*
+`generator_override` | <code>[dict](#dict) \| None</code> | Optional dict mapping unique_id to generator name. Overrides automatic generator selection for specified series; an id matches a key equal to it, else a key with the same ``str``. Keys may be any hashable. Stored as a read-only mapping; ``model_dump`` returns a plain dict. Example: &#123;"series_0": "SARIMAGenerator"&#125; | *required*
 `on_error` | <code>[str](#str)</code> | What to do when a fitted generator fails for a series. 'raise' (default) propagates the error; 'ar1' substitutes an AR(1) series matching the source's mean, std, and lag-1 autocorrelation, and reports all substitutions in a single warning at the end of `apply`. | *required*
 `seed` | <code>[int](#int) \| None</code> | Default random seed for ``apply`` (default: None) | *required*
 
@@ -132,26 +132,34 @@ Name | Type | Description | Default
 apply(df, *, seed=None, include_original=True, id_col='unique_id', time_col='ds', target_col='y', engine=None, source_col=None)
 ```
 
-Augment dataset with synthetic series.
+Augment ``df`` with synthetic series.
 
-For each series in the input DataFrame, generates n_augment synthetic
-series that are statistically similar to the original. Arguments are
-described on :meth:`BaseAugmenter.apply`.
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input frame containing the ID, time and target columns. | *required*
+`seed` | <code>[int](#int) \| None</code> | Seed for this call; None uses the spec's ``seed``. | <code>None</code>
+`include_original` | <code>[bool](#bool)</code> | Include unchanged original rows (default: True). | <code>True</code>
+`id_col` | <code>[str](#str)</code> | Name of the ID column (default: 'unique_id'). | <code>'unique_id'</code>
+`time_col` | <code>[str](#str)</code> | Name of the timestamp column (default: 'ds'). | <code>'ds'</code>
+`target_col` | <code>[str](#str)</code> | Name of the value column (default: 'y'). | <code>'y'</code>
+`engine` | <code>[str](#str) \| None</code> | Output dataframe library (e.g. 'pandas', 'polars'). None (default) matches the input DataFrame's library. | <code>None</code>
+`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding, for every row, the input id of the series it derives from; the column has the same dtype as the output id column. Original rows name themselves; FitAndSimulate and MovingBlockBootstrap copies name their single source. Mixup names the anchor (the first chosen series, whose timestamps and extra columns are used) and DBA the reference series; other blended series also contribute values, so grouping CV folds by ``source_col`` does not prevent leakage for those two strategies. None (default) adds no column. | <code>None</code>
 
 **Returns:**
 
 Type | Description
 ---- | -----------
-<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | DataFrame with the original series (optional) and synthetic
-<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | series. Synthetic series IDs follow the pattern
-<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | `"{original_id}_aug_{i}"`
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows.
 
 **Raises:**
 
 Type | Description
 ---- | -----------
-<code>[ValueError](#ValueError)</code> | If DataFrame is missing required columns
-<code>[RuntimeError](#RuntimeError)</code> | If a fitted generator fails for a series and on_error='raise' (the default)
+<code>[ValidationError](#ValidationError)</code> | If ``seed`` is not a non-negative integer.
+<code>[ValueError](#ValueError)</code> | If ``df`` is missing required columns, ``source_col`` clashes with an input column, or no series is usable.
+<code>[RuntimeError](#RuntimeError)</code> | If a FitAndSimulate generator fails and ``on_error='raise'`` (the default).
 
 #### `FitAndSimulate.apply_series`
 
@@ -235,19 +243,34 @@ Name | Type | Description | Default
 apply(df, *, seed=None, include_original=True, id_col='unique_id', time_col='ds', target_col='y', engine=None, source_col=None)
 ```
 
-Mix series of ``df``; arguments are described on :meth:`BaseAugmenter.apply`.
+Augment ``df`` with synthetic series.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input frame containing the ID, time and target columns. | *required*
+`seed` | <code>[int](#int) \| None</code> | Seed for this call; None uses the spec's ``seed``. | <code>None</code>
+`include_original` | <code>[bool](#bool)</code> | Include unchanged original rows (default: True). | <code>True</code>
+`id_col` | <code>[str](#str)</code> | Name of the ID column (default: 'unique_id'). | <code>'unique_id'</code>
+`time_col` | <code>[str](#str)</code> | Name of the timestamp column (default: 'ds'). | <code>'ds'</code>
+`target_col` | <code>[str](#str)</code> | Name of the value column (default: 'y'). | <code>'y'</code>
+`engine` | <code>[str](#str) \| None</code> | Output dataframe library (e.g. 'pandas', 'polars'). None (default) matches the input DataFrame's library. | <code>None</code>
+`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding, for every row, the input id of the series it derives from; the column has the same dtype as the output id column. Original rows name themselves; FitAndSimulate and MovingBlockBootstrap copies name their single source. Mixup names the anchor (the first chosen series, whose timestamps and extra columns are used) and DBA the reference series; other blended series also contribute values, so grouping CV folds by ``source_col`` does not prevent leakage for those two strategies. None (default) adds no column. | <code>None</code>
 
 **Returns:**
 
 Type | Description
 ---- | -----------
-<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | DataFrame with the original series (optional) and synthetic mixup series. Mixup IDs follow the pattern ``"mixup_{i}"``.
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows.
 
 **Raises:**
 
 Type | Description
 ---- | -----------
-<code>[ValueError](#ValueError)</code> | If the DataFrame is missing required columns, or if it holds no usable series.
+<code>[ValidationError](#ValidationError)</code> | If ``seed`` is not a non-negative integer.
+<code>[ValueError](#ValueError)</code> | If ``df`` is missing required columns, ``source_col`` clashes with an input column, or no series is usable.
+<code>[RuntimeError](#RuntimeError)</code> | If a FitAndSimulate generator fails and ``on_error='raise'`` (the default).
 
 
 ### `MovingBlockBootstrap`
@@ -309,20 +332,34 @@ Name | Type | Description | Default
 apply(df, *, seed=None, include_original=True, id_col='unique_id', time_col='ds', target_col='y', engine=None, source_col=None)
 ```
 
-Bootstrap series of ``df``; arguments are described on :meth:`BaseAugmenter.apply`.
+Augment ``df`` with synthetic series.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input frame containing the ID, time and target columns. | *required*
+`seed` | <code>[int](#int) \| None</code> | Seed for this call; None uses the spec's ``seed``. | <code>None</code>
+`include_original` | <code>[bool](#bool)</code> | Include unchanged original rows (default: True). | <code>True</code>
+`id_col` | <code>[str](#str)</code> | Name of the ID column (default: 'unique_id'). | <code>'unique_id'</code>
+`time_col` | <code>[str](#str)</code> | Name of the timestamp column (default: 'ds'). | <code>'ds'</code>
+`target_col` | <code>[str](#str)</code> | Name of the value column (default: 'y'). | <code>'y'</code>
+`engine` | <code>[str](#str) \| None</code> | Output dataframe library (e.g. 'pandas', 'polars'). None (default) matches the input DataFrame's library. | <code>None</code>
+`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding, for every row, the input id of the series it derives from; the column has the same dtype as the output id column. Original rows name themselves; FitAndSimulate and MovingBlockBootstrap copies name their single source. Mixup names the anchor (the first chosen series, whose timestamps and extra columns are used) and DBA the reference series; other blended series also contribute values, so grouping CV folds by ``source_col`` does not prevent leakage for those two strategies. None (default) adds no column. | <code>None</code>
 
 **Returns:**
 
 Type | Description
 ---- | -----------
-<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows,
-<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | using the requested output engine or the input engine.
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows.
 
 **Raises:**
 
 Type | Description
 ---- | -----------
-<code>[ValueError](#ValueError)</code> | For missing required columns, infinite target values, or no usable source series.
+<code>[ValidationError](#ValidationError)</code> | If ``seed`` is not a non-negative integer.
+<code>[ValueError](#ValueError)</code> | If ``df`` is missing required columns, ``source_col`` clashes with an input column, or no series is usable.
+<code>[RuntimeError](#RuntimeError)</code> | If a FitAndSimulate generator fails and ``on_error='raise'`` (the default).
 
 
 ### `DBA`
@@ -391,20 +428,34 @@ Name | Type | Description | Default
 apply(df, *, seed=None, include_original=True, id_col='unique_id', time_col='ds', target_col='y', engine=None, source_col=None)
 ```
 
-Average neighbors in ``df``; arguments are described on :meth:`BaseAugmenter.apply`.
+Augment ``df`` with synthetic series.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input frame containing the ID, time and target columns. | *required*
+`seed` | <code>[int](#int) \| None</code> | Seed for this call; None uses the spec's ``seed``. | <code>None</code>
+`include_original` | <code>[bool](#bool)</code> | Include unchanged original rows (default: True). | <code>True</code>
+`id_col` | <code>[str](#str)</code> | Name of the ID column (default: 'unique_id'). | <code>'unique_id'</code>
+`time_col` | <code>[str](#str)</code> | Name of the timestamp column (default: 'ds'). | <code>'ds'</code>
+`target_col` | <code>[str](#str)</code> | Name of the value column (default: 'y'). | <code>'y'</code>
+`engine` | <code>[str](#str) \| None</code> | Output dataframe library (e.g. 'pandas', 'polars'). None (default) matches the input DataFrame's library. | <code>None</code>
+`source_col` | <code>[str](#str) \| None</code> | Name of an added column holding, for every row, the input id of the series it derives from; the column has the same dtype as the output id column. Original rows name themselves; FitAndSimulate and MovingBlockBootstrap copies name their single source. Mixup names the anchor (the first chosen series, whose timestamps and extra columns are used) and DBA the reference series; other blended series also contribute values, so grouping CV folds by ``source_col`` does not prevent leakage for those two strategies. None (default) adds no column. | <code>None</code>
 
 **Returns:**
 
 Type | Description
 ---- | -----------
-<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows,
-<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | using the requested output engine or the input engine.
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Frame containing generated series and, optionally, original rows.
 
 **Raises:**
 
 Type | Description
 ---- | -----------
-<code>[ValueError](#ValueError)</code> | For missing required columns, infinite target values, excessive alignment/output storage, or fewer than two usable source series.
+<code>[ValidationError](#ValidationError)</code> | If ``seed`` is not a non-negative integer.
+<code>[ValueError](#ValueError)</code> | If ``df`` is missing required columns, ``source_col`` clashes with an input column, or no series is usable.
+<code>[RuntimeError](#RuntimeError)</code> | If a FitAndSimulate generator fails and ``on_error='raise'`` (the default).
 
 
 ### `analyze`
@@ -452,11 +503,12 @@ A thin facade over the augmentation specs in :mod:`synforecast.augment`,
 which are the primary API: :class:`~synforecast.FitAndSimulate`,
 :class:`~synforecast.Mixup`, :class:`~synforecast.MovingBlockBootstrap`
 and :class:`~synforecast.DBA`. Each method builds the matching spec and
-calls its ``apply`` with this instance's columns, engine and a seed. The
-first drawing call uses ``seed`` itself; each later call uses a distinct
-seed derived from it, so repeated calls give fresh draws while a new
-instance with the same ``seed`` replays the same sequence of outputs.
-Call a spec's ``apply`` directly for output that is identical per call.
+runs it with this instance's columns and engine. As in 0.2.0, the
+instance keeps one random stream (``rng``, seeded by ``seed``) across
+calls: repeated calls give fresh draws, and a new instance with the same
+``seed`` replays the same sequence of outputs. The first call matches the
+spec's ``apply(df, seed=seed)``; call ``apply`` directly for output that
+is identical per call.
 
 - :meth:`augment` fits a parametric generator per series and simulates
   from it (IDs ``"{original_id}_aug_{i}"``).
@@ -566,7 +618,7 @@ Name | Type | Description | Default
 ---- | ---- | ----------- | -------
 `df` | <code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | Input DataFrame with time series (must have id_col, time_col, target_col) | *required*
 `n_augment` | <code>[int](#int)</code> | Number of synthetic series to generate per original series | <code>1</code>
-`generator_override` | <code>[dict](#dict)[[str](#str) \| [int](#int), [str](#str)] \| None</code> | Optional dict mapping unique_id to generator name. Overrides automatic generator selection for specified series. Example: &#123;"series_0": "SARIMAGenerator"&#125; | <code>None</code>
+`generator_override` | <code>[dict](#dict)[[Hashable](#collections.abc.Hashable), [str](#str)] \| None</code> | Optional dict mapping unique_id to generator name. Overrides automatic generator selection for specified series. Example: &#123;"series_0": "SARIMAGenerator"&#125; | <code>None</code>
 `preserve_timestamps` | <code>[bool](#bool)</code> | Accepted for compatibility and ignored; synthetic series always use the original's timestamps | <code>True</code>
 `source_col` | <code>[str](#str) \| None</code> | Name of an added column holding each row's source series id; None (default) adds no column. | <code>None</code>
 
