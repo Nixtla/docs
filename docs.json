@@ -5,13 +5,19 @@
     "dismissible": true,
     "color": {
       "light": "#bfd1ff",
-      "dark": "#9187e8"
+      "dark": "#918bc6"
     }
   },
   "colors": {
-    "primary": "#161616",
-    "light": "#FFF",
-    "dark": "#161616"
+    "primary": "#222121",
+    "light": "#f6f4f0",
+    "dark": "#222121"
+  },
+  "background": {
+    "color": {
+      "light": "#f6f4f0",
+      "dark": "#171614"
+    }
   },
   "favicon": "/favicon.svg",
   "footer": {
