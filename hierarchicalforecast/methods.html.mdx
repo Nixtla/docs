@@ -351,6 +351,18 @@ Name | Type | Description | Default
 ---- | ---- | ----------- | -------
 `method` | <code>[str](#str)</code> | One of `forecast_proportions`, `average_proportions` and `proportion_averages`. | *required*
 
+**How each `method` computes proportions:**
+
+- **`forecast_proportions`:** Uses the base forecasts, not the history. Reconciliation runs separately for each step of the forecast horizon, so proportions can change from one period to the next. Starting at the top node, each child receives the parent's reconciled forecast multiplied by the child's base forecast divided by the sum of its siblings' base forecasts. This repeats level by level down the hierarchy. If the siblings' base forecasts sum to zero, the parent forecast is split equally among the children. `y_insample` is not needed.
+- **`average_proportions`:** Uses the in-sample history `y_insample`. For each bottom-level series, it computes the ratio of the bottom series to the top series at every in-sample timestamp, then averages those ratios. The result is a single proportion per bottom series. That proportion is applied to the top-level forecast at every step of the horizon.
+- **`proportion_averages`:** Also uses `y_insample`. For each bottom-level series, it divides the mean of the bottom series over the whole history by the mean of the top series over the whole history. The result is a single proportion per bottom series, applied to every step of the horizon.
+
+For `average_proportions` and `proportion_averages`, the proportions are computed over the full history you pass in `Y_df`, not per calendar period such as month. To use a shorter or more recent window, filter `Y_df` before calling `reconcile`.
+
+<Note>
+`average_proportions` and `proportion_averages` are sensitive to the in-sample data. Missing values in `Y_df` can produce `NaN` reconciled forecasts. `TopDown` ignores `NaN` values when averaging and raises a warning, but `TopDownSparse` does not ignore them, so a single `NaN` in a bottom or top series propagates to the proportions. With `average_proportions`, a top-level value of zero at any timestamp also produces infinite or `NaN` ratios. Fill or drop missing values and avoid zero totals in the history before reconciling with these methods.
+</Note>
+
 References:
 - [CW. Gross (1990). "Disaggregation methods to expedite product line forecasting". Journal of Forecasting, 9 , 233-254. doi:10.1002/for.3980090304](https://onlinelibrary.wiley.com/doi/abs/10.1002/for.3980090304).
 - [G. Fliedner (1999). "An investigation of aggregate variable time series forecast strategies with specific subaggregate time series statistical correlation". Computers and Operations Research, 26 , 1133-1149. doi:10.1016/S0305-0548(99)00017-9](https://doi.org/10.1016/S0305-0548(99)00017-9).
