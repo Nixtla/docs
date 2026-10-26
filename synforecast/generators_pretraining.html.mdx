@@ -264,7 +264,9 @@ behaviors (e.g. trend + seasonality); kernel multiplication modulates them
 (e.g. locally periodic, amplitude-varying seasonality). SynForecast makes
 the bank configurable, expresses seasonal periods in time steps on a
 normalized grid, and adds bounded retries, divergence guards, and optional
-standardization.
+standardization. It also replaces the reference's dense Cholesky sampler
+with the exact O(n^2) polynomial decomposition described below, which
+adds ``jitter`` to each term and escalates it on a numerical breakdown.
 
 Base kernels (r = |x_i - x_j|, all on the normalized grid):
     - rbf: ``exp(-r^2 / (2 l^2))`` — smooth, length-scale ``l``
@@ -277,6 +279,12 @@ Base kernels (r = |x_i - x_j|, all on the normalized grid):
     - white: ``w`` on the diagonal — independent noise
     - constant: a constant offset
 
+Each composition is a polynomial ``K = sum_d (x x')^d T_d(x - x')`` with
+stationary PSD ``T_d`` (only the linear kernel is non-stationary), sampled
+exactly as ``sum_d x^d * f_d`` with independent O(n^2) Durbin-Levinson
+draws ``f_d ~ GP(0, T_d)``. Both bulk ``generate()`` and
+``generate_single_series`` run this sampler in Rust.
+
 Because a composed kernel can be near-degenerate or produce an exploding
 scale, non-finite, near-constant, or ``|y| >= 1e8`` draws are redrawn a
 bounded number of times before falling back to Gaussian noise.
@@ -285,14 +293,14 @@ bounded number of times before falling back to Gaussian noise.
 
 Name | Type | Description | Default
 ---- | ---- | ----------- | -------
-`max_kernels` | <code>[int](#int)</code> | Maximum number of base kernels composed per series; the count is drawn uniformly from ``1..max_kernels`` (default: 5). | *required*
+`max_kernels` | <code>[int](#int)</code> | Maximum number of base kernels composed per series; the count is drawn uniformly from ``1..max_kernels`` (default: 5, at most 64). | *required*
 `seasonal_periods` | <code>[list](#list)[[float](#float)]</code> | Periodic-kernel periods, in time steps, forming the periodic entries of the bank (default: a broad set from 4 up to 730 covering common hourly/daily/weekly/quarterly/yearly seasonalities). | *required*
 `rbf_length_scales` | <code>[list](#list)[[float](#float)]</code> | RBF length scales on the normalized grid (default: [0.1, 1.0, 10.0]). | *required*
 `rational_quadratic_alphas` | <code>[list](#list)[[float](#float)]</code> | Rational-quadratic shape parameters (default: [0.1, 1.0, 10.0]). | *required*
 `linear_sigmas` | <code>[list](#list)[[float](#float)]</code> | ``sigma_0`` offsets for the linear (DotProduct) kernel (default: [0.0, 1.0, 10.0]). | *required*
 `white_noise_levels` | <code>[list](#list)[[float](#float)]</code> | Diagonal noise levels for the white kernel (default: [0.1, 1.0]). | *required*
 `include_constant` | <code>[bool](#bool)</code> | Include a constant kernel in the bank (default: True). | *required*
-`jitter` | <code>[float](#float)</code> | Diagonal jitter added before factorization for numerical stability (default: 1e-6). | *required*
+`jitter` | <code>[float](#float)</code> | Diagonal jitter added to each term ``T_d``. On a numerical breakdown it is escalated tenfold up to three times, to at least ``1e-6`` times the term's variance even when ``jitter`` is 0 (default: 1e-6). | *required*
 `standardize` | <code>[bool](#bool)</code> | Standardize each sampled series to zero mean and unit variance. Kernel compositions span extreme scales, so standardization keeps the pool comparable for pretraining (default: True). | *required*
 `seed` | <code>[int](#int) \| None</code> | Random seed for reproducibility (default: None). | *required*
 
@@ -303,6 +311,8 @@ generate_single_series(length)
 ```
 
 Generate one KernelSynth series.
+
+Runs the same Rust sampler as the batch path, seeded from ``self.rng``.
 
 **Parameters:**
 

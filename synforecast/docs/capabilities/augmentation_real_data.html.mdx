@@ -129,33 +129,33 @@ df_sample.filter(pl.col("unique_id") == sample_ids[0]).head(5)
 ```
 
 ```shell
-  0%|          | 0.00/555k [00:00<?, ?iB/s]2.35MiB [00:00, 73.7MiB/s]                 
+  0%|          | 0.00/555k [00:00<?, ?iB/s]2.35MiB [00:00, 82.5MiB/s]                 
 INFO:datasetsforecast.utils:Successfully downloaded Hourly-train.csv, 2347115, bytes.
-  0%|          | 0.00/36.8k [00:00<?, ?iB/s]133kiB [00:00, 20.7MiB/s]                   
+  0%|          | 0.00/36.8k [00:00<?, ?iB/s]133kiB [00:00, 19.7MiB/s]                   
 INFO:datasetsforecast.utils:Successfully downloaded Hourly-test.csv, 132820, bytes.
-  0%|          | 0.00/346k [00:00<?, ?iB/s]4.34MiB [00:00, 115MiB/s]                  
+  0%|          | 0.00/346k [00:00<?, ?iB/s]4.34MiB [00:00, 141MiB/s]                  
 INFO:datasetsforecast.utils:Successfully downloaded M4-info.csv, 4335598, bytes.
-  0%|          | 0.00/3.56M [00:00<?, ?iB/s]100%|██████████| 3.56M/3.56M [00:00<00:00, 69.9MiB/s]
+  0%|          | 0.00/3.56M [00:00<?, ?iB/s]100%|██████████| 3.56M/3.56M [00:00<00:00, 95.4MiB/s]
 INFO:datasetsforecast.utils:Successfully downloaded submission-Naive2.zip, 3564691, bytes.
 INFO:datasetsforecast.utils:Decompressing zip file...
 ```
 
 ```shell
 Loaded 414 hourly series from M4
-Using 5 series for demonstration: ['H144', 'H146', 'H235', 'H234', 'H357']
-Total rows in sample: 4520
+Using 5 series for demonstration: ['H307', 'H305', 'H270', 'H382', 'H365']
+Total rows in sample: 5040
 
 Sample data (first series, first 5 rows):
 ```
 
-| unique_id | ds  | y     |
-|-----------|-----|-------|
-| str       | i64 | f64   |
-| "H144"    | 1   | 955.0 |
-| "H144"    | 2   | 790.0 |
-| "H144"    | 3   | 872.0 |
-| "H144"    | 4   | 712.0 |
-| "H144"    | 5   | 291.0 |
+| unique_id | ds  | y    |
+|-----------|-----|------|
+| str       | i64 | f64  |
+| "H307"    | 1   | 12.4 |
+| "H307"    | 2   | 11.8 |
+| "H307"    | 3   | 11.3 |
+| "H307"    | 4   | 10.8 |
+| "H307"    | 5   | 10.4 |
 
 ```python
 fig, ax = plt.subplots(figsize=(12, 5))
@@ -196,35 +196,35 @@ for series_id in sample_ids:
 
 ```shell
 
-  H144:
-    Recommended generator: SeasonalGenerator
-    Has seasonality: True
-    Seasonality period: 24
-    Has trend: False
-    Is stationary: True
-
-  H146:
-    Recommended generator: SeasonalGenerator
-    Has seasonality: True
-    Seasonality period: 24
-    Has trend: False
-    Is stationary: True
-
-  H235:
+  H307:
     Recommended generator: SeasonalGenerator
     Has seasonality: True
     Seasonality period: 24
     Has trend: True
     Is stationary: True
 
-  H234:
+  H305:
     Recommended generator: SeasonalGenerator
     Has seasonality: True
     Seasonality period: 24
     Has trend: True
     Is stationary: True
 
-  H357:
+  H270:
+    Recommended generator: SeasonalGenerator
+    Has seasonality: True
+    Seasonality period: 24
+    Has trend: True
+    Is stationary: True
+
+  H382:
+    Recommended generator: SeasonalGenerator
+    Has seasonality: True
+    Seasonality period: 24
+    Has trend: False
+    Is stationary: True
+
+  H365:
     Recommended generator: SeasonalGenerator
     Has seasonality: True
     Seasonality period: 24
@@ -317,20 +317,20 @@ print(
 ```
 
 ```shell
-Detailed comparison for series: H144
+Detailed comparison for series: H307
 
 Statistic           Original Synthetic (avg)     Diff %   Source  
 ------------------------------------------------------------------
-mean                551.3262        551.3307       0.0%   pinned  
-std                 382.3467        382.3399       0.0%   pinned  
-min                  12.0000       -946.5067    7987.6%   free    
-max                1673.0000       1579.6324       5.6%   free    
-range              1661.0000       2526.1390      52.1%   free    
-cv                    0.6935          0.6935       0.0%   pinned  
-skewness              0.2819         -0.2291     181.3%   free    
-autocorr_lag1         0.9034          0.9334       3.3%   pinned  
+mean                 18.7514         18.7514       0.0%   pinned  
+std                   4.2094          4.2093       0.0%   pinned  
+min                  10.1000          4.3703      56.7%   free    
+max                  27.8000         27.2239       2.1%   free    
+range                17.7000         22.8536      29.1%   free    
+cv                    0.2245          0.2245       0.0%   pinned  
+skewness              0.0625         -0.5816    1031.0%   free    
+autocorr_lag1         0.9719          0.9961       2.5%   pinned  
 
-Correlation of each synthetic draw to the source series: -0.09, -0.11, 0.00
+Correlation of each synthetic draw to the source series: 0.55, 0.49, 0.54
 Low correlations confirm the synthetic series are independent draws that share the pinned statistics, not copies of the input.
 ```
 
@@ -384,21 +384,21 @@ print(
 ```
 
 ```shell
-  0%|          | 0.00/32.5M [00:00<?, ?iB/s] 22%|██▏       | 7.26M/32.5M [00:00<00:00, 72.6MiB/s] 45%|████▌     | 14.7M/32.5M [00:00<00:00, 73.4MiB/s] 68%|██████▊   | 22.0M/32.5M [00:00<00:00, 73.4MiB/s] 91%|█████████ | 29.5M/32.5M [00:00<00:00, 74.2MiB/s]37.0MiB [00:00, 73.8MiB/s]                           44.3MiB [00:00, 73.1MiB/s]51.7MiB [00:00, 73.2MiB/s]59.3MiB [00:00, 74.1MiB/s]66.7MiB [00:00, 73.0MiB/s]74.2MiB [00:01, 73.7MiB/s]81.6MiB [00:01, 73.5MiB/s]89.0MiB [00:01, 73.3MiB/s]95.8MiB [00:01, 73.6MiB/s]
+  0%|          | 0.00/32.5M [00:00<?, ?iB/s] 29%|██▉       | 9.56M/32.5M [00:00<00:00, 95.6MiB/s] 64%|██████▍   | 20.9M/32.5M [00:00<00:00, 106MiB/s] 32.6MiB [00:00, 111MiB/s]                           43.7MiB [00:00, 111MiB/s]54.8MiB [00:00, 106MiB/s]65.4MiB [00:00, 103MiB/s]75.9MiB [00:00, 104MiB/s]86.4MiB [00:00, 104MiB/s]95.8MiB [00:00, 106MiB/s]
 INFO:datasetsforecast.utils:Successfully downloaded Daily-train.csv, 95765153, bytes.
-  0%|          | 0.00/198k [00:00<?, ?iB/s]576kiB [00:00, 32.6MiB/s]                  
+  0%|          | 0.00/198k [00:00<?, ?iB/s]576kiB [00:00, 20.2MiB/s]                  
 INFO:datasetsforecast.utils:Successfully downloaded Daily-test.csv, 576459, bytes.
 ```
 
 ```shell
 Loaded 4227 daily series from M4
-Using 4 series: ['D1215', 'D3868', 'D3423', 'D1859']
+Using 4 series: ['D1126', 'D292', 'D3467', 'D3895']
 
 Analysis results:
-  D1215: FractionalBrownianMotionGenerator
-  D3868: RandomWalkGenerator
-  D3423: GARCHGenerator
-  D1859: GeometricBrownianMotionGenerator
+  D1126: SARIMAGenerator
+  D292: RandomWalkGenerator
+  D3467: RandomWalkGenerator
+  D3895: FractionalBrownianMotionGenerator
 
 Augmented from 4 to 12 series
 ```
@@ -498,14 +498,14 @@ print(
 
 ```shell
 Original series (5 series):
-  Mean of means: 175.2437 (std: 210.1079)
-  Mean of stds:  130.3940 (std: 157.5724)
-  Mean autocorr: 0.8746 (std: 0.0858)
+  Mean of means: 42.0166 (std: 30.7581)
+  Mean of stds:  21.4136 (std: 21.6581)
+  Mean autocorr: 0.9069 (std: 0.0890)
 
 Synthetic series (15 series):
-  Mean of means: 175.2455 (std: 210.1099)
-  Mean of stds:  130.3943 (std: 157.5715)
-  Mean autocorr: 0.9418 (std: 0.0417)
+  Mean of means: 42.0164 (std: 30.7577)
+  Mean of stds:  21.4142 (std: 21.6589)
+  Mean autocorr: 0.9641 (std: 0.0404)
 ```
 
 ```python
@@ -564,15 +564,15 @@ print(f"  Mean: {lengths['length'].mean():.1f}")
 
 ```shell
 Original training set: 10 series
-Total observations: 9300
+Total observations: 8520
 
 Expanded training set: 60 series
-Total observations: 55800
+Total observations: 51120
 Expansion factor: 6.0x
 
 Series length distribution:
   Min: 748, Max: 1008
-  Mean: 930.0
+  Mean: 852.0
 ```
 
 ## A non-duplication check
@@ -636,8 +636,8 @@ plt.show()
 ```
 
 ```shell
-closest pair of REAL series:          z-distance 0.12
-every synthetic to its NEAREST real:  z-distance >= 1.06
+closest pair of REAL series:          z-distance 0.08
+every synthetic to its NEAREST real:  z-distance >= 0.89
 synthetic closer to a real than the closest real-real pair: 0 / 15
 ```
 

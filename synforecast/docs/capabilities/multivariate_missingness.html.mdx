@@ -61,13 +61,13 @@ Total observations: 600
 |-----------|---------------------|-----------|
 | cat       | datetime\[ns\]      | f64       |
 | "0"       | 2000-01-01 00:00:00 | 2.057667  |
-| "0"       | 2000-01-02 00:00:00 | 0.295293  |
+| "0"       | 2000-01-02 00:00:00 | NaN       |
 | "0"       | 2000-01-03 00:00:00 | 0.893053  |
 | "0"       | 2000-01-04 00:00:00 | 0.235888  |
-| "0"       | 2000-01-05 00:00:00 | NaN       |
+| "0"       | 2000-01-05 00:00:00 | 1.876363  |
 | …         | …                   | …         |
 | "0"       | 2000-01-26 00:00:00 | 0.474074  |
-| "0"       | 2000-01-27 00:00:00 | NaN       |
+| "0"       | 2000-01-27 00:00:00 | -2.672011 |
 | "0"       | 2000-01-28 00:00:00 | 0.068059  |
 | "0"       | 2000-01-29 00:00:00 | NaN       |
 | "0"       | 2000-01-30 00:00:00 | -0.438549 |
@@ -151,9 +151,9 @@ Missing blocks of size: 7 days
 | …         | …                   | …         |
 | "0"       | 2000-02-05 00:00:00 | 0.293606  |
 | "0"       | 2000-02-06 00:00:00 | 0.504607  |
-| "0"       | 2000-02-07 00:00:00 | NaN       |
-| "0"       | 2000-02-08 00:00:00 | NaN       |
-| "0"       | 2000-02-09 00:00:00 | NaN       |
+| "0"       | 2000-02-07 00:00:00 | 0.39023   |
+| "0"       | 2000-02-08 00:00:00 | 0.787069  |
+| "0"       | 2000-02-09 00:00:00 | 0.923599  |
 
 ```python
 print("Block missing statistics by series:")
@@ -180,9 +180,9 @@ for series_id in df_copula["unique_id"].unique().sort():
 
 ```shell
 Block missing statistics by series:
-  0: 33 missing (16.5%), max block: 12 days
+  0: 31 missing (15.5%), max block: 10 days
   1: 35 missing (17.5%), max block: 7 days
-  2: 30 missing (15.0%), max block: 9 days
+  2: 35 missing (17.5%), max block: 7 days
 ```
 
 ```python
@@ -244,8 +244,8 @@ Generated 2 correlated series (1 year)
 Seasonal period: 7 days (weekly)
 
 Seasonal missing statistics:
-  0: 44 missing (12.1%)
-  1: 46 missing (12.6%)
+  0: 34 missing (9.3%)
+  1: 37 missing (10.1%)
 ```
 
 | unique_id | ds                  | y         |
@@ -253,7 +253,7 @@ Seasonal missing statistics:
 | cat       | datetime\[ns\]      | f64       |
 | "0"       | 2000-01-01 00:00:00 | 0.891458  |
 | "0"       | 2000-01-02 00:00:00 | -1.258571 |
-| "0"       | 2000-01-03 00:00:00 | NaN       |
+| "0"       | 2000-01-03 00:00:00 | -0.900947 |
 | "0"       | 2000-01-04 00:00:00 | -0.421688 |
 | "0"       | 2000-01-05 00:00:00 | -0.204434 |
 | …         | …                   | …         |
@@ -261,7 +261,7 @@ Seasonal missing statistics:
 | "0"       | 2000-01-27 00:00:00 | 2.656017  |
 | "0"       | 2000-01-28 00:00:00 | 0.936677  |
 | "0"       | 2000-01-29 00:00:00 | 1.093172  |
-| "0"       | 2000-01-30 00:00:00 | -0.687454 |
+| "0"       | 2000-01-30 00:00:00 | NaN       |
 
 ```python
 fig, ax = plt.subplots(figsize=(12, 4))
@@ -337,7 +337,7 @@ print(f"Correlation preserved:       {abs(corr_complete - corr_missing) < 0.1}")
 
 ```shell
 Correlation (complete data): 0.069
-Correlation (25% missing):   0.041
+Correlation (25% missing):   0.010
 Correlation preserved:       True
 ```
 

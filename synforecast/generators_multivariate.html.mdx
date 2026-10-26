@@ -209,6 +209,11 @@ Kernels (r = |t - t'|, l = length_scale, a = amplitude):
     - periodic: ``a^2 exp(-2 sin^2(pi r / period) / l^2)`` — exact
       periodicity
 
+The periodic kernel is sampled exactly: one period by circulant FFT for an
+integer period up to ``4 * max(length, 1024)``, otherwise its cosine
+series, or Durbin-Levinson for very short length scales. The other kernels
+use FFT circulant embedding.
+
 **Parameters:**
 
 Name | Type | Description | Default
@@ -218,7 +223,7 @@ Name | Type | Description | Default
 `amplitude` | <code>[float](#float)</code> | Signal amplitude / output scale (default: 1.0). | *required*
 `period` | <code>[float](#float)</code> | Period for the periodic kernel (default: 50.0). | *required*
 `mean` | <code>[float](#float)</code> | Mean function value (default: 0.0). | *required*
-`noise_variance` | <code>[float](#float)</code> | Observation noise variance, also acts as jitter for the Cholesky factorization (default: 1e-6). | *required*
+`noise_variance` | <code>[float](#float)</code> | Variance of independent observation noise added to each point (default: 1e-6). | *required*
 
 #### `GaussianProcessGenerator.generate_single_series`
 

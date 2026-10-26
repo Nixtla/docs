@@ -138,11 +138,11 @@ for series_id, info in analysis.items():
 ```shell
 Analysis results for each series:
 
-  seasonal:
-    Recommended generator: SeasonalGenerator
-    Has seasonality: True
-    Has trend: False
-    Is stationary: True
+  random_walk:
+    Recommended generator: RandomWalkGenerator
+    Has seasonality: False
+    Has trend: True
+    Is stationary: False
     Is intermittent: False
 
   intermittent:
@@ -152,11 +152,11 @@ Analysis results for each series:
     Is stationary: True
     Is intermittent: True
 
-  random_walk:
-    Recommended generator: RandomWalkGenerator
-    Has seasonality: False
-    Has trend: True
-    Is stationary: False
+  seasonal:
+    Recommended generator: SeasonalGenerator
+    Has seasonality: True
+    Has trend: False
+    Is stationary: True
     Is intermittent: False
 ```
 
@@ -359,11 +359,11 @@ mixed.filter(pl.col("unique_id") == mixup_ids[0]).head()
 | unique_id | ds                  | y        |
 |-----------|---------------------|----------|
 | cat       | datetime\[ns\]      | f64      |
-| "mixup_0" | 2000-01-01 00:00:00 | 0.388051 |
-| "mixup_0" | 2000-01-01 01:00:00 | 0.405526 |
-| "mixup_0" | 2000-01-01 02:00:00 | 0.565628 |
-| "mixup_0" | 2000-01-01 03:00:00 | 0.651099 |
-| "mixup_0" | 2000-01-01 04:00:00 | 0.666551 |
+| "mixup_2" | 2000-01-01 00:00:00 | 0.767863 |
+| "mixup_2" | 2000-01-01 01:00:00 | 0.797189 |
+| "mixup_2" | 2000-01-01 02:00:00 | 0.859291 |
+| "mixup_2" | 2000-01-01 03:00:00 | 0.870587 |
+| "mixup_2" | 2000-01-01 04:00:00 | 0.86152  |
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(13, 4), sharex=True)
