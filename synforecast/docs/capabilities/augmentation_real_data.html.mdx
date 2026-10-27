@@ -57,7 +57,7 @@ def compute_series_stats(values: np.ndarray) -> dict:
 
 
 # Statistics SynAugment matches to the source series by construction (via the
-# rescaling step in SynAugment._match_autocorrelation). A small difference here
+# rescaling step in synforecast.augment._match_autocorrelation). A small difference here
 # is expected and is not evidence of augmentation quality.
 PINNED_STATS = {"mean", "std", "cv", "autocorr_lag1"}
 

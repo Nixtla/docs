@@ -1,23 +1,28 @@
 ---
-title: 'SynAugment: data augmentation'
+title: Data augmentation
 ---
 
-`SynAugment` expands a panel of real series with synthetic look-alikes.
-For each input series it detects the pattern (seasonality, trend,
-stationarity), picks a matching generator, fits its parameters, and
-draws new series that share the original’s statistical fingerprint — a
-cheap way to give a global model more to learn from.
+Augmentation specs (`FitAndSimulate`, `Mixup`, `MovingBlockBootstrap`,
+`DBA`) expand a panel of real series with synthetic look-alikes — a
+cheap way to give a global model more to learn from. `FitAndSimulate`
+detects each series’ pattern (seasonality, trend, stationarity), picks a
+matching generator, fits its parameters, and draws new series that share
+the original’s statistical fingerprint; the other three resample, blend
+or average the real series themselves. Each spec is frozen and seeded:
+`Spec(seed=...).apply(df)` always returns the same output. `SynAugment`
+remains as a convenience facade with the same methods (`augment`,
+`mixup`, `mbb`, `dba`).
 
 > **Four augmentation strategies**
 >
-> -   **`augment`** (this guide) — fit a generator per series and draw
->     statistically similar copies.
-> -   **[`mixup`](#tsmixup-convex-combinations-of-real-series)** — blend
+> -   **`FitAndSimulate`** (this guide) — fit a generator per series and
+>     draw statistically similar copies.
+> -   **[`Mixup`](#tsmixup-convex-combinations-of-real-series)** — blend
 >     several real series with convex weights (TSMixup), covered at the
 >     end.
-> -   **[`mbb`](./nonparametric_augmentation.html)** — resample blocks
->     from each series’ decomposed remainder.
-> -   **[`dba`](./nonparametric_augmentation.html)** — build randomized
+> -   **[`MovingBlockBootstrap`](./nonparametric_augmentation.html)** —
+>     resample blocks from each series’ decomposed remainder.
+> -   **[`DBA`](./nonparametric_augmentation.html)** — build randomized
 >     DTW barycenters from nearby panel series.
 >
 > Fit augmentation on the **training split only** — fitting on
@@ -28,7 +33,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import polars as pl
 
-from synforecast import SynAugment
+from synforecast import FitAndSimulate, Mixup
+from synforecast.augment import analyze
 from synforecast.generators import RandomWalkGenerator, SeasonalGenerator
 ```
 
@@ -55,8 +61,7 @@ df = pl.DataFrame(
 
 print(f"Original dataset: {len(df)} rows, {df['unique_id'].n_unique()} series")
 
-augmenter = SynAugment(seed=42)
-augmented_df = augmenter.augment(df, n_augment=3)
+augmented_df = FitAndSimulate(seed=42, n_augment=3).apply(df)
 
 print(
     f"Augmented dataset: {len(augmented_df)} rows, {augmented_df['unique_id'].n_unique()} series"
@@ -90,7 +95,7 @@ plt.show()
 
 ## Analyzing series before augmentation
 
-SynAugment analyzes each series to detect its properties and recommend
+`analyze` examines each series to detect its properties and recommend
 the best generator.
 
 ```python
@@ -121,8 +126,7 @@ multi_df = pl.DataFrame(
     }
 )
 
-augmenter = SynAugment(seed=42)
-analysis = augmenter.analyze(multi_df)
+analysis = analyze(multi_df)
 
 print("Analysis results for each series:")
 for series_id, info in analysis.items():
@@ -138,6 +142,13 @@ for series_id, info in analysis.items():
 ```shell
 Analysis results for each series:
 
+  seasonal:
+    Recommended generator: SeasonalGenerator
+    Has seasonality: True
+    Has trend: False
+    Is stationary: True
+    Is intermittent: False
+
   random_walk:
     Recommended generator: RandomWalkGenerator
     Has seasonality: False
@@ -151,13 +162,6 @@ Analysis results for each series:
     Has trend: False
     Is stationary: True
     Is intermittent: True
-
-  seasonal:
-    Recommended generator: SeasonalGenerator
-    Has seasonality: True
-    Has trend: False
-    Is stationary: True
-    Is intermittent: False
 ```
 
 ```python
@@ -181,14 +185,14 @@ Override the auto-detected generator for specific series when you want
 to use a particular model.
 
 ```python
-augmented_override = augmenter.augment(
-    multi_df,
+augmented_override = FitAndSimulate(
+    seed=42,
     n_augment=1,
     generator_override={
         "seasonal": "SARIMAGenerator",
         "random_walk": "FractionalBrownianMotionGenerator",
     },
-)
+).apply(multi_df)
 
 print(f"Augmented with overrides: {augmented_override['unique_id'].n_unique()} series")
 unique_ids = sorted(augmented_override["unique_id"].unique().to_list())
@@ -207,7 +211,7 @@ the original.
 
 ```python
 rw_df = df.clone()
-augmented = augmenter.augment(rw_df, n_augment=5)
+augmented = FitAndSimulate(seed=42, n_augment=5).apply(rw_df)
 
 original = augmented.filter(pl.col("unique_id") == "series_0")
 print(f"Original series (series_0):")
@@ -230,11 +234,11 @@ Original series (series_0):
   Max:  2.3403
 
 Synthetic series:
-  series_0_aug_0: mean=-2.6977, std=2.0971
-  series_0_aug_1: mean=-2.6973, std=2.0972
-  series_0_aug_2: mean=-2.6975, std=2.0969
-  series_0_aug_3: mean=-2.6970, std=2.0969
-  series_0_aug_4: mean=-2.6976, std=2.0970
+  series_0_aug_0: mean=-2.6976, std=2.0973
+  series_0_aug_1: mean=-2.6975, std=2.0970
+  series_0_aug_2: mean=-2.6973, std=2.0970
+  series_0_aug_3: mean=-2.6977, std=2.0971
+  series_0_aug_4: mean=-2.6973, std=2.0972
 ```
 
 ```python
@@ -291,8 +295,7 @@ combined_df = pl.concat([rw_df, seasonal_df])
 print(f"Generated dataset: {combined_df['unique_id'].n_unique()} series")
 print(f"Series IDs: {sorted(combined_df['unique_id'].unique().to_list())}")
 
-augmenter = SynAugment(seed=42)
-augmented_combined = augmenter.augment(combined_df, n_augment=2)
+augmented_combined = FitAndSimulate(seed=42, n_augment=2).apply(combined_df)
 
 print(f"\nAfter augmentation: {augmented_combined['unique_id'].n_unique()} series")
 print(f"Series IDs: {sorted(augmented_combined['unique_id'].unique().to_list())}")
@@ -326,12 +329,13 @@ plt.show()
 
 ## TSMixup: convex combinations of real series
 
-`SynAugment.mixup` implements TSMixup, the augmentation used to pretrain
-the Chronos models (Ansari et al. 2024). Each synthetic series is a
-convex combination of a random window from `1..max_mix` source series,
-weighted by a `Dirichlet(alpha)` draw. Unlike `augment`, which fits one
-generator per series, a mixup series blends the dynamics of several — a
-cheap way to broaden a small panel without fitting any model.
+`Mixup` (also `SynAugment.mixup`) implements TSMixup, the augmentation
+used to pretrain the Chronos models (Ansari et al. 2024). Each synthetic
+series is a convex combination of a random window from `1..max_mix`
+source series, weighted by a `Dirichlet(alpha)` draw. Unlike
+`FitAndSimulate`, which fits one generator per series, a mixup series
+blends the dynamics of several — a cheap way to broaden a small panel
+without fitting any model.
 
 The blend lives in scaled space: sources are normalized before mixing
 (`scaling="mean"` divides by the mean absolute value, the Chronos
@@ -340,7 +344,7 @@ source’s level. Use `scaling="none"` when the series already share a
 scale.
 
 ```python
-mixed = SynAugment(seed=0).mixup(combined_df, n_series=6, max_mix=3, scaling="mean")
+mixed = Mixup(seed=0, n_series=6, max_mix=3, scaling="mean").apply(combined_df)
 
 mixup_ids = [
     u for u in mixed["unique_id"].unique().to_list() if str(u).startswith("mixup_")
@@ -359,11 +363,11 @@ mixed.filter(pl.col("unique_id") == mixup_ids[0]).head()
 | unique_id | ds                  | y        |
 |-----------|---------------------|----------|
 | cat       | datetime\[ns\]      | f64      |
-| "mixup_2" | 2000-01-01 00:00:00 | 0.767863 |
-| "mixup_2" | 2000-01-01 01:00:00 | 0.797189 |
-| "mixup_2" | 2000-01-01 02:00:00 | 0.859291 |
-| "mixup_2" | 2000-01-01 03:00:00 | 0.870587 |
-| "mixup_2" | 2000-01-01 04:00:00 | 0.86152  |
+| "mixup_0" | 2000-01-01 00:00:00 | 0.388051 |
+| "mixup_0" | 2000-01-01 01:00:00 | 0.405526 |
+| "mixup_0" | 2000-01-01 02:00:00 | 0.565628 |
+| "mixup_0" | 2000-01-01 03:00:00 | 0.651099 |
+| "mixup_0" | 2000-01-01 04:00:00 | 0.666551 |
 
 ```python
 fig, axes = plt.subplots(1, 2, figsize=(13, 4), sharex=True)
@@ -385,7 +389,7 @@ plt.show()
 
 ![](./augmentation_files/figure-markdown_strict/cell-13-output-1.png)
 
-## Low-Level API - augment_single_series
+## Low-Level API - apply_series
 
 For fine-grained control, use the low-level API to augment individual
 series directly.
@@ -395,12 +399,10 @@ single_series = df.filter(pl.col("unique_id") == "series_0")
 values = single_series["y"].to_numpy()
 timestamps = single_series["ds"].to_numpy()
 
-augmenter = SynAugment(seed=42)
-augmented_tuples = augmenter.augment_single_series(
+augmented_tuples = FitAndSimulate(seed=42, n_augment=2).apply_series(
     series_id="my_series",
     values=values,
     timestamps=timestamps,
-    n_augment=2,
     generator_name=None,
 )
 
