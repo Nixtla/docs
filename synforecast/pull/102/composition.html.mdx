@@ -256,8 +256,11 @@ Draw one random calendar for a pretraining series.
 
 - mode: additive or multiplicative with equal probability; additive peaks
   (also used by multiplicative draws on series with negative values) are
-  log-uniform in [1, 8] standard deviations, multiplicative peaks uniform
-  in [0.2, 0.9] of the level;
+  log-uniform in [1.25, 10] standard deviations of the base series,
+  multiplicative peaks uniform in [0.2, 0.9] of the level. The additive
+  range is chosen so that, with changepoints and anomalies drawn after
+  the calendar, sub-daily draws keep the daily seasonal strength of the
+  first version of this prior, which added the calendar last;
 - time of day: a Fourier profile of 1-5 harmonics, drawn per series;
 - day of week: none with probability 0.3, otherwise weekday levels with a
   weekend contrast of random sign and size uniform in [0.5, 1.5] (drawn
