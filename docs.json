@@ -202,6 +202,7 @@
               "mlforecast/docs/how-to-guides/one_model_per_horizon.html",
               "mlforecast/docs/how-to-guides/custom_date_features.html",
               "mlforecast/docs/how-to-guides/predict_callbacks.html",
+              "mlforecast/docs/how-to-guides/profiling.html",
               "mlforecast/docs/how-to-guides/predict_subset.html",
               "mlforecast/docs/how-to-guides/transfer_learning.html"
             ]
@@ -234,7 +235,8 @@
                   "mlforecast/lag_transforms.html",
                   "mlforecast/date_features.html",
                   "mlforecast/feature_engineering.html",
-                  "mlforecast/callbacks.html"
+                  "mlforecast/callbacks.html",
+                  "mlforecast/hooks.html"
                 ]
               },
               {
