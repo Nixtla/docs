@@ -26,6 +26,7 @@ then returns a panel you can hand straight to any Nixtla forecaster.
 
 ```python
 from synforecast import generate_series
+from synforecast import Anomalies, Changepoints, Missing, OverlayConfig
 
 panel = generate_series(
     n_series=6,
@@ -169,17 +170,14 @@ messy = RandomWalkGenerator(
     freq="D",
     start_value=100.0,
     seed=42,
-    # spikes and dips
-    anomalies=True,
-    anomaly_fraction=0.03,
-    anomaly_types=["spike", "dip"],
-    # abrupt level shifts
-    changepoints=True,
-    num_changepoints=2,
-    changepoint_type="level",
-    # gaps
-    missing_data=True,
-    missing_rate=0.02,
+    overlays=OverlayConfig(
+        # spikes and dips
+        anomalies=Anomalies(types=["spike", "dip"], fraction=0.03),
+        # abrupt level shifts
+        changepoints=Changepoints(count=2, kind="level"),
+        # gaps
+        missing=Missing(rate=0.02),
+    ),
 )
 plot_panel(
     messy.generate(n_series=1),

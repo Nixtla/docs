@@ -78,7 +78,8 @@ Name | Type | Description | Default
 
 Type | Description
 ---- | -----------
-<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | DataFrame containing all generated time series from all generators, in long format with columns [id_col, time_col, target_col].
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | DataFrame containing all generated time series from all generators, in long format with columns [id_col, time_col, target_col],
+<code>[IntoFrameT](#narwhals.stable.v2.typing.IntoFrameT)</code> | plus any extra column a generator adds (exogenous, flag or event columns), null for series from generators without it.
 
 <details class="notes" open markdown="1">
 <summary>Notes</summary>

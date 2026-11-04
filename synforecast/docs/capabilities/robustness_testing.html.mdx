@@ -24,6 +24,7 @@ from utilsforecast.losses import mase
 
 from synforecast.exogenous import ExogenousConfig
 from synforecast.generators import SeasonalGenerator
+from synforecast import Anomalies, OverlayConfig
 
 
 def robust_zscores(y: np.ndarray, window: int = 25) -> np.ndarray:
@@ -55,8 +56,14 @@ panel = SeasonalGenerator(
     engine='polars', min_length=400, max_length=400, freq='D',
     seasonality_period=7, seasonality_amplitude=8.0, base_level=100.0,
     noise_level=2.0,
-    anomalies=True, anomaly_fraction=0.04, anomaly_types=['spike', 'dip'],
-    spike_magnitude=30.0, dip_magnitude=-30.0,
+    overlays=OverlayConfig(
+        anomalies=Anomalies(
+            types=['spike', 'dip'],
+            fraction=0.04,
+            spike_magnitude=30.0,
+            dip_magnitude=-30.0,
+        ),
+    ),
     exogenous=FLAGS, seed=7,
 ).generate(n_series=25)
 

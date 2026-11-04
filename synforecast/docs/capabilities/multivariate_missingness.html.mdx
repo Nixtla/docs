@@ -23,6 +23,8 @@ import numpy as np
 import polars as pl
 
 from synforecast.generators import CopulaGenerator, VARGenerator
+from synforecast import Missing, OverlayConfig
+
 ```
 
 ## VAR generator with random missing data
@@ -36,9 +38,9 @@ var_params = {
     "max_length": 200,
     "freq": "D",
     "lag_order": 1,
-    "missing_data": True,
-    "missing_pattern": "random",
-    "missing_rate": 0.15,
+    "overlays": OverlayConfig(
+        missing=Missing(pattern="random", rate=0.15),
+    ),
     "seed": 42,
 }
 
@@ -118,10 +120,9 @@ copula_params = {
     "freq": "D",
     "copula_type": "gaussian",
     "correlation_matrix": correlation_matrix,
-    "missing_data": True,
-    "missing_pattern": "block",
-    "missing_rate": 0.2,
-    "missing_block_size": 7,
+    "overlays": OverlayConfig(
+        missing=Missing(pattern="block", rate=0.2, block_size=7),
+    ),
     "seed": 123,
 }
 
@@ -131,7 +132,7 @@ df_copula = copula_gen.generate(n_series=3)
 print(
     f"Generated {df_copula['unique_id'].n_unique()} correlated series with Gaussian copula"
 )
-print(f"Missing blocks of size: {copula_params['missing_block_size']} days")
+print(f"Missing blocks of size: {copula_params['overlays'].missing.block_size} days")
 df_copula.head(40)
 ```
 
@@ -211,10 +212,9 @@ var_seasonal_params = {
     "max_length": 365,
     "freq": "D",
     "lag_order": 2,
-    "missing_data": True,
-    "missing_pattern": "seasonal",
-    "missing_rate": 0.12,
-    "missing_seasonal_period": 7,
+    "overlays": OverlayConfig(
+        missing=Missing(pattern="seasonal", rate=0.12, seasonal_period=7),
+    ),
     "seed": 456,
 }
 
@@ -225,7 +225,7 @@ print(
     f"Generated {df_var_seasonal['unique_id'].n_unique()} correlated series (1 year)"
 )
 print(
-    f"Seasonal period: {var_seasonal_params['missing_seasonal_period']} days (weekly)"
+    f"Seasonal period: {var_seasonal_params['overlays'].missing.seasonal_period} days (weekly)"
 )
 
 print("\nSeasonal missing statistics:")
@@ -291,7 +291,6 @@ params_complete = {
     "max_length": 500,
     "freq": "D",
     "lag_order": 1,
-    "missing_data": False,
     "seed": 789,
 }
 
@@ -300,9 +299,9 @@ params_missing = {
     "max_length": 500,
     "freq": "D",
     "lag_order": 1,
-    "missing_data": True,
-    "missing_pattern": "random",
-    "missing_rate": 0.25,
+    "overlays": OverlayConfig(
+        missing=Missing(pattern="random", rate=0.25),
+    ),
     "seed": 789,
 }
 

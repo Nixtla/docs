@@ -143,7 +143,7 @@ future release.
 ### `pretraining_pool`
 
 ```python
-pretraining_pool(min_length=256, max_length=1024, freq='D', seed=42, include_interpretable=True, n_meta_variants=3, seasonal_period=None, include_seasonal=False, members=None, **base_kwargs)
+pretraining_pool(min_length=256, max_length=1024, freq='D', seed=42, include_interpretable=True, n_meta_variants=3, seasonal_period=None, include_seasonal=False, members=None, include_extended=False, overlay_seed=None, calendar_rate=0.0, observability_rate=0.0, **base_kwargs)
 ```
 
 Create a breadth-maximizing pool for foundation-model pretraining.
@@ -174,7 +174,11 @@ Name | Type | Description | Default
 `n_meta_variants` | <code>[int](#int)</code> | Number of independently-seeded instances of each meta-generator (default 3). More instances give the meta-generators a larger share when series are spread evenly across the pool, as in :func:`generate_series`. | <code>3</code>
 `seasonal_period` | <code>[int](#int) \| None</code> | Seasonal period for the seasonal variants of the included :func:`interpretable_pool` and :func:`seasonal_pool`. Defaults to None, which derives it from ``freq``. | <code>None</code>
 `include_seasonal` | <code>[bool](#bool)</code> | When True, append the eight :func:`seasonal_pool` instances (strong seasonality on a moving level) at the same period. Skipped with a warning when the period is below 2, as for yearly data. Recommended for regularly seasonal quarterly and monthly targets, where it raised feature-space coverage on every panel tested that had a seasonal gap to fill; it does not help intermittent monthly data, where displacing pool breadth cost about three points. Leave it off for weekly, daily, hourly, and intermittent targets. Default False. | <code>False</code>
-`members` | <code>[Iterable](#collections.abc.Iterable)[[int](#int)] \| None</code> | Indices of the pool entries to build, in the order given. Defaults to None, which builds the whole pool. Each selected instance is identical to the same entry of the full pool and the others are never constructed. Order: interpretable entries, then ``n_meta_variants`` each of TSI, TCM, KernelSynth and MAR, then seasonal entries. Entry seeds are ``seed`` plus a fixed offset, so for fresh draws reuse built members or give each rebuild a random 64-bit seed. Consecutive seeds alias: ``seed + 1`` rebuilds entries of ``seed`` under other indices, which repeats their series exactly. | <code>None</code>
+`members` | <code>[Iterable](#collections.abc.Iterable)[[int](#int)] \| None</code> | Indices of the pool entries to build, in the order given. Defaults to None, which builds the whole pool. Each selected instance is identical to the same entry of the full pool and the others are never constructed. Order: interpretable entries, then ``n_meta_variants`` each of TSI, TCM, KernelSynth and MAR, then seasonal entries, then extended entries. Entry seeds are ``seed`` plus a fixed offset, so for fresh draws reuse built members or give each rebuild a random 64-bit seed. Consecutive seeds alias: ``seed + 1`` rebuilds entries of ``seed`` under other indices, which repeats their series exactly. | <code>None</code>
+`include_extended` | <code>[bool](#bool)</code> | When True, append one instance of each univariate generator outside the interpretable and meta pools (Clickstream, DailyActiveUsers, GeometricBrownianMotion, HawkesProcess, JumpDiffusion, OrnsteinUhlenbeck, PoissonProcess, RandomWalk, Seasonal, StateSpace, StochasticVolatility), after all other entries so existing indices are unchanged. All use defaults except the two price processes, which step daily (``dt = 1/252``, and 25 jumps a year of log-size std 0.05 for JumpDiffusion) so long series stay bounded. Default False. | <code>False</code>
+`overlay_seed` | <code>[int](#int) \| None</code> | When set, each built entry gets the overlays that :func:`pretraining_overlays` draws from ``(overlay_seed, index)``, so a member built alone matches the full pool's entry. Drawn stages only fill the stages an entry leaves off, and entries that define their own changepoints or anomalies take no drawn ones. Default None, which adds no overlays. | <code>None</code>
+`calendar_rate` | <code>[float](#float)</code> | Probability that an entry also gets a calendar drawn by :func:`calendar_overlays` from its own stream of ``(overlay_seed, index)``, so pools at rate 0 are unchanged. Requires ``overlay_seed``. Default 0.0. | <code>0.0</code>
+`observability_rate` | <code>[float](#float)</code> | Probability that an entry gets a waveform and observation configuration drawn by :func:`observability_overlays` from its own stream of ``(overlay_seed, index)``, with periods up to a third of ``min_length`` (between 12 and 720 steps). The draw replaces the entry's drawn base weight, waveform, observation, changepoint, anomaly and missing-data stages. Pools at rate 0 are unchanged. Requires ``overlay_seed``. Default 0.0. | <code>0.0</code>
 `**base_kwargs` | <code>[Any](#typing.Any)</code> | Additional keyword arguments passed to all generators (e.g., engine, id_col, time_col, target_col). | <code>&#123;&#125;</code>
 
 **Returns:**
@@ -201,6 +205,142 @@ Type | Description
 >>> # Add the strongly seasonal instances for monthly targets
 >>> seasonal = pretraining_pool(freq="MS", include_seasonal=True)
 ```
+
+
+### `pretraining_overlays`
+
+```python
+pretraining_overlays(rng)
+```
+
+Draw one random overlay configuration for a pretraining series.
+
+Each overlay is switched on independently, so a series can combine a base
+mechanism with heavy-tailed noise, structural breaks, anomalies and gaps:
+
+- heavy-tailed innovations (probability 0.3): Student's t with
+  ``df ~ U(2.5, 8)``, Laplace, or skew-normal with ``alpha ~ U(-6, 6)``;
+- changepoints (0.3): 1-3 breaks of type level, trend, variance or mixed,
+  with relative magnitudes;
+- anomalies (0.25): a non-empty subset of spike, dip and level shift at a
+  log-uniform fraction in [0.002, 0.03]; spikes and dips of 3-10 standard
+  deviations, level shifts of 1-4 standard deviations lasting 5-50 steps;
+- missing data (0.1): a random or block pattern at a rate in [0.02, 0.2]
+  with blocks of 2-20 steps.
+
+Changepoint and anomaly magnitudes use ``scale="relative"`` so they are
+sized on each series. Innovation settings only affect generators that draw
+innovations; the others ignore them.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`rng` | <code>[Generator](#numpy.random.Generator)</code> | Random stream that determines the configuration. | *required*
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[dict](#dict)[[str](#str), [Any](#typing.Any)]</code> | Generator keyword arguments: innovation settings and an ``overlays``
+<code>[dict](#dict)[[str](#str), [Any](#typing.Any)]</code> | class:`~synforecast.overlays.OverlayConfig`; empty when nothing is drawn.
+
+
+### `calendar_overlays`
+
+```python
+calendar_overlays(rng)
+```
+
+Draw one random calendar for a pretraining series.
+
+- mode: additive or multiplicative with equal probability; additive peaks
+  (also used by multiplicative draws on series with negative values) are
+  log-uniform in [1.25, 10] standard deviations of the base series,
+  multiplicative peaks uniform in [0.2, 0.9] of the level. The additive
+  range is chosen so that, with changepoints and anomalies drawn after
+  the calendar, sub-daily draws keep the daily seasonal strength of the
+  first version of this prior, which added the calendar last;
+- time of day: a Fourier profile of 1-5 harmonics, drawn per series;
+- day of week: none with probability 0.3, otherwise weekday levels with a
+  weekend contrast of random sign and size uniform in [0.5, 1.5] (drawn
+  per call) plus per-series noise of standard deviation 0.25, weighted
+  log-uniform in [0.2, 2] relative to the time of day.
+
+Cycles that cannot show at the generator's frequency are skipped
+silently: on daily data only the weekday cycle remains, and coarser data
+gets no calendar.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`rng` | <code>[Generator](#numpy.random.Generator)</code> | Random stream that determines the configuration. | *required*
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[Calendar](#synforecast.overlays.Calendar)</code> | The calendar, for ``OverlayConfig(calendar=...)``.
+
+
+### `observability_overlays`
+
+```python
+observability_overlays(rng, max_period=720)
+```
+
+Draw one random waveform and observation configuration for a pretraining series.
+
+Targets observability-style data: sharp-edged periodic templates (square
+pulses, spikes, ramp-and-reset, trapezoids) and piecewise-constant,
+quantized dynamics (level switching, staircases, floors with bursts,
+saturation, held readings). Each draw is one of three components:
+
+- clean (probability 0.4): the waveform over a base weight of 0 (a
+  quarter of clean draws) or log-uniform in [0.01, 0.1], so the template
+  dominates; quantized with probability 0.5; no changepoints, anomalies
+  or missing data;
+- mild (0.35): the clean setup plus one or two perturbations drawn from:
+  a re-weighted base (uniform in [0.3, 1]), quantization, saturation,
+  sample-and-hold, frozen windows, anomalies and missing data;
+- layered (0.25): a base weight uniform in [0.5, 1], changepoints,
+  anomalies, at least one observation effect (each of saturation,
+  quantization, sample-and-hold and frozen windows with probability 0.5)
+  and missing data with probability 0.5.
+
+The waveform: shape pulse 0.25, spike 0.2, sawtooth 0.15, trapezoid 0.15,
+levels 0.15, staircase 0.1; period log-uniform in [12, ``max_period``]
+steps; timing periodic 0.5, jittered 0.25 (standard deviation 1-10% of
+the period), renewal 0.25 (gamma or lognormal durations, coefficient of
+variation uniform in [0.2, 1]); duty log-uniform in [0.01, 0.5]; spikes
+1-3 steps wide; 2-6 levels; peaks 0.7, dips 0.3; additive 0.75 with peaks
+log-uniform in [1, 8] standard deviations, otherwise multiplicative with
+swing uniform in [0.3, 0.9]. Observation effects: saturation below a
+floor in [0.02, 0.3] and/or above a cap in [0.7, 0.98] of the way from
+the series' minimum to its maximum, a grid step log-uniform in
+[0.02, 0.5] standard deviations, holds of 2-10 steps (at most the
+nominal on-time of a pulse), and frozen windows covering about 2-20% of
+the series, with mean length 5-100 steps.
+
+Changepoint and anomaly magnitudes are relative, as in
+:func:`pretraining_overlays`. The returned config sets every stage it
+draws and leaves the others off, so it replaces the waveform, base
+weight, observation, changepoint, anomaly and missing-data stages of a
+:func:`pretraining_overlays` draw.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`rng` | <code>[Generator](#numpy.random.Generator)</code> | Random stream that determines the configuration. | *required*
+`max_period` | <code>[int](#int)</code> | Longest waveform period in steps, at least 12. Pass about a third of the shortest series so most draws show three cycles. | <code>720</code>
+
+**Returns:**
+
+Type | Description
+---- | -----------
+<code>[OverlayConfig](#synforecast.overlays.OverlayConfig)</code> | The drawn stages; the calendar is left off.
 
 
 ### `seasonal_pool`
@@ -313,6 +453,7 @@ Name | Type | Description | Default
 `mixing_strength_range` | <code>[tuple](#tuple)[[float](#float), [float](#float)]</code> | Range for the mixing strength s in [0, 1); s scales the induced cotemporaneous cross-correlations (default: (0.2, 0.9)). | *required*
 `lag_range` | <code>[tuple](#tuple)[[int](#int), [int](#int)]</code> | Inclusive range for lead-lag offsets in time steps (default: (1, 24)). | *required*
 `noise_scale_range` | <code>[tuple](#tuple)[[float](#float), [float](#float)]</code> | Range for the lead-lag perturbation noise std, relative to the unit-variance standardized channels (default: (0.02, 0.2)). | *required*
+`apply_overlays` | <code>[bool](#bool)</code> | Draw the wrapped generator's ``overlays`` on each coupled channel, after the level and scale restore (default: False, which keeps channels free of overlays as before). | *required*
 `seed` | <code>[int](#int) \| None</code> | Random seed for reproducibility (default: None). | *required*
 
 <details class="example" open markdown="1">

@@ -669,6 +669,7 @@
               "synforecast/composition.html",
               "synforecast/core.html",
               "synforecast/exogenous.html",
+              "synforecast/overlays.html",
               "synforecast/dataset.html",
               "synforecast/evaluation.html",
               "synforecast/generators_statistical.html",

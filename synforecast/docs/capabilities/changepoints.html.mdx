@@ -25,6 +25,7 @@ import polars as pl
 
 from synforecast.exogenous import ExogenousConfig
 from synforecast.generators import RandomWalkGenerator, SeasonalGenerator, VARGenerator
+from synforecast import Anomalies, Changepoints, Missing, OverlayConfig
 
 FLAGS = ExogenousConfig(changepoint_flags=True)
 
@@ -58,11 +59,14 @@ level_df = RandomWalkGenerator(
     freq="D",
     drift=0.1,
     volatility=2.0,
-    changepoints=True,
-    num_changepoints=3,
-    changepoint_type="level",
-    changepoint_level_changes=[50.0, -30.0, 40.0],
-    changepoint_locations=[0.2, 0.5, 0.8],
+    overlays=OverlayConfig(
+        changepoints=Changepoints(
+            count=3,
+            kind="level",
+            locations=[0.2, 0.5, 0.8],
+            level_changes=[50.0, -30.0, 40.0],
+        ),
+    ),
     exogenous=FLAGS,
     seed=42,
 ).generate(n_series=1)
@@ -90,11 +94,14 @@ trend_df = SeasonalGenerator(
     seasonality_period=7,
     seasonality_amplitude=10.0,
     base_level=100.0,
-    changepoints=True,
-    num_changepoints=2,
-    changepoint_type="trend",
-    changepoint_trend_changes=[0.3, -0.2],
-    changepoint_locations=[0.3, 0.7],
+    overlays=OverlayConfig(
+        changepoints=Changepoints(
+            count=2,
+            kind="trend",
+            locations=[0.3, 0.7],
+            trend_changes=[0.3, -0.2],
+        ),
+    ),
     exogenous=FLAGS,
     seed=42,
 ).generate(n_series=1)
@@ -117,11 +124,14 @@ variance_df = RandomWalkGenerator(
     freq="D",
     drift=0.05,
     volatility=2.0,
-    changepoints=True,
-    num_changepoints=2,
-    changepoint_type="variance",
-    changepoint_variance_changes=[2.0, 0.5],
-    changepoint_locations=[0.33, 0.67],
+    overlays=OverlayConfig(
+        changepoints=Changepoints(
+            count=2,
+            kind="variance",
+            locations=[0.33, 0.67],
+            variance_changes=[2.0, 0.5],
+        ),
+    ),
     exogenous=FLAGS,
     seed=42,
 ).generate(n_series=1)
@@ -144,9 +154,9 @@ mixed_df = RandomWalkGenerator(
     freq="D",
     drift=0.1,
     volatility=2.0,
-    changepoints=True,
-    num_changepoints=4,
-    changepoint_type="mixed",
+    overlays=OverlayConfig(
+        changepoints=Changepoints(count=4, kind="mixed"),
+    ),
     exogenous=FLAGS,
     seed=42,
 ).generate(n_series=1)
@@ -168,11 +178,14 @@ var_df = VARGenerator(
     max_length=200,
     freq="D",
     lag_order=1,
-    changepoints=True,
-    num_changepoints=2,
-    changepoint_type="level",
-    changepoint_level_changes=[30.0, -20.0],
-    changepoint_locations=[0.3, 0.7],
+    overlays=OverlayConfig(
+        changepoints=Changepoints(
+            count=2,
+            kind="level",
+            locations=[0.3, 0.7],
+            level_changes=[30.0, -20.0],
+        ),
+    ),
     exogenous=FLAGS,
     seed=42,
 ).generate(n_series=3)
@@ -189,18 +202,16 @@ composed_df = RandomWalkGenerator(
     freq="D",
     drift=0.1,
     volatility=2.0,
-    changepoints=True,
-    num_changepoints=3,
-    changepoint_type="mixed",
-    changepoint_locations=[0.25, 0.5, 0.75],
-    anomalies=True,
-    anomaly_fraction=0.04,
-    anomaly_types=["spike", "dip"],
-    spike_magnitude=40.0,
-    dip_magnitude=-40.0,
-    missing_data=True,
-    missing_pattern="random",
-    missing_rate=0.05,
+    overlays=OverlayConfig(
+        changepoints=Changepoints(count=3, kind="mixed", locations=[0.25, 0.5, 0.75]),
+        anomalies=Anomalies(
+            types=["spike", "dip"],
+            fraction=0.04,
+            spike_magnitude=40.0,
+            dip_magnitude=-40.0,
+        ),
+        missing=Missing(pattern="random", rate=0.05),
+    ),
     exogenous=FLAGS,
     seed=42,
 ).generate(n_series=1)

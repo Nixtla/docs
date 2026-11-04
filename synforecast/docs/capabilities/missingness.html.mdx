@@ -24,6 +24,7 @@ import matplotlib.pyplot as plt
 import polars as pl
 
 from synforecast.generators import RandomWalkGenerator, SeasonalGenerator
+from synforecast import Missing, OverlayConfig
 
 
 def plot_missing(df, title):
@@ -58,9 +59,9 @@ random_df = RandomWalkGenerator(
     min_length=200,
     max_length=200,
     freq="D",
-    missing_data=True,
-    missing_pattern="random",
-    missing_rate=0.15,
+    overlays=OverlayConfig(
+        missing=Missing(pattern="random", rate=0.15),
+    ),
     seed=42,
 ).generate(n_series=1)
 print(f"target rate 15%, actual {missing_rate(random_df):.1%}")
@@ -85,10 +86,9 @@ block_df = RandomWalkGenerator(
     min_length=200,
     max_length=200,
     freq="D",
-    missing_data=True,
-    missing_pattern="block",
-    missing_rate=0.2,
-    missing_block_size=5,
+    overlays=OverlayConfig(
+        missing=Missing(pattern="block", rate=0.2, block_size=5),
+    ),
     seed=123,
 ).generate(n_series=1)
 print(f"target rate 20%, actual {missing_rate(block_df):.1%}, block size 5")
@@ -116,10 +116,9 @@ seasonal_df = SeasonalGenerator(
     seasonality_period=7,
     seasonality_amplitude=10.0,
     base_level=100.0,
-    missing_data=True,
-    missing_pattern="seasonal",
-    missing_rate=0.12,
-    missing_seasonal_period=7,
+    overlays=OverlayConfig(
+        missing=Missing(pattern="seasonal", rate=0.12, seasonal_period=7),
+    ),
     seed=456,
 ).generate(n_series=1)
 print(f"target rate 12%, actual {missing_rate(seasonal_df):.1%}")
@@ -167,13 +166,15 @@ gets its own independent gaps.
 for rate in (0.05, 0.15, 0.30):
     df = RandomWalkGenerator(
         engine="polars", min_length=300, max_length=300, freq="D",
-        missing_data=True, missing_pattern="random", missing_rate=rate, seed=789,
+        overlays=OverlayConfig(missing=Missing(pattern="random", rate=rate)),
+        seed=789,
     ).generate(n_series=1)
     print(f"target {rate:>4.0%}  ->  actual {missing_rate(df):.1%}")
 
 multi_df = RandomWalkGenerator(
     engine="polars", min_length=100, max_length=100, freq="D",
-    missing_data=True, missing_pattern="random", missing_rate=0.2, seed=1234,
+    overlays=OverlayConfig(missing=Missing(pattern="random", rate=0.2)),
+    seed=1234,
 ).generate(n_series=3)
 print("\nper-series missing rate:")
 print(

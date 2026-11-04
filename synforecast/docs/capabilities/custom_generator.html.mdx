@@ -32,6 +32,7 @@ import polars as pl
 from pydantic import Field
 
 from synforecast.base import BaseGenerator
+from synforecast import Anomalies, Changepoints, OverlayConfig
 
 
 class LogisticGrowthGenerator(BaseGenerator):
@@ -133,14 +134,15 @@ messy = LogisticGrowthGenerator(
     capacity=1000.0,
     growth_rate=0.08,
     noise_std=10.0,
-    anomalies=True,
-    anomaly_fraction=0.04,
-    anomaly_types=["spike", "dip"],
-    spike_magnitude=150.0,
-    dip_magnitude=-150.0,
-    changepoints=True,
-    num_changepoints=1,
-    changepoint_type="level",
+    overlays=OverlayConfig(
+        changepoints=Changepoints(count=1, kind="level"),
+        anomalies=Anomalies(
+            types=["spike", "dip"],
+            fraction=0.04,
+            spike_magnitude=150.0,
+            dip_magnitude=-150.0,
+        ),
+    ),
     exogenous=ExogenousConfig(anomaly_flags=True),
     engine="polars",
     seed=1,

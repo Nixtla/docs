@@ -25,6 +25,8 @@ import polars as pl
 
 from synforecast.exogenous import CorrelatedExogConfig, ExogenousConfig
 from synforecast.generators import RandomWalkGenerator
+from synforecast import Anomalies, Changepoints, Missing, OverlayConfig
+
 ```
 
 ## Datetime features
@@ -121,18 +123,16 @@ gen = RandomWalkGenerator(engine="polars", **{
     "seed": 42,
     "drift": 0.1,
     "volatility": 1.5,
-    "anomalies": True,
-    "anomaly_fraction": 0.05,
-    "anomaly_types": ["spike", "dip"],
-    "spike_magnitude": 15.0,
-    "dip_magnitude": -15.0,
-    "changepoints": True,
-    "num_changepoints": 3,
-    "changepoint_type": "level",
-    "missing_data": True,
-    "missing_rate": 0.08,
-    "missing_pattern": "block",
-    "missing_block_size": 5,
+    "overlays": OverlayConfig(
+        changepoints=Changepoints(count=3, kind="level"),
+        anomalies=Anomalies(
+            types=["spike", "dip"],
+            fraction=0.05,
+            spike_magnitude=15.0,
+            dip_magnitude=-15.0,
+        ),
+        missing=Missing(pattern="block", rate=0.08, block_size=5),
+    ),
     "exogenous": ExogenousConfig(
         anomaly_flags=True,
         changepoint_flags=True,
@@ -346,14 +346,11 @@ gen = RandomWalkGenerator(engine="polars", **{
     "seed": 42,
     "drift": 0.02,
     "volatility": 1.0,
-    "anomalies": True,
-    "anomaly_fraction": 0.04,
-    "spike_magnitude": 12.0,
-    "dip_magnitude": -12.0,
-    "changepoints": True,
-    "num_changepoints": 2,
-    "missing_data": True,
-    "missing_rate": 0.05,
+    "overlays": OverlayConfig(
+        changepoints=Changepoints(count=2),
+        anomalies=Anomalies(fraction=0.04, spike_magnitude=12.0, dip_magnitude=-12.0),
+        missing=Missing(rate=0.05),
+    ),
     "exogenous": ExogenousConfig(
         datetime_features=True,
         datetime_cyclical=True,
