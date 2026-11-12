@@ -66,6 +66,7 @@ Name | Type | Description | Default
 `burn_in` | <code>[int](#int)</code> | Calibration and warm-up steps; must exceed the mechanism's largest lag and be at least 16 (default: 128). | *required*
 `max_redraws` | <code>[int](#int)</code> | Redraws allowed per group (default: 5). | *required*
 `on_generator_fallback` | <code>[str](#str)</code> | 'record' or 'redraw' groups whose generator returned its noise fallback (default: 'record'). | *required*
+`overlays` | <code>[GroupOverlaySpec](#synforecast.groups.GroupOverlaySpec) \| None</code> | Shared events and local overlays on the channels (default: None, which draws exactly as a prior without the field: same values, recipes and fingerprint). | *required*
 
 <details class="example" open markdown="1">
 <summary>Example</summary>
@@ -104,7 +105,8 @@ replay(recipe, *, components=False)
 ```
 
 Rebuild the group a recipe describes, with its full recipe; the
-prior must match the one that produced it.
+prior must match the one that produced it. An ``observation`` record
+(:meth:`Group.observe`) is re-applied.
 
 #### `GroupPrior.draw_channel`
 
@@ -717,6 +719,154 @@ sparsity: float = Field(default=0.1, gt=0.0, le=1.0)
 ```
 
 
+### `GroupOverlaySpec`
+
+Bases: <code>[BaseModel](#pydantic.BaseModel)</code>
+
+Overlays on the channels of every group: shared events and local effects.
+
+A group draws, from its own overlay streams of ``(seed, group_id,
+attempt)``:
+
+- **shared events** (probability ``shared_rate``): one event schedule,
+  changepoints and/or anomalies drawn as :func:`~synforecast.presets.pretraining_overlays`
+  draws them (conditioned on drawing at least one of the two), with one
+  set of overlay seeds. Event locations and kinds depend only on those
+  seeds and the length, so they coincide on every selected channel. Each
+  selected channel gets the event's change, sized on its own scale
+  (relative magnitudes) and multiplied by its own factor
+  ``sign * U(shared_scale)`` with a random sign: common shocks;
+- **local overlays**, independently per emitted channel: with probability
+  ``local_rate`` the changepoints, anomalies and missing values of a
+  :func:`~synforecast.presets.pretraining_overlays` draw (its innovation
+  settings do not apply to an already drawn series); with probability
+  ``observability_rate`` the draw is replaced by an
+  :func:`~synforecast.presets.observability_overlays` draw (periods up to
+  a third of the length, between 12 and 720 steps); with probability
+  ``calendar_rate`` a :func:`~synforecast.presets.calendar_overlays`
+  calendar is added. Each draw has its own stream, as in
+  :func:`~synforecast.presets.pretraining_pool`, so a rate of 0 leaves
+  the other draws unchanged.
+
+``apply_to='emitted'`` applies shared events to the emitted channels after
+composition. ``apply_to='drivers'`` applies them to the latent series
+before composition (regression and fixed regression: the target's base
+and its drivers; coupled: every base series), on the emitted window
+only, so calibration on the burn-in is untouched and the target inherits
+driver events through its edge functions. Local overlays always apply to
+the emitted channels, after shared events. Recipes record the drawn
+configurations, seeds, factors and event indices; :meth:`GroupPrior.replay`
+rebuilds them exactly. Regression ``components`` describe the composition
+before overlays.
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`sampler` | <code>[str](#str)</code> | Overlay distribution; 'pretraining' (default). | *required*
+`shared_rate` | <code>[float](#float)</code> | Probability that a group has shared events (default: 0.3). | *required*
+`shared_channels` | <code>[str](#str)</code> | Channels that receive shared events: 'all', 'target_and_informative' (targets and informative drivers; every channel of coupled and VARX groups) or 'covariates' (default: 'all'). | *required*
+`shared_scale` | <code>[tuple](#tuple)[[float](#float), [float](#float)]</code> | Range of the per-channel factor of the shared change (default: (0.5, 1.5)). | *required*
+`local_rate` | <code>[float](#float)</code> | Probability that a channel draws local changepoints, anomalies and missing values (default: 0.3). | *required*
+`calendar_rate` | <code>[float](#float)</code> | Probability that a channel gets a calendar; cycles that cannot show at the prior's frequency are skipped (default: 0.0). | *required*
+`observability_rate` | <code>[float](#float)</code> | Probability that a channel's local draw is an observability configuration (default: 0.0). | *required*
+`apply_to` | <code>[str](#str)</code> | 'emitted' or 'drivers' (default: 'emitted'). | *required*
+
+#### `GroupOverlaySpec.apply_to`
+
+```python
+apply_to: Literal['emitted', 'drivers'] = 'emitted'
+```
+
+#### `GroupOverlaySpec.calendar_rate`
+
+```python
+calendar_rate: float = Field(default=0.0, ge=0.0, le=1.0)
+```
+
+#### `GroupOverlaySpec.local_rate`
+
+```python
+local_rate: float = Field(default=0.3, ge=0.0, le=1.0)
+```
+
+#### `GroupOverlaySpec.model_config`
+
+```python
+model_config = ConfigDict(frozen=True, extra='forbid', allow_inf_nan=False)
+```
+
+#### `GroupOverlaySpec.observability_rate`
+
+```python
+observability_rate: float = Field(default=0.0, ge=0.0, le=1.0)
+```
+
+#### `GroupOverlaySpec.sampler`
+
+```python
+sampler: Literal['pretraining'] = 'pretraining'
+```
+
+#### `GroupOverlaySpec.shared_channels`
+
+```python
+shared_channels: Literal['all', 'target_and_informative', 'covariates'] = 'all'
+```
+
+#### `GroupOverlaySpec.shared_rate`
+
+```python
+shared_rate: float = Field(default=0.3, ge=0.0, le=1.0)
+```
+
+#### `GroupOverlaySpec.shared_scale`
+
+```python
+shared_scale: tuple[float, float] = (0.5, 1.5)
+```
+
+
+### `ObservationSpec`
+
+Bases: <code>[BaseModel](#pydantic.BaseModel)</code>
+
+Which covariates of a group are available: drops and block missingness.
+
+The plan is a pure function of ``(seed, group_id)`` and covers ``slots``
+covariate positions (covariates in channel order): with probability
+``p_drop_all`` every covariate is unavailable; each slot is unavailable
+with probability ``p_drop_channel``; each slot gets block missingness
+with probability ``p_missing_channel``, at a rate ``U(missing_rate)`` in
+blocks of ``missing_block`` steps (both ends inclusive). Unavailable
+covariates become all-NaN and missing steps NaN; targets are never
+touched and no value is synthesized. The random stream is
+``numpy.random.default_rng([seed, group_id, 29])``, drawn in this order:
+the drop-all flag, the per-slot drop flags, then per slot its missingness
+flag, rate, block length and block starts (drawn for every slot, used
+only where the flag is set).
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`p_drop_all` | <code>[float](#float)</code> | Probability that no covariate is available (default: 0.0). | *required*
+`p_drop_channel` | <code>[float](#float)</code> | Per-slot probability of an unavailable covariate (default: 0.0). | *required*
+`p_missing_channel` | <code>[float](#float)</code> | Per-slot probability of block missingness (default: 0.0). | *required*
+`missing_rate` | <code>[tuple](#tuple)[[float](#float), [float](#float)]</code> | Range of the missing share (default: (0.02, 0.2)). | *required*
+`missing_block` | <code>[tuple](#tuple)[[int](#int), [int](#int)]</code> | Range of the block length, inclusive (default: (2, 20)). | *required*
+`slots` | <code>[int](#int)</code> | Covariate slots the plan covers; groups with more covariates are rejected. | *required*
+
+#### `ObservationSpec.plan`
+
+```python
+plan(seed, group_id, length)
+```
+
+The plan of one group: drop-all flag, per-slot drop flags
+``(slots,)`` and per-slot missing masks ``(slots, length)``.
+
+
 ### `VARXTruth`
 
 ```python
@@ -1069,6 +1219,16 @@ position. Control groups have no single generating process, so
 :meth:`GroupPrior.replay` and :meth:`VARXTruth.from_recipe` reject
 them; replay the source groups instead.
 
+#### `GroupBatch.observe`
+
+```python
+observe(spec, seed)
+```
+
+Every group under its own observation plan (:meth:`Group.observe`);
+apply it after :meth:`shuffle_covariates` so each control group keeps
+its receiver's plan.
+
 #### `GroupBatch.diagnostics`
 
 ```python
@@ -1099,53 +1259,22 @@ Name | Type | Description
 [`recipe`](#synforecast.groups.Group.recipe) | <code>[dict](#dict)</code> | Versioned ground truth of the group, JSON-serializable.
 [`components`](#synforecast.groups.Group.components) | <code>[dict](#dict) \| None</code> | For regression mechanisms sampled with ``components=True``: the target's ``base`` and the applied ``effect`` on the emitted window (additive, or log-space under multiplicative composition), before target AR feedback.
 
-#### `Group.components`
+#### `Group.observe`
 
 ```python
-components: dict | None = field(default=None, repr=False)
+observe(spec, seed)
 ```
 
-#### `Group.covariate_indices`
+This group under the observation plan of ``spec`` for
+``(seed, group_id)``: unavailable covariates become all-NaN and missing
+steps NaN; targets, roles and timestamps are unchanged.
 
-```python
-covariate_indices: list[int]
-```
-
-Channel indices of the covariates.
-
-#### `Group.group_id`
-
-```python
-group_id: int
-```
-
-#### `Group.length`
-
-```python
-length: int
-```
-
-Number of time steps.
-
-#### `Group.recipe`
-
-```python
-recipe: dict = field(repr=False)
-```
-
-#### `Group.roles`
-
-```python
-roles: tuple[str, ...]
-```
-
-#### `Group.target_index`
-
-```python
-target_index: int
-```
-
-Channel index of the target, for groups with exactly one target.
+Covariate ``k`` (in channel order) takes plan slot ``k``. The plan is
+keyed by this group's ID, so a control group from
+:meth:`GroupBatch.shuffle_covariates` gets its receiver's plan. The
+recipe gains an ``observation`` record (spec, seed, drop-all flag,
+``unavailable`` channels, ``missing`` steps per channel);
+:meth:`GroupPrior.replay` re-applies it.
 
 #### `Group.target_indices`
 
@@ -1155,17 +1284,29 @@ target_indices: list[int]
 
 Channel indices of the targets.
 
-#### `Group.timestamps`
+#### `Group.target_index`
 
 ```python
-timestamps: np.ndarray
+target_index: int
 ```
 
-#### `Group.values`
+Channel index of the target, for groups with exactly one target.
+
+#### `Group.covariate_indices`
 
 ```python
-values: np.ndarray
+covariate_indices: list[int]
 ```
+
+Channel indices of the covariates.
+
+#### `Group.length`
+
+```python
+length: int
+```
+
+Number of time steps.
 
 
 ### `probe_suite`
