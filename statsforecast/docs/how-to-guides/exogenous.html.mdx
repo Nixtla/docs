@@ -220,6 +220,25 @@ exogenous regressors. To use this model, we first need to import it from
 `statsforecast.models` and then we need to instantiate it. Given that
 we’re working with daily data, we need to set `season_length = 7`.
 
+### How exogenous regressors enter ARIMA models
+
+`ARIMA` and `AutoARIMA` treat exogenous regressors as a linear regression
+with ARIMA errors:
+
+$$
+y_t = \beta_1 x_{1,t} + \dots + \beta_k x_{k,t} + \eta_t
+$$
+
+Each regressor $x_{i,t}$ gets one coefficient $\beta_i$. The error term
+$\eta_t$ follows the ARIMA process. The regressors enter the model
+linearly. To model a nonlinear effect, add transformed columns (for
+example, squared values, logs, or interactions) to both the training
+data and the future exogenous data.
+
+To fix these coefficients instead of estimating them, pass the `ex_{i}`
+keys in the `fixed` parameter of
+[`ARIMA`](../../src/core/models.html#arima).
+
 ```python
 from statsforecast.models import AutoARIMA
 ```
