@@ -32,8 +32,11 @@ Channels are shuffled after construction, so channel position carries no
 information. A group is redrawn with a new attempt seed (up to
 ``max_redraws``) when a latent series (including the burn-in) or the
 emitted target is not finite or exceeds 1e8 in magnitude, or when a draw
-raises; a failing multiplicative composition first falls back to
-additive, which the recipe records. Persistent failure raises with every
+raises; a failing multiplicative composition (a non-finite or too large
+target, or an applied log multiplier beyond ln(1e8) in magnitude on the
+emitted window, which would collapse the target toward zero by more than
+eight orders of magnitude) first falls back to additive, which the recipe
+records. Persistent failure raises with every
 attempt's reason. Generator noise fallbacks (KernelSynth) are recorded in
 the recipe's ``generator_fallbacks`` (indices into ``channels``), or
 redrawn with
