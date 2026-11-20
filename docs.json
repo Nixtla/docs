@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "banner": {
-    "content": "**TimeGPT-2.1 is here!** [Read the announcement \u2192](https://www.nixtla.io/blog/timegpt-2-1-announcement?utm_campaign=timegpt_2_1_announcement&utm_source=nixtlaverse.nixtla.io&utm_medium=banner)",
+    "content": "Missed the webinar \u201cInside the Nixtla Engine: Agentic Forecasting\u201d? [Watch the recording](https://www.nixtla.io/webinar-events/inside-the-nixtla-engine-agentic-forecasting-live?utm_campaign=inside_the_nixtla_engine_agentic_forecasting&utm_source=nixtlaverse.nixtla.io&utm_medium=banner)",
     "dismissible": true
   },
   "colors": {
