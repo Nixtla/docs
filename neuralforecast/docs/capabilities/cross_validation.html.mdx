@@ -131,6 +131,14 @@ the distance between each cross-validation window. By setting it equal
 to the horizon, we perform *chained cross-validation* where the windows
 do not overlap.
 
+`max_steps` counts training steps (gradient updates), not epochs. Each
+epoch passes once over the training series in batches of `batch_size`
+series. When your dataset has `batch_size` series or fewer, every epoch
+is a single step. In that case, `max_steps=1000` shows up in the
+PyTorch Lightning progress bar as epochs 0 through 999, because the
+epoch counter starts at 0. With `refit=True`, each cross-validation
+window trains a new model for up to `max_steps` steps.
+
 ```python
 h = 100
 nf = NeuralForecast(models=[NHITS(h=h, input_size=2*h, max_steps=500, enable_progress_bar=False, logger=False)], freq=1);

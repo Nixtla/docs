@@ -34,6 +34,20 @@ Scikit-learn interface store the fitted models.
 The `StatsForecast` class offers parallelization utilities with Dask, Spark, and Ray back-ends.
 See distributed computing example [here](https://github.com/Nixtla/statsforecast/tree/main/experiments/ray).
 
+```python
+StatsForecast(models, freq, n_jobs=1, fallback_model=None, verbose=False)
+```
+
+**Parameters:**
+
+Name | Type | Description | Default
+---- | ---- | ----------- | -------
+`models` | <code>[List](#typing.List)\[[Any](#typing.Any)\]</code> | List of instantiated StatsForecast model objects. Models must have unique names, which you can set with the `alias` parameter. | *required*
+`freq` | <code>[str](#str) or [int](#int)</code> | Frequency of the time series. Must be a valid pandas or polars offset alias (for example, `'D'`, `'ME'`, or `'h'`), or an integer for integer timestamps. | *required*
+`n_jobs` | <code>[int](#int)</code> | Number of jobs used for parallel processing. Use `-1` to use all available CPU cores. The default of `1` runs in a single process. StatsForecast caps the effective value at the number of series. | <code>1</code>
+`fallback_model` | <code>[Any](#typing.Any)</code> | Model to use when a primary model fails during fitting or forecasting. Only works with the `forecast` and `cross_validation` methods. If `None`, exceptions from failing models are raised. | <code>None</code>
+`verbose` | <code>[bool](#bool)</code> | If `True`, displays a TQDM progress bar. | <code>False</code>
+
 #### `StatsForecast.fit`
 
 ```python
